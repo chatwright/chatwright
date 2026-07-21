@@ -1,0 +1,17 @@
+# SpecScore Repo Config Schema: https://specscore.md/repo-config
+
+project:
+    title: Chatwright
+    host: github.com
+    org: chatwright
+    repo: chatwright
+publication:
+    default:
+        actions:
+            - stage
+            - commit
+            - push
+    push:
+        allow_branches:
+            - main
+        deny_branches: []

@@ -1,0 +1,126 @@
+<section class="page run-page">
+  <div class="page-heading">
+    <div>
+      <p class="page-kicker">Run inspector · {{ store.runID }}</p>
+      <h1>Every result keeps its receipts.</h1>
+      <p>Conversation, HTTP traffic, platform calls and assertions are correlated rather than shown as separate logs.</p>
+    </div>
+    <div class="heading-actions">
+      <p-button label="Open scenario" icon="pi pi-sitemap" severity="secondary" outlined routerLink="/scenario" />
+      <p-button label="Replay manually" icon="pi pi-refresh" routerLink="/emulator" />
+    </div>
+  </div>
+
+  <div class="run-summary surface">
+    <div class="run-verdict">
+      <span class="verdict-mark"><i class="pi pi-check"></i></span>
+      <div><span class="eyebrow">Result</span><strong>Passed</strong><small>language-choice · main</small></div>
+    </div>
+    <div class="run-metadata">
+      <div><small>EXECUTION</small><strong>Real HTTP</strong><span>faithful</span></div>
+      <div><small>PLATFORM</small><strong>Telegram</strong><span>Bot API fixture</span></div>
+      <div><small>COMMIT</small><strong class="mono">67c4b8a</strong><span>local tree</span></div>
+      <div><small>STARTED</small><strong>18:42:11</strong><span>21 Jul 2026</span></div>
+    </div>
+    <div class="run-actions">
+      <p-button icon="pi pi-download" severity="secondary" text pTooltip="Download evidence bundle" />
+      <p-button icon="pi pi-share-alt" severity="secondary" text pTooltip="Copy run link" />
+      <p-button icon="pi pi-ellipsis-h" severity="secondary" text pTooltip="More actions" />
+    </div>
+  </div>
+
+  <div class="run-metrics">
+    <article class="surface primary-metric">
+      <div><span class="eyebrow">Total duration</span><strong>342<span>ms</span></strong><small>wall clock · local</small></div>
+      <div class="latency-bars">
+        <span style="--bar: 14%"><i>Actor → webhook</i><b>18 ms</b></span>
+        <span style="--bar: 29%"><i>Handler work</i><b>41 ms</b></span>
+        <span style="--bar: 41%"><i>Initial reply</i><b>49 ms</b></span>
+        <span style="--bar: 52%"><i>Edit reply</i><b>58 ms</b></span>
+      </div>
+    </article>
+    <article class="surface small-metric"><span class="metric-symbol blue"><i class="pi pi-comments"></i></span><div><small>Messages</small><strong>2</strong><span>1 sent · 1 bot</span></div></article>
+    <article class="surface small-metric"><span class="metric-symbol violet"><i class="pi pi-pencil"></i></span><div><small>Edits</small><strong>{{ store.editCount() }}</strong><span>same message ID</span></div></article>
+    <article class="surface small-metric"><span class="metric-symbol amber"><i class="pi pi-database"></i></span><div><small>Payload</small><strong>1.8<span>KB</span></strong><span>in + out</span></div></article>
+  </div>
+
+  <div class="inspector-grid">
+    <article class="surface timeline-panel">
+      <header class="surface-header">
+        <div><h2>Correlated timeline</h2><p>Semantic transcript + technical trace</p></div>
+        <div class="legend"><span class="actor"></span>Actor <span class="http"></span>HTTP <span class="api"></span>API <span class="assertion"></span>Assertion</div>
+      </header>
+      <div class="timeline-scale"><span>0 ms</span><span>100</span><span>200</span><span>300</span><span>342 ms</span></div>
+      <div class="trace-rows">
+        @for (event of store.traceEvents(); track $index) {
+          <button
+            type="button"
+            class="trace-row"
+            [class.selected]="selectedTraceIndex === $index"
+            (click)="selectTrace($index)"
+          >
+            <span class="trace-time">{{ event.time }}</span>
+            <span class="trace-icon" [class]="'trace-icon ' + event.kind">
+              <i [class]="event.kind === 'actor' ? 'pi pi-user' : event.kind === 'http' ? 'pi pi-globe' : event.kind === 'api' ? 'pi pi-send' : 'pi pi-check'"></i>
+            </span>
+            <span class="trace-copy"><strong>{{ event.title }}</strong><small>{{ event.detail }}</small></span>
+            <span class="trace-duration">{{ $index === 0 ? '0 ms' : $index === 1 ? '18 ms' : $index === 2 ? '41 ms' : event.active ? '58 ms' : '5 ms' }}</span>
+            <i class="pi pi-angle-right"></i>
+          </button>
+        }
+      </div>
+    </article>
+
+    <article class="surface detail-panel">
+      <header class="surface-header">
+        <div><h2>Selected event</h2><p>Outbound platform API · span 5f2a</p></div>
+        <p-tag value="HTTP 200" severity="success" />
+      </header>
+      <div class="detail-title">
+        <span class="detail-icon"><i class="pi pi-pencil"></i></span>
+        <div><span class="eyebrow">Telegram Bot API</span><strong>{{ store.messageVersion() > 1 ? 'editMessageText' : 'sendMessage' }}</strong><small>{{ store.messageVersion() > 1 ? '03.337' : '00.041' }} · localhost:41209</small></div>
+      </div>
+      <div class="detail-tabs"><button class="active">Request</button><button>Response</button><button>State diff</button></div>
+      <div class="request-meta">
+        <div><small>METHOD</small><strong>POST</strong></div>
+        <div><small>PATH</small><strong class="mono">/bot•••/{{ store.messageVersion() > 1 ? 'editMessageText' : 'sendMessage' }}</strong></div>
+        <div><small>DURATION</small><strong>12 ms</strong></div>
+      </div>
+      <pre class="payload"><span>{{ '{' }}</span>
+  <b>"chat_id"</b>: <em>894211</em>,
+  <b>"message_id"</b>: <em>27</em>,
+  <b>"text"</b>: <i>"{{ store.greeting() }}"</i>,
+  <b>"reply_markup"</b>: <span>{{ '{' }} "inline_keyboard": […] {{ '}' }}</span>
+<span>{{ '}' }}</span></pre>
+      <div class="state-diff">
+        <div><span>-</span><code>message[27].version = {{ store.messageVersion() > 1 ? store.messageVersion() - 1 : 0 }}</code></div>
+        <div><span>+</span><code>message[27].version = {{ store.messageVersion() }}</code></div>
+        <p><i class="pi pi-link"></i> Correlated to assertion <strong>In-place edit</strong></p>
+      </div>
+    </article>
+  </div>
+
+  <article class="surface assertions-panel">
+    <header class="surface-header">
+      <div><h2>Assertions</h2><p>Source-linked checks over shared observations</p></div>
+      <div class="assertion-score"><span>4 / 4 passed</span><p-progressbar [value]="100" [showValue]="false" /></div>
+    </header>
+    <p-table [value]="assertions" styleClass="assertions-table">
+      <ng-template #header><tr><th>Assertion</th><th>Expected</th><th>Actual</th><th>Observed</th><th>Status</th></tr></ng-template>
+      <ng-template #body let-assertion>
+        <tr>
+          <td><strong>{{ assertion.assertion }}</strong><small class="mono">greetbot_e2e_test.go</small></td>
+          <td>{{ assertion.expected }}</td>
+          <td><code>{{ assertion.actual }}</code></td>
+          <td class="mono">{{ assertion.latency }}</td>
+          <td><p-tag [value]="assertion.status" severity="success" icon="pi pi-check" /></td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </article>
+
+  <div class="evidence-footer">
+    <span><i class="pi pi-shield"></i> Result bundle schema v0 · no secrets captured</span>
+    <a routerLink="/workspace">Back to workspace <i class="pi pi-arrow-right"></i></a>
+  </div>
+</section>

@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.angular/
+.DS_Store
+coverage/
+prototype/.env.local
+prototype/src/app/primeui-license.local.ts
