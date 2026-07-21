@@ -3,12 +3,12 @@
 **Date:** 2026-07-21
 **Owner:** alex
 **Status:** Proposed
-**Consumed by:** [`platform-adapters`](../features/chatwright/platform-adapters/README.md)
+**Consumed by:** [`telegram`](../features/chatwright/platform-emulators/telegram/README.md), [`telegram/client`](../features/chatwright/platform-emulators/telegram/client/README.md), [`telegram/server-api`](../features/chatwright/platform-emulators/telegram/server-api/README.md)
 
 ## Purpose
 
-Ground the first adapter in documented and observed Telegram behaviour, with
-special attention to outbound emulation and bot-to-bot claims.
+Ground the Telegram Platform Emulator in documented and observed behaviour, with
+special attention to update delivery, Bot API compatibility and bot-to-bot claims.
 
 ## Observed baseline
 

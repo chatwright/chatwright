@@ -1,11 +1,12 @@
 # Chatwright
 
-**Deterministic and AI-driven testing for conversational applications.**
+**Emulate messaging platforms locally. Test real conversational applications.**
 
 Chatwright is an independent open-source conversation execution, simulation and
-testing platform developed by [Sneat.co](https://sneat.co). It exercises real bot
-webhooks through realistic platform-shaped updates and fake outbound platform
-APIs, while keeping scenarios platform-neutral where the platforms permit it.
+testing product developed by [Sneat.co](https://sneat.co). Chatwright emulates
+the messaging platform; the bot under development is the real software under
+test. It exercises real bot webhooks through platform-shaped updates and local
+bot-facing APIs, while keeping scenarios neutral where platforms permit it.
 
 The repository currently contains an early Go runtime in [`chatwrite/`](chatwrite/README.md),
 the product specification in [`spec/`](spec/README.md), the phased
@@ -25,7 +26,7 @@ pnpm start
 | Mock-up | Local route | What it demonstrates |
 |---|---|---|
 | [Workspace overview](prototype/src/app/pages/workspace/workspace.page.html) | [http://localhost:4200/workspace](http://localhost:4200/workspace) | Hierarchical scenario coverage, recent runs and the path into an active test |
-| [Live emulator](prototype/src/app/pages/emulator/emulator.page.html) | [http://localhost:4200/emulator](http://localhost:4200/emulator) | Multiple actors and chats; changing the language edits the existing bot greeting in place |
+| [Playground](prototype/src/app/pages/emulator/emulator.page.html) | [http://localhost:4200/emulator](http://localhost:4200/emulator) | Multiple actors and chats consuming one Telegram Platform Emulator; changing the language edits the existing bot greeting in place |
 | [Scenario authoring](prototype/src/app/pages/scenario/scenario.page.html) | [http://localhost:4200/scenario](http://localhost:4200/scenario) | A readable, hierarchical scenario with platform-neutral steps and assertions |
 | [Run inspector](prototype/src/app/pages/run/run.page.html) | [http://localhost:4200/run](http://localhost:4200/run) | Transcript, HTTP trace, assertions and first-class latency/message metrics |
 
@@ -34,10 +35,10 @@ conversation aid, not the hosted Chatwright application.
 
 ## Product direction
 
-- **Now:** harden the existing deterministic Telegram slice—private text,
-  actions, edits, real HTTP webhook delivery, fake Bot API capture and CI-ready
-  failure reports.
-- **Next:** make the same runtime useful for manual offline testing, then add a
+- **Now:** harden the Telegram Platform Emulator MVP—Client Emulator plus
+  Server/API Emulator—for private text, actions, edits, real HTTP webhook
+  delivery, fake Bot API capture and CI-ready failure reports.
+- **Next:** make the Playground a first-class consumer for manual offline testing, then add a
   portable structured scenario model and Starlark.
 - **Later:** AI actors and evidence-linked UX evaluation, followed by hosted
   authoring, collaboration and run history.
@@ -45,7 +46,10 @@ conversation aid, not the hosted Chatwright application.
 The [roadmap](docs/roadmap.md) explains the value gates and deliberately excluded
 scope. The [Chatwright idea](spec/ideas/chatwright.md) and
 [feature hierarchy](spec/features/chatwright/README.md) are the specification
-entry points.
+entry points. The [Platform Emulators](spec/features/chatwright/platform-emulators/README.md)
+area defines the Telegram MVP and planned platforms; the
+[Playground](spec/features/chatwright/playground/README.md) is its manual-testing
+consumer.
 
 ## Repository map
 

@@ -41,7 +41,7 @@ planned capability.
 
 ### Task 2: Supported fake Bot API conformance
 
-**Verifies:** chatwright/platform-adapters#ac:fake-api-mutates-chat-state, chatwright/platform-adapters#ac:unsupported-is-honest
+**Verifies:** chatwright/platform-emulators/telegram/server-api#ac:real-bot-calls-fake-bot-api, chatwright/platform-emulators#ac:compatibility-is-honest
 **Depends-On:** 1
 **Status:** planning
 
@@ -72,7 +72,7 @@ prove no real sleeps are needed in delayed/retry fixtures.
 
 ### Task 5: Multi-user and multi-bot reference scenario
 
-**Verifies:** chatwright/conversation-runtime#ac:isolates-complete-run-state, chatwright/deterministic-testing#ac:safe-for-ci
+**Verifies:** chatwright/conversation-runtime#ac:isolates-complete-run-state, chatwright/deterministic-testing#ac:safe-for-ci, chatwright/platform-emulators/telegram/client#ac:one-instance-represents-many-users
 **Depends-On:** 2, 3, 4
 **Status:** planning
 

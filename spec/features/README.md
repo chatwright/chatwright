@@ -8,7 +8,7 @@ format: https://specscore.md/features-index-specification
 
 | Feature | Status | Summary |
 |---|---|---|
-| [Chatwright](chatwright/README.md) | Specifying | Conversation execution, deterministic and AI testing, manual emulation, authoring and developer tooling over one runtime |
+| [Chatwright](chatwright/README.md) | Specifying | Local messaging-platform emulation for real bots, deterministic and AI testing, a manual Playground, authoring and developer tooling |
 
 ## Open Questions
 

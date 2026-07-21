@@ -1,9 +1,9 @@
-# Research: Emulator, authoring and AI workflows
+# Research: Playground, authoring and AI workflows
 
 **Date:** 2026-07-21
 **Owner:** alex
 **Status:** Proposed
-**Consumed by:** [`manual-emulator`](../features/chatwright/manual-emulator/README.md), [`scenario-authoring`](../features/chatwright/scenario-authoring/README.md), [`ai-driven-testing`](../features/chatwright/ai-driven-testing/README.md), [`agent-implementation-loop`](../features/chatwright/agent-implementation-loop/README.md)
+**Consumed by:** [`playground`](../features/chatwright/playground/README.md), [`scenario-authoring`](../features/chatwright/scenario-authoring/README.md), [`ai-driven-testing`](../features/chatwright/ai-driven-testing/README.md), [`agent-implementation-loop`](../features/chatwright/agent-implementation-loop/README.md)
 
 ## Purpose
 
@@ -15,7 +15,7 @@ stable.
 
 | ID | Question | Required evidence and output |
 |---|---|---|
-| I-20 | What architecture lets a browser-based local emulator control human actors while the runtime remains authoritative? | Local transport/security spike and multi-panel interaction prototype. |
+| I-20 | What architecture lets the browser-based Playground control human actors while the Platform Emulator remains authoritative? | Local transport/security spike and multi-panel interaction prototype. |
 | I-21 | Which recorded events are source data versus candidate assertions, and how does a user select the latter? | Recorded-session schema and a usability walkthrough producing a maintainable scenario. |
 | I-22 | Which Go Starlark implementation satisfies sandboxing, cancellation, modules, debugging and licence needs? | Options matrix and executable spike for a representative multi-turn scenario. |
 | I-23 | What structured visual scenario format supports versioning, branches, reusable actors and export without claiming arbitrary code round-tripping? | Schema draft, migration story and visual-editor round-trip for supported constructs. |
@@ -28,7 +28,7 @@ stable.
 ## Prototype hypothesis
 
 The connected PrimeNG prototype under [`prototype/`](../../prototype/README.md)
-tests one navigation hypothesis: hierarchy → live emulator → scenario definition
+tests one navigation hypothesis: hierarchy → Playground → scenario definition
 → run evidence should preserve context and use the same actors/run IDs. It is a
 mock, not evidence that the data model is settled.
 

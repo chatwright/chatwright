@@ -64,8 +64,8 @@ requirements; Chatwright does not snapshot every generated phrase by default.
 Scenario: An AI persona tests a booking bot
 Given a persona, goal and constraints
 When the actor conducts a run
-Then every chosen action traverses the same platform adapter and webhook path as
-a scripted actor
+Then every chosen action traverses the same Platform Emulator and real bot
+webhook path as a scripted actor
 
 ### AC: judgement-is-traceable
 

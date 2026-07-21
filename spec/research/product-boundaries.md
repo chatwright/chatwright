@@ -15,7 +15,7 @@ licensing and hosted integration boundaries.
 | ID | Question | Required evidence and output |
 |---|---|---|
 | I-29 | What CLI shape supports Go tests, external processes, local emulation, machine-readable CI and platform selection? | Command/config prototype, exit-code contract and three workflow transcripts. |
-| I-30 | Which packages/repositories should contain runtime, adapters, examples, scenario libraries, web UI and hosted services? | Dependency/release map with criteria for splitting rather than speculative repositories. |
+| I-30 | Which packages/repositories should contain runtime, Platform Emulator internals, examples, scenario libraries, Playground UI and hosted services? | Dependency/release map with criteria for splitting rather than speculative repositories. |
 | I-31 | Does Apache-2.0 remain the right runtime licence, and what notice/third-party obligations arise from adapter reuse? | Licence review and automated dependency notice process; no pricing decision required. |
 | I-32 | Which functions must work entirely locally, and which hosted capabilities may be proprietary or paid? | Boundary table tested against the independent-use promise and realistic operating costs. |
 | I-33 | How may a hosted product use Sneat accounts without coupling the runtime or open formats? | Auth boundary/tenant model and a no-account local/CI acceptance fixture. |

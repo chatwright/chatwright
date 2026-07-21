@@ -20,9 +20,10 @@ Three corrections improve it:
    and an experimental WhatsApp text adapter. The first step is therefore to
    define and harden a trustworthy supported slice, not to create another API
    sketch.
-2. **“Telegram first, WhatsApp deferred” needs a precise reading.** Full WhatsApp
-   fidelity remains deferred; the existing text adapter is a valuable architecture
-   probe. It should neither be deleted nor advertised as a complete platform.
+2. **“Telegram first, WhatsApp deferred” needs a precise reading.** The Telegram
+   Platform Emulator is the MVP and reference architecture. Full WhatsApp
+   emulation remains deferred; the existing text adapter is a valuable
+   architecture probe, not a WhatsApp Platform Emulator.
 3. **The hierarchy is a map, not a simultaneous backlog.** AI evaluation,
    Starlark, visual authoring and hosted collaboration are important, but they
    should not dilute the immediate developer promise: test a real local bot
@@ -50,8 +51,9 @@ message reaches the bot.
 
 1. **A real boundary before a broad API.** Real HTTP webhooks and fake outbound
    APIs are more valuable than a large convenience DSL over direct handler calls.
-2. **Intent in scenarios, mechanics in adapters.** Keep ordinary scenarios
-   platform-neutral; make genuine platform requirements explicit extensions.
+2. **Intent in scenarios, mechanics in Platform Emulators.** Keep ordinary
+   scenarios platform-neutral; make genuine platform requirements explicit
+   extensions.
 3. **Deterministic evidence before AI judgement.** AI can explore and interpret,
    but it cannot overwrite observed state, events or assertions.
 4. **One semantic transcript, one technical trace.** Correlate them; do not force
@@ -86,12 +88,23 @@ conversation locally and diagnose deliberate failures without a Telegram account
 describe only observed support; no blanket fake-API success hides a supported
 method error.
 
-## Phase 1 — Trustworthy deterministic Telegram runtime
+## Phase 1 — Telegram Platform Emulator MVP
 
-**Goal:** be the obvious test harness for one narrow but production-relevant class
-of Telegram bots.
+**Goal:** run a complete local Telegram execution loop for one narrow but
+production-relevant compatibility profile. Telegram is emulated; the bot is the
+real application under test.
 
-### Supported slice
+### Product shape
+
+- **Telegram Client Emulator:** multiple users, identities and chats producing
+  client actions and retaining client-visible history.
+- **Telegram Server/API Emulator:** update generation and webhook delivery plus
+  fake Bot API endpoints, responses, errors and authoritative platform state.
+
+This is the complete public hierarchy. Lower-level method handlers, transports,
+state stores and protocol fixtures remain architecture concerns.
+
+### Initial supported profile
 
 - multiple bot and user identities in isolated private chats;
 - Telegram text updates, inline actions/callbacks and in-place edits;
@@ -117,11 +130,11 @@ framework-independent HTTP fixture run the supported slice; repeated suites meet
 an agreed duration/flake budget; unfamiliar developers can explain supplied
 failures from the result bundle alone.
 
-## Phase 1.x — Manual local emulator
+## Phase 1.x — Chatwright Playground
 
 **Goal:** make Chatwright valuable before a test has been written.
 
-- Local browser UI driven by the same runtime and fake platform path.
+- Local browser UI consuming the same Telegram Platform Emulator as automated tests.
 - Human actors, multiple identities and several simultaneous chat panels.
 - Live transcript/trace/metrics with breakpoints on a small deterministic trigger set.
 - Selective recording: choose observations that become assertions; export a Go
@@ -165,7 +178,8 @@ and never silently changes deterministic outcomes.
 
 **Goal:** turn individual runs into a collaborative product loop.
 
-- Connected hierarchy, authoring, emulator and run-inspector views.
+- Connected hierarchy, authoring, Playground and run-inspector views over the
+  same Platform Emulator state.
 - Hosted execution, history, comparison, dashboards and CI/GitHub integration.
 - Team collaboration, reusable scenario/persona libraries and organisation policy.
 - Scenario/subtree export to coding agents with versioned evidence returned.

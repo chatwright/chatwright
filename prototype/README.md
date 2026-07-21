@@ -24,7 +24,7 @@ pnpm build
 | View | Route | Primary question |
 |---|---|---|
 | Workspace | `/workspace` | Can users understand hierarchy, coverage and the next useful action? |
-| Live emulator | `/emulator` | Can several actor/chat contexts stay legible while all actions use one run? |
+| Playground | `/emulator` | Can several actor/chat contexts stay legible while all actions use one run? |
 | Scenario | `/scenario` | Can conversational intent and executable assertions read as one specification? |
 | Run inspector | `/run` | Can a failure or edit be explained from transcript, trace and metrics without a debugger? |
 
@@ -33,10 +33,15 @@ All views refer to the same workspace, `greetbot/language-choice` scenario and
 
 ## Dynamic interaction
 
-In the live emulator, change the language selector inside Greeter's reply. The
+In the Playground, change the language selector inside Greeter's reply. The
 reply text changes in place, its version increments, an “edited” marker appears,
 and a matching `editMessageText` event is added to the trace rail. Reset returns
 the run to the English v1 state.
+
+The Playground mock is a consumer of a Telegram Platform Emulator. In this
+static prototype the platform/runtime data is illustrative; in the product, the
+emulator—not the UI—owns Telegram updates, Bot API behaviour and chat state while
+the bot under development remains real.
 
 ## Design intent
 

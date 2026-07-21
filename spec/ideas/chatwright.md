@@ -8,7 +8,7 @@ status: Implementing
 **Status:** Implementing
 **Date:** 2026-07-21
 **Owner:** alex
-**Promotes To:** chatwright, chatwright/agent-implementation-loop, chatwright/ai-driven-testing, chatwright/conversation-runtime, chatwright/deterministic-testing, chatwright/developer-tooling, chatwright/manual-emulator, chatwright/observability, chatwright/platform-adapters, chatwright/scenario-authoring
+**Promotes To:** chatwright, chatwright/agent-implementation-loop, chatwright/ai-driven-testing, chatwright/conversation-runtime, chatwright/deterministic-testing, chatwright/developer-tooling, chatwright/manual-emulator, chatwright/observability, chatwright/platform-adapters, chatwright/platform-emulators, chatwright/platform-emulators/discord, chatwright/platform-emulators/slack, chatwright/platform-emulators/telegram, chatwright/platform-emulators/telegram/client, chatwright/platform-emulators/telegram/server-api, chatwright/platform-emulators/whatsapp, chatwright/playground, chatwright/scenario-authoring
 **Supersedes:** —
 **Related Ideas:** —
 
@@ -40,17 +40,19 @@ independently useful open-source infrastructure before pursuing a hosted Studio.
 
 ## Recommended Direction
 
-Build a platform-neutral conversation environment around adapter-owned platform
-mechanics. A scenario expresses intent (send text, choose an action, expect an
-edit); a Telegram or future WhatsApp adapter owns webhook envelopes, IDs,
-callbacks, API responses and restrictions.
+Build Platform Emulators around a platform-neutral conversation environment.
+Chatwright emulates the messaging platform; the developer runs and tests the
+real bot application. A scenario expresses intent (send text, choose an action,
+expect an edit), while the selected emulator owns webhook envelopes, IDs,
+callbacks, API responses, restrictions and platform state.
 
 Use Go as the first runtime and API, with real HTTP webhook execution as the
 strongest integration mode and direct invocation as an optional narrower mode.
-Make deterministic tests and a local human-controlled emulator useful first.
-Add a portable structured model and Starlark only after the runtime semantics are
-stable. Add AI actors as another actor driver—not another execution engine—and
-require every AI judgement to point to transcript or state evidence.
+Make the Telegram Platform Emulator, deterministic tests and a local Chatwright
+Playground useful first. The Playground consumes the emulator; it does not
+replace it. Add a portable structured model and Starlark only after runtime
+semantics are stable. Add AI actors as another actor driver—not another execution
+engine—and require every AI judgement to point to transcript or state evidence.
 
 Keep the runtime open source and independent of Sneat application architecture.
 `bots-go-framework` is the initial integration and reference adapter source, not
@@ -72,8 +74,9 @@ integrate with `sneat.work`, but the runtime must remain usable without either.
 
 ## MVP Scope
 
-The first product-worthy release supports deterministic, offline Telegram tests
-for multiple private users and bots with:
+The first product-worthy release is the Telegram Platform Emulator, comprising
+its Client Emulator and Server/API Emulator. It supports deterministic and
+manual offline Telegram development for multiple private users and bots with:
 
 - real HTTP webhook delivery to an in-process or local bot;
 - realistic inbound text updates and a validating fake outbound Bot API;
@@ -82,15 +85,19 @@ for multiple private users and bots with:
 - chainable text/action/edit assertions with `Within(duration)`;
 - per-message latency, size and count metrics with run-level aggregation;
 - deterministic draining for work initiated by the webhook;
-- CI execution and a documented `bots-go-framework` reference integration.
+- CI execution and a documented `bots-go-framework` reference integration;
+- Playground access to multiple conversations and actor switching;
+- recording actors, messages, actions, timestamps, metrics and platform events
+  for selective conversion into reusable scenarios or specifications.
 
 The existing repository is an implementation seed, not evidence that every MVP
 item above is production-ready.
 
 ## Not Doing (and Why)
 
-- Full Telegram emulation in the first release—narrow fidelity beats a broad,
-  inaccurate clone.
+- Full Telegram feature parity in the first release—the Telegram Platform
+  Emulator supplies a complete local loop for its declared compatibility profile,
+  not an inaccurate claim to reproduce every Telegram capability.
 - Full WhatsApp execution—the generic model must account for it, while platform
   work follows after the Telegram slice is reliable. The current text adapter is
   experimental groundwork, not a scope commitment.
@@ -108,7 +115,7 @@ item above is production-ready.
 | Must-be-true | Real HTTP plus a fake outbound API finds failures that handler-unit tests miss without making the suite slow or flaky. | Run the same bot behaviour through unit and Chatwright suites; compare defects found, duration and flake rate. |
 | Must-be-true | A useful neutral message/action model can cover Telegram now without encoding Telegram-only concepts. | Map the MVP scenarios to Telegram and a WhatsApp design fixture; record every required platform escape hatch. |
 | Must-be-true | Developers can diagnose failures from one transcript/trace without attaching a debugger. | Give failing fixtures to unfamiliar developers; measure time to explain the failure. |
-| Should-be-true | The manual emulator converts exploratory sessions into maintainable scenarios. | Record five real sessions and assess how much generated output needs manual correction. |
+| Should-be-true | The Playground converts exploratory sessions over the same Platform Emulator into maintainable scenarios. | Record five real sessions and assess how much generated output needs manual correction. |
 | Might-be-true | Teams will pay for hosted authoring, history and AI evaluation while using the runtime freely. | Interview runtime adopters only after repeat local/CI use is visible. |
 
 ## SpecScore Integration
@@ -120,14 +127,14 @@ item above is production-ready.
 
 ## Open Questions
 
-- What minimum fidelity makes the Telegram adapter trustworthy without turning
-  Chatwright into a complete platform clone?
+- What named compatibility profile makes the Telegram Platform Emulator useful
+  and trustworthy without claiming full Telegram feature parity?
 - Which structured scenario representation can support visual authoring without
   promising lossless round-tripping from arbitrary Go or Starlark?
 - Which deterministic evidence is sufficient for goal completion before an AI
   evaluator is allowed to contribute a judgement?
-- Where should the basic local emulator sit across the open-source/hosted
-  boundary?
+- Where should the local Platform Emulators and Playground sit across the
+  open-source/hosted boundary?
 
 ---
 *This document follows the https://specscore.md/idea-specification*

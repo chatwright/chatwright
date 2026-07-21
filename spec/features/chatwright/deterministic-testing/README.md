@@ -27,8 +27,8 @@ failure.
 
 A scripted actor sends semantic actions and observes messages through a chat.
 Scenarios may cover several users, bots, chats and platforms while sharing
-environment fixtures. Platform-neutral intent is the default; explicit adapter
-assertions cover mechanics that matter to the product.
+environment fixtures. Platform-neutral intent is the default; explicit
+platform-specific assertions cover mechanics that matter to the product.
 
 ### Fluent expectations
 
@@ -53,7 +53,7 @@ jobs and related platform calls. CI output must remain useful without the web UI
 
 - [conversation-runtime](../conversation-runtime/README.md)
 - [observability](../observability/README.md)
-- [platform-adapters](../platform-adapters/README.md)
+- [platform-emulators](../platform-emulators/README.md)
 
 ## Acceptance Criteria
 

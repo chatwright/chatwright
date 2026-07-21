@@ -13,6 +13,7 @@ user-grounded evidence before the corresponding feature is approved.
 | [Scheduling and observability](scheduling-and-observability.md) | I-13–I-19 | Virtual time, draining, metrics, trace, assertions and milestones |
 | [Authoring, emulator and AI](authoring-and-ai.md) | I-20–I-28 | Manual UI, recording, formats, AI providers/evaluation, agent export and SpecScore |
 | [Product boundaries](product-boundaries.md) | I-29–I-34 | CLI, repository/licence/hosted boundaries and Sneat integration |
+| [Platform Emulator architecture](platform-emulators.md) | I-35–I-48 | Shared emulator infrastructure, Telegram compatibility, state engines and offline/manual workflows |
 
 ## Completion rule
 

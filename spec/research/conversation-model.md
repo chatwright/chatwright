@@ -3,7 +3,7 @@
 **Date:** 2026-07-21
 **Owner:** alex
 **Status:** Proposed
-**Consumed by:** [`conversation-runtime`](../features/chatwright/conversation-runtime/README.md), [`platform-adapters`](../features/chatwright/platform-adapters/README.md)
+**Consumed by:** [`conversation-runtime`](../features/chatwright/conversation-runtime/README.md), [`platform-emulators`](../features/chatwright/platform-emulators/README.md)
 
 ## Purpose
 
@@ -23,7 +23,7 @@ preserving platform fidelity and multiple identities.
 
 - Prefer semantic verbs that survive two platforms; do not generalise a concept
   that has no equivalent merely to make APIs look symmetric.
-- Preserve raw adapter metadata for diagnostics without making it the scenario's
+- Preserve raw platform metadata for diagnostics without making it the scenario's
   default assertion surface.
 - Model a message edit as versioned identity, not as a second sent message.
 - Keep actor driver/state separate from the real or simulated identity it uses.

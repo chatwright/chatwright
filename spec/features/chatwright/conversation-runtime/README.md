@@ -42,8 +42,8 @@ but the runtime must not collapse these concepts into one struct.
 
 Chat identity is at least platform + bot account + platform chat identity. A
 message keeps stable identity and versions across edits, and may carry replies,
-threads, actions, media, delivery state and adapter-specific metadata. Adapters
-own unsupported semantics.
+threads, actions, media, delivery state and platform-specific metadata. Platform
+Emulators own unsupported semantics.
 
 ### Scheduling and lifecycle
 
@@ -54,7 +54,7 @@ observable without an explicit integration seam.
 
 ## Dependencies
 
-- [platform-adapters](../platform-adapters/README.md)
+- [platform-emulators](../platform-emulators/README.md)
 - [observability](../observability/README.md)
 
 ## Acceptance Criteria
@@ -87,7 +87,7 @@ separately reportable
 - Which async sources must register with the environment before deterministic
   draining can promise that the run is idle?
 - Can one user safely hold several identities on the same platform and bot?
-- Which message state is canonical versus adapter extension data?
+- Which message state is canonical versus platform-specific extension data?
 
 ---
 *This document follows the https://specscore.md/feature-specification*
