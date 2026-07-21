@@ -45,12 +45,15 @@ func TestGreeting(t *testing.T) {
 }
 ```
 
-Interactive elements are asserted neutrally too — `ExpectAction(row, col)` maps
-onto Telegram inline buttons (`text`/`callback_data`) and WhatsApp interactive
-replies (`title`/`id`):
+Interactive elements are asserted — and **clicked** — neutrally too.
+`ExpectAction(row, col)` maps onto Telegram inline buttons (`text`/`callback_data`)
+and WhatsApp interactive replies (`title`/`id`); `Click()` sends the callback
+(or text) back to the bot so the conversation continues:
 
 ```go
-msg.ExpectAction(0, 0).Label("My events").ID("my-events")
+msg.ExpectAction(0, 0).Label("My events").ID("my-events").
+	Click().
+	ExpectBotMessage().Text("Here are your events")
 ```
 
 ## How it works
@@ -81,6 +84,7 @@ testing.**
 Early, under active construction:
 
 - ✅ Platform-agnostic scenario API mapped to platform-specific calls
+- ✅ Clicking actions (`Click()`) — callback query / interactive reply back to the bot
 - ✅ Telegram platform — full (text + inline actions), via `bots-api-telegram`
 - ✅ WhatsApp platform — text (MVP), via `bots-api-whatsapp`; interactive replies next
 - ✅ Real bots driven over HTTP; emulated platform API servers
