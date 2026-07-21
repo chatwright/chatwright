@@ -56,6 +56,16 @@ msg.ExpectAction(0, 0).Label("My events").ID("my-events").
 	ExpectBotMessage().Text("Here are your events")
 ```
 
+A click doesn't have to produce a *new* message: if the bot edits the message the
+action was attached to (e.g. Telegram `editMessageText`), assert that in place
+with `ExpectEdited()` on the original message handle instead of expecting a new
+one:
+
+```go
+msg.ExpectAction(1, 0).Label("Español").ID("lang:es").Click()
+msg.ExpectEdited().Within(time.Second).Text("¡Hola, forastero!")
+```
+
 ## How it works
 
 1. `chatwright.New(t)` boots an **emulated platform API server** (Telegram Bot API
@@ -85,7 +95,8 @@ Early, under active construction:
 
 - ✅ Platform-agnostic scenario API mapped to platform-specific calls
 - ✅ Clicking actions (`Click()`) — callback query / interactive reply back to the bot
-- ✅ Telegram platform — full (text + inline actions), via `bots-api-telegram`
+- ✅ In-place message edits (`ExpectEdited()`) — assert a Telegram `editMessageText`-style edit
+- ✅ Telegram platform — full (text + inline actions + edits), via `bots-api-telegram`
 - ✅ WhatsApp platform — text (MVP), via `bots-api-whatsapp`; interactive replies next
 - ✅ Real bots driven over HTTP; emulated platform API servers
 - ✅ Latency-aware assertions (`ExpectBotMessage().Within(...)`) + first-class metrics
