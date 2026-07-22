@@ -170,6 +170,82 @@ immutable checkpoints, fresh replacement `dal.DB` handles, all-or-none grouped
 checkpoint/branch start, reverse-order compensation, explicit unsupported
 capabilities and database-only manifests. Do not add methods to `dal.DB`.
 
+### Wave 0 contract freeze
+
+The committed Chatwright runtime for this plan is the Go module rooted at
+`chatwrite/` (`github.com/chatwright/chatwright`). The fresh checkout contains
+no `cli/` runtime, and no second implementation may be introduced beside
+`chatwrite/`.
+
+Wave 0 recorded these clean synchronized bases:
+
+| Repository | URL | Default branch | Starting commit | Use |
+|---|---|---|---|---|
+| Chatwright | `https://github.com/chatwright/chatwright.git` | `main` | `aa42ec0f6deb7f735117cd2a7f01736d617e6d9e` | modified |
+| DALgo | `https://github.com/dal-go/dalgo.git` | `main` | `c979840261d55af0598aea3cdb905c9fffa28e09` | modified |
+| sneat-bots | `https://github.com/sneat-co/sneat-bots.git` | `main` | `1009a685b47891d8bae1168d2d2eee0dafde9711` | modified |
+| sneat-go | `https://github.com/sneat-co/sneat-go.git` | `main` | `21a293129e83162bb8dc30066f286622e3c5ccf6` | modified |
+| Listus backend | `https://github.com/sneat-co/listus.git` | `main` | `ea91d7b8ef82f2df926f153318ac384573b05be5` | read-only |
+| Sneat core modules | `https://github.com/sneat-co/sneat-core-modules.git` | `main` | `712ce897548e7b7ac9a1b3f010d62bab59350433` | read-only |
+
+The lifecycle contract is frozen as follows:
+
+- holder registration rejects empty and duplicate application names before
+  invoking a holder;
+- capture and branch start visit holders in registration order and publish a
+  group result only after every holder succeeds;
+- partial capture and partial branch start compensate completed work in reverse
+  registration order, retain the primary failure, and report cleanup failures
+  as quarantined resources;
+- checkpoints are immutable until idempotent release, and every branch owns a
+  fresh replacement handle with idempotent finish;
+- application continuation starts only after the complete replacement group is
+  available and the application factory has bound it;
+- checkpoint identity is qualified by scenario and fragment invocation path;
+- evidence scope is exactly `database-only`, includes holder generations,
+  mechanism and cleanup, and explicitly excludes emulator/messages/cursors,
+  clocks, queues, process globals, caches and files;
+- sibling branches execute sequentially and never reset a live database;
+- DALgo exposes branching as an optional sibling-package capability and does
+  not add a method to `dal.DB`;
+- the first memory provider accepts only the default serialised engine and
+  returns an explicit unsupported-capability error for columnar/custom engines.
+
+The following contract-test identities are fixed. Implementations may add
+cases, but must not weaken or rename these behaviours without updating this
+plan and its feature acceptance criteria:
+
+| Repository/package | Frozen contract tests |
+|---|---|
+| Chatwright `branching` | `TestRegistryRejectsEmptyAndDuplicateNames`, `TestCapturePublishesOnlyCompleteGroups`, `TestCaptureFailureCompensatesInReverseOrder`, `TestBranchFailureDoesNotInvokeApplicationFactory`, `TestBranchFailureCompensatesInReverseOrder`, `TestCleanupFailuresAreQuarantined`, `TestReleaseAndFinishAreIdempotent`, `TestEvidenceIsExplicitlyDatabaseOnly`, `TestBranchFactoryReceivesOnlyFreshReplacementHandles` |
+| Chatwright scenario composition | `TestFragmentInvocationRecordsParentPathSourceAndInputs`, `TestFragmentInputsAreIsolated`, `TestCheckpointIdentityIsQualifiedByInvocationPath`, `TestCheckpointLineageCrossesParentAndFragment` |
+| DALgo optional contract | `TestDBInterfaceIsNotWidened`, plus a provider-neutral `branchingtest.RunConformance` covering empty, seed, mutate, semantic digest, source isolation, sibling isolation, fresh handles and idempotent cleanup |
+| `dalgo2memory` | `TestBranchingConformanceSerialized`, `TestBranchingPreservesNestedKeyChains`, `TestBranchingRejectsColumnarEngine`, `TestTwoMemoryDatabasesConformAsOneGroup` |
+| sneat-bots Listus actions | `TestExactTitleReaddDeduplicatesActiveItem`, `TestExactTitleReaddReactivatesDoneItem`, confirmed remove-done/remove-all confirm and cancel tests, and semantic title/status/count assertions |
+| sneat-bots Listus scenario | `TestListusReferenceScenarioDirect` with the three named siblings starting from the same four-active-item digest and one fragment invoked by new/existing parents |
+| sneat-go onboarding | a fake-auth new-user test proving bot user, app user, locale, and auth-created/assigned default family space without fixture provisioning |
+| sneat-go Telegram host | `TestListusReferenceScenarioTelegramWebhook` executing the sneat-bots definition through the actual ListusBot profile and Chatwright fake Bot API with fresh DB, bot, application and driver handles per sibling |
+
+Exclusive implementation ownership is frozen by path:
+
+| Lane | Exclusive paths |
+|---|---|
+| Chatwright composition | new `chatwrite/scenario*.go` files and their tests only |
+| Chatwright coordinator | new `chatwrite/branching/**` files only |
+| DALgo contract | new top-level `branching/**` and `branchingtest/**` files only |
+| DALgo memory | `adapters/dalgo2memory/branching*.go` and tests; request any shared engine edit from the integration lead |
+| sneat-bots actions | existing `extensions/listus/convoactions/**` and `extensions/listus/listusbot/cmds4listusbot/**` action/test files only |
+| sneat-bots scenario | new `extensions/listus/scenarios/**` files only |
+| sneat-go onboarding | `pkg/bots/botauth/facade4botauth/**` onboarding files/tests only |
+| sneat-go host | new Listus execution-host test/support files under `pkg/bots/botinit/` only |
+
+Only the integration lead owns `go.mod`, `go.sum`, specification status/links,
+and edits outside the path table. Cross-repository integration order is DALgo
+contract, DALgo memory, Chatwright composition/coordinator, sneat-bots actions,
+sneat-bots scenario, sneat-go onboarding, then sneat-go Telegram host. Local
+`replace` directives used while integrating must be removed before the release
+gate.
+
 ### Wave 1: Parallel contract and product lanes
 
 Tasks 2–6 may run concurrently after Task 1. Their path ownership must not
