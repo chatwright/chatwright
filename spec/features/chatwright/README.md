@@ -31,6 +31,7 @@ prerequisite for local development.
 | [deterministic-testing](deterministic-testing/README.md) | Scripted scenarios, fluent assertions, milestones and CI-safe failure reporting |
 | [ai-driven-testing](ai-driven-testing/README.md) | Goal-driven actors, constrained exploration and evidence-linked evaluation |
 | [fuzz-testing](fuzz-testing/README.md) | Seeded input, event-order and timing mutation plus AI-generated conversational perturbations |
+| [observation-model](observation-model/README.md) | Actor-neutral projection of visible messages, generic actions, observation lineage and journey context shared by every actor |
 | [playground](playground/README.md) | Offline manual interaction, multiple chat panels, inspection and scenario recording |
 | [scenario-authoring](scenario-authoring/README.md) | Go, structured scenarios, Starlark, hierarchy, inheritance and breakpoints |
 | [state-branching](state-branching/README.md) | Named database-state checkpoints, isolated scenario continuations and replay fallback |
