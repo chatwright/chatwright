@@ -19,6 +19,7 @@ format: https://specscore.md/ideas-index-specification
 | [observation-model](observation-model.md) | Specifying | 2026-07-22 | alex | chatwright/observation-model, chatwright/observation-model/visible-conversation, chatwright/observation-model/actor-actions, chatwright/observation-model/observation-lineage, chatwright/observation-model/observation-context |
 | [openvaultdb-artifact-storage](openvaultdb-artifact-storage.md) | Specifying | 2026-07-22 | alex | chatwright/developer-tooling/openvaultdb-artifact-storage |
 | [third-party-emulator-backends](third-party-emulator-backends.md) | Draft | 2026-07-22 | alex | — |
+| [typing-indicator-fidelity](typing-indicator-fidelity.md) | Approved | 2026-07-22 | alex | — |
 | [specscore-rehearse-verification](specscore-rehearse-verification.md) | Specifying | 2026-07-22 | alex | chatwright/scenario-authoring/portable-scenario-documents, chatwright/developer-tooling/rehearse-adapter, chatwright/developer-tooling/specscore-verification-bindings |
 
 ## Open Questions

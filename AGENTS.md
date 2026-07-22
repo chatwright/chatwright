@@ -39,5 +39,8 @@ don't append unilaterally.)
   lintable conventions; this file states only what lint cannot check.
 - Docs use British English; Go code/comments may use American English; never
   mixed within a file.
+- JSON artefacts (run bundles, cassettes, reports) carry human-readable
+  string constants, never integer enums; in Go, kind/direction/verdict types
+  are string types.
 - Go: `gofmt` clean, `go vet ./...`, `go test -race ./...` before pushing.
 - Contributions: DCO sign-off — see [CONTRIBUTING.md](CONTRIBUTING.md).
