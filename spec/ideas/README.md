@@ -13,6 +13,7 @@ format: https://specscore.md/ideas-index-specification
 | [datatug-investigation-workspace](datatug-investigation-workspace.md) | Specifying | 2026-07-22 | alex | chatwright/developer-tooling/datatug-integration |
 | [headless-conversational-engine-testing](headless-conversational-engine-testing.md) | Specifying | 2026-07-22 | alex | chatwright/conversation-runtime/headless-engine-harness |
 | [openvaultdb-artifact-storage](openvaultdb-artifact-storage.md) | Specifying | 2026-07-22 | alex | chatwright/developer-tooling/openvaultdb-artifact-storage |
+| [third-party-emulator-backends](third-party-emulator-backends.md) | Draft | 2026-07-22 | alex | — |
 | [specscore-rehearse-verification](specscore-rehearse-verification.md) | Specifying | 2026-07-22 | alex | chatwright/scenario-authoring/portable-scenario-documents, chatwright/developer-tooling/rehearse-adapter, chatwright/developer-tooling/specscore-verification-bindings |
 
 ## Open Questions
