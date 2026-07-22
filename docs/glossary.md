@@ -49,7 +49,7 @@ private backstage. Decisions referenced below live in
 |---|---|
 | **scenario** | The authored, platform-neutral description of a conversation and its assertions. Scenarios express intent; Platform Emulators own mechanics. |
 | **fragment** | A reusable, input-isolated piece of scenario invoked by path, with provenance recorded (scenario composition). |
-| **run** | One execution of a scenario in one environment with one endpoint profile. A "test" is a deterministic run with assertions. |
+| **run** | One execution in one environment with one endpoint profile: an ordered sequence of parts over one continuous conversation and cast. A plain scripted test is a single deterministic part; a plain campaign is a single AI-goal part. A "test" is a deterministic run with assertions. |
 | **conversation** / **chat** | The stateful exchange inside a run. Not a synonym for scenario. |
 | **milestone** | A named checkpoint of conversational progress a scenario can assert. |
 | **breakpoint** | A deterministic pause trigger for inspecting a live run (Playground). |
@@ -72,6 +72,18 @@ private backstage. Decisions referenced below live in
 | **trace** | The technical record (HTTP requests, API calls, events), correlated to the transcript by stable IDs. |
 | **metrics** | First-class measurements (latency, sizes, counts; tokens next) from message to run scope. |
 | **fidelity labels** | Declared, never implied: `HTTP`/`direct` (transport), `faithful`/`logical` (platform behaviour), supported/partial/unsupported (coverage). "Fidelity is declared" is doctrine — no "full platform" claims. |
+
+## Run bundles and playback
+
+| Term | Meaning |
+|---|---|
+| **run bundle** | A single self-contained `*.chatwright.json` file recording one or more runs — journal, actors roster, parts, observations, loop events, report, evidence, annotations — replayable with no live emulator, service or network. Identified by its format URL (`https://chatwright.dev/formats/run-bundle/v1`), never a bare version number. Cassettes are separate artefacts, never embedded. |
+| **journal** | The per-chat, append-only structured record a Platform Emulator keeps (messages, edits as versioned identity, method calls), attributed to platform identities. A bundle carries it verbatim; transcript and trace are views over it. |
+| **part** | One ordered passage of a run with a declared kind (`ai-goal` today; `deterministic` reserved) and a journal boundary into the run-level journal. Parts are playback's chapters and give findings their context (hybrid-runs idea). |
+| **actors roster** | A run's list of every conversation participant — `ai-agent`, `human`, `scripted`, `replay` or `bot` — with their platform identities and, for AI actors, provider and model ids. Every journal entry resolves to a roster actor. |
+| **player** | The Studio surface that replays a run bundle entirely client-side: a local file is dropped in and played — nothing is uploaded. |
+| **bookmark** | A manually placed fast-forward marker stored in a bundle. Derived markers (part boundaries, task completions, findings) come from bundle content and are not stored as bookmarks. |
+| **annotation** | A comment anchored to a conversation moment in a bundle (chat + entry, optionally an exact message version), with author and time; replies thread annotations into a conversation about the conversation. |
 
 ## Writing conventions
 
