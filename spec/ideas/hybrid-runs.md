@@ -83,9 +83,11 @@ rework of the campaign API, evidence wiring or Listus lanes is ever needed.
 - Runtime: a minimal `Run(parts...)` composition executing deterministic
   fragments and AI-goal parts in order over one environment, recording part
   boundaries in evidence.
-- Listus proof: onboarding (deterministic fragment, already exists) → one
-  AI-goal exploration part → deterministic cleanup, in one bundle, replayable
-  in the player with chapters.
+- Listus proof (two parts, per founder decision): onboarding (deterministic
+  fragment, already exists) → one AI-goal exploration part, in one bundle,
+  replayable in the player with chapters. Deterministic parts AFTER an AI part
+  (e.g. cleanup) remain supported by the composition API and unit-tested, but
+  are not part of the MVP proof scenario.
 
 ## Not Doing (and Why)
 
