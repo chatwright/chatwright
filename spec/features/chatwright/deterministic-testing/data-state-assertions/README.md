@@ -121,9 +121,10 @@ authoring/inspection surface for DTQL and returned recordsets; Chatwright does
 not require a DataTug daemon or shell out to the DataTug CLI in the first
 release.
 
-This shared-artifact boundary lets a later Studio view open the exact failing
-query and result in DataTug without coupling deterministic scenario execution to
-another process.
+This shared-artifact boundary lets the
+[DataTug assertion investigation](../../developer-tooling/datatug-integration/README.md)
+open the exact failing query and captured result without coupling deterministic
+scenario execution to another process.
 
 ## Dependencies
 
@@ -132,7 +133,6 @@ another process.
 - [Database state holders](../../state-branching/database-state-holders/README.md)
 - [Observability](../../observability/README.md)
 - DALgo `dtql` and query-capable database adapters
-- DataTug as an authoring/inspection consumer of the same DTQL artifact
 
 ## Acceptance Criteria
 

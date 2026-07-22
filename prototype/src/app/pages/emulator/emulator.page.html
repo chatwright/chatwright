@@ -41,7 +41,7 @@
           <button
             type="button"
             class="chat-preview"
-            [class.active]="activeChat === chat.id"
+            [class.active]="activeChat() === chat.id"
             (click)="selectChat(chat.id)"
           >
             <span class="preview-avatar" [class]="'preview-avatar ' + chat.accent">
@@ -67,12 +67,16 @@
       </div>
     </aside>
 
-    <section class="chat-stage">
-      @if (activeChat === 'alice-greeter') {
+    <section
+      class="chat-stage telegram-window"
+      [class.telegram-dark]="store.telegramTheme() === 'dark'"
+      [class.telegram-light]="store.telegramTheme() === 'light'"
+    >
+      @if (activeChat() === 'alice-greeter') {
         <header class="chat-header">
           <div class="chat-identity">
             <p-avatar label="AL" shape="circle" />
-            <div><strong>Alice ↔ Greeter bot</strong><small><span></span> Telegram private chat · ID 894211</small></div>
+            <div><strong><i class="pi pi-send platform-icon"></i> Telegram · Alice ↔ Greeter bot</strong><small><span></span> Private chat · ID 894211</small></div>
           </div>
           <div class="chat-header-actions">
             <p-button icon="pi pi-code" text rounded pTooltip="Open scenario" routerLink="/scenario" />
@@ -80,7 +84,7 @@
           </div>
         </header>
 
-        <div class="message-canvas">
+        <div #messageCanvas class="message-canvas">
           <div class="day-marker"><span>Run started locally</span></div>
 
           <div class="message-row outgoing">
@@ -104,23 +108,6 @@
                 </div>
                 <p>{{ store.greeting() }}</p>
 
-                <div class="language-control">
-                  <label for="greeting-language">
-                    <span>Reply language</span>
-                    <small>Selecting a language sends a callback and edits this message.</small>
-                  </label>
-                  <p-select
-                    inputId="greeting-language"
-                    [options]="store.languages"
-                    optionLabel="label"
-                    optionValue="code"
-                    [ngModel]="store.selectedLanguageCode()"
-                    (onChange)="translate($event.value)"
-                    size="small"
-                    ariaLabel="Reply language"
-                  />
-                </div>
-
                 <footer>
                   <span>00.049</span>
                   @if (store.lastEdited()) {
@@ -130,57 +117,99 @@
                   }
                 </footer>
               </div>
+              <div class="telegram-inline-keyboard" aria-label="Choose reply language">
+                @for (language of store.languages; track language.code) {
+                  <button
+                    type="button"
+                    class="language-action"
+                    [class.selected]="store.selectedLanguageCode() === language.code"
+                    [attr.aria-pressed]="store.selectedLanguageCode() === language.code"
+                    [attr.aria-label]="'Translate greeting to ' + language.label"
+                    (click)="translate(language.code)"
+                  >
+                    <span>{{ language.label }}</span>
+                    @if (store.selectedLanguageCode() === language.code) {
+                      <i class="pi pi-check" aria-hidden="true"></i>
+                    }
+                  </button>
+                }
+              </div>
               @if (store.messageVersion() > 1) {
                 <div class="edit-proof"><span></span> Same platform message · version {{ store.messageVersion() }} · edit matched in 58 ms</div>
               }
             </div>
           </div>
+
+          @for (message of activeSentMessages(); track message.id) {
+            <div class="message-row outgoing sent-message">
+              <div class="message-bubble user-message">
+                <p>{{ message.text }}</p>
+                <footer><span>{{ message.time }}</span><i class="pi pi-check"></i></footer>
+              </div>
+              <span class="message-author">{{ message.author }}</span>
+            </div>
+          }
         </div>
 
         <footer class="composer">
           <button type="button" class="composer-action" aria-label="Attach a test event"><i class="pi pi-paperclip"></i></button>
-          <input pInputText placeholder="Act as Alice…" aria-label="Message as Alice" />
-          <p-button icon="pi pi-send" rounded ariaLabel="Send as Alice" />
-          <div class="composer-hint"><kbd>⌘</kbd><kbd>↵</kbd> send · every action is recorded</div>
+          <input
+            #composerInput
+            pInputText
+            placeholder="Act as Alice…"
+            aria-label="Message as Alice"
+            autocomplete="off"
+            [value]="activeDraft()"
+            (input)="updateDraft($event)"
+            (keydown.enter)="sendMessage()"
+          />
+          <p-button icon="pi pi-send" rounded ariaLabel="Send as Alice" [disabled]="!activeDraft().trim()" (onClick)="sendMessage()" />
+          <div class="composer-hint"><kbd>↵</kbd> send · every action is recorded</div>
         </footer>
-      } @else if (activeChat === 'bob-reminder') {
+      } @else if (activeChat() === 'bob-reminder') {
         <header class="chat-header">
           <div class="chat-identity">
             <p-avatar label="BO" shape="circle" />
-            <div><strong>Bob ↔ Reminder bot</strong><small><span></span> Telegram private chat · ID 894227</small></div>
+            <div><strong><i class="pi pi-send platform-icon"></i> Telegram · Bob ↔ Reminder bot</strong><small><span></span> Private chat · ID 894227</small></div>
           </div>
           <p-tag value="recording" severity="warn" />
         </header>
-        <div class="message-canvas alternate-chat">
+        <div #messageCanvas class="message-canvas alternate-chat">
           <div class="message-row outgoing"><div class="message-bubble user-message"><p>Anything due this week?</p><footer><span>00.000</span></footer></div></div>
           <div class="path-chip"><i class="pi pi-bolt"></i> HTTP round trip · 81 ms</div>
           <div class="message-row incoming">
             <span class="bot-avatar blue"><i class="pi pi-bell"></i></span>
             <div class="message-stack"><span class="message-author">Reminder bot <b>BOT</b></span><div class="message-bubble bot-message"><p>Your car insurance renews in 6 days.</p><div class="simple-actions"><button>Open renewal</button><button>Remind me tomorrow</button></div><footer><span>00.081</span><span class="delivered"><i class="pi pi-check-circle"></i> captured</span></footer></div></div>
           </div>
+          @for (message of activeSentMessages(); track message.id) {
+            <div class="message-row outgoing sent-message"><div class="message-bubble user-message"><p>{{ message.text }}</p><footer><span>{{ message.time }}</span><i class="pi pi-check"></i></footer></div><span class="message-author">{{ message.author }}</span></div>
+          }
         </div>
-        <footer class="composer"><button type="button" class="composer-action"><i class="pi pi-paperclip"></i></button><input pInputText placeholder="Act as Bob…" /><p-button icon="pi pi-send" rounded /></footer>
+        <footer class="composer"><button type="button" class="composer-action" aria-label="Attach a test event"><i class="pi pi-paperclip"></i></button><input #composerInput pInputText placeholder="Act as Bob…" aria-label="Message as Bob" autocomplete="off" [value]="activeDraft()" (input)="updateDraft($event)" (keydown.enter)="sendMessage()" /><p-button icon="pi pi-send" rounded ariaLabel="Send as Bob" [disabled]="!activeDraft().trim()" (onClick)="sendMessage()" /></footer>
       } @else {
         <header class="chat-header">
           <div class="chat-identity">
             <p-avatar icon="pi pi-users" shape="circle" />
-            <div><strong>Launch crew</strong><small><span></span> Logical group chat · 3 actors · 2 bots</small></div>
+            <div><strong><i class="pi pi-send platform-icon"></i> Telegram · Launch crew</strong><small><span></span> Logical group chat · 3 actors · 2 bots</small></div>
           </div>
           <p-tag value="logical mode" severity="secondary" />
         </header>
-        <div class="message-canvas alternate-chat">
+        <div #messageCanvas class="message-canvas alternate-chat">
           <div class="mode-warning"><i class="pi pi-info-circle"></i><span>This panel demonstrates abstract multi-bot conversation mode, not a claim about Telegram bot-to-bot delivery.</span></div>
           <div class="message-row outgoing"><div class="message-bubble user-message"><p>Ship it?</p><footer><span>00.000 · Alice</span></footer></div></div>
           <div class="message-row incoming compact"><span class="bot-avatar violet">BO</span><div class="message-bubble peer-message"><p>Once <code>/help</code> is green.</p><footer><span>00.420 · Bob</span></footer></div></div>
           <div class="message-row incoming"><span class="bot-avatar"><i class="pi pi-sparkles"></i></span><div class="message-stack"><span class="message-author">Chatwright bot <b>BOT</b></span><div class="message-bubble bot-message"><p>1 scenario still failing: <strong>help-fallback</strong> missed its 1 s deadline.</p><div class="simple-actions"><button>Inspect failure</button><button>Run again</button></div><footer><span>00.611</span></footer></div></div></div>
+          @for (message of activeSentMessages(); track message.id) {
+            <div class="message-row outgoing sent-message"><div class="message-bubble user-message"><p>{{ message.text }}</p><footer><span>{{ message.time }}</span><i class="pi pi-check"></i></footer></div><span class="message-author">{{ message.author }}</span></div>
+          }
         </div>
-        <footer class="composer"><button type="button" class="composer-action"><i class="pi pi-paperclip"></i></button><input pInputText placeholder="Act as Alice in Launch crew…" /><p-button icon="pi pi-send" rounded /></footer>
+        <footer class="composer"><button type="button" class="composer-action" aria-label="Attach a test event"><i class="pi pi-paperclip"></i></button><input #composerInput pInputText placeholder="Act as Alice in Launch crew…" aria-label="Message as Alice in Launch crew" autocomplete="off" [value]="activeDraft()" (input)="updateDraft($event)" (keydown.enter)="sendMessage()" /><p-button icon="pi pi-send" rounded ariaLabel="Send as Alice" [disabled]="!activeDraft().trim()" (onClick)="sendMessage()" /></footer>
       }
     </section>
 
     <aside class="trace-rail">
       <header>
-        <div><span class="eyebrow">Live evidence</span><strong>Execution trace</strong></div>
+        <div><span class="eyebrow">Live evidence</span><strong>Execution trace</strong><small class="trace-hint">Hover an event for JSON</small></div>
         <span class="recording-dot"><span></span> REC</span>
       </header>
 
@@ -192,7 +221,20 @@
 
       <div class="trace-list">
         @for (event of store.traceEvents(); track $index) {
-          <div class="trace-event" [class.active]="event.active">
+          <a
+            class="trace-event"
+            [class.active]="event.active"
+            [routerLink]="['/run']"
+            [queryParams]="{
+              event: $index,
+              view: event.title === 'sendMessage' || event.title === 'editMessageText' ? 'rendered' : 'request'
+            }"
+            [attr.aria-label]="'Inspect ' + event.title + ' in the full run inspector'"
+            (mouseenter)="showTracePreview($event, event)"
+            (mouseleave)="hideTracePreview()"
+            (focus)="showTracePreview($event, event)"
+            (blur)="hideTracePreview()"
+          >
             <span class="trace-line"></span>
             <span class="trace-marker" [class]="'trace-marker ' + event.kind">
               <i
@@ -204,9 +246,25 @@
               <strong>{{ event.title }}</strong>
               <p>{{ event.detail }}</p>
             </div>
-          </div>
+          </a>
         }
       </div>
+
+      @if (tracePreview(); as preview) {
+        <aside
+          class="trace-preview-tooltip"
+          role="tooltip"
+          [style.top.px]="tracePreviewTop()"
+          [style.left.px]="tracePreviewLeft()"
+        >
+          <header>
+            <div><span>{{ preview.operation }}</span><strong>{{ preview.title }}</strong></div>
+            <div class="preview-metrics"><b>{{ preview.status }}</b><span>{{ preview.durationMs }} ms</span></div>
+          </header>
+          <pre><code class="hljs language-json" [innerHTML]="highlightedTracePayload()"></code></pre>
+          <footer><i class="pi pi-arrow-up-right"></i> Click this event to open its correlated inspector view.</footer>
+        </aside>
+      }
 
       <a class="trace-link" routerLink="/run"><span>Open full run inspector</span><i class="pi pi-arrow-up-right"></i></a>
     </aside>
