@@ -1,4 +1,4 @@
-module github.com/chatwright/chatwright
+module github.com/chatwright/chatwright/chatwrite
 
 go 1.26.1
 
