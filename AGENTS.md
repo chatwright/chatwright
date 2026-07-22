@@ -31,8 +31,8 @@ unilaterally.)
 - Vocabulary is canonical in [`docs/glossary.md`](docs/glossary.md) — when
   other wording conflicts, the glossary wins; fix the other document.
 - Specs live in [`spec/`](spec/README.md); run `specscore spec lint` before
-  pushing spec changes (0 violations). Acceptance-criteria headings:
-  `### AC: <id>`.
+  pushing spec changes (0 violations) — the linter is the authority on
+  lintable conventions; this file states only what lint cannot check.
 - Docs use British English; Go code/comments may use American English; never
   mixed within a file.
 - Go: `gofmt` clean, `go vet ./...`, `go test -race ./...` before pushing.

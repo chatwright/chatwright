@@ -53,8 +53,8 @@ request or open a discussion first — do not guess at scope.
 
 ### Spec conventions
 
-- Acceptance criteria are headed exactly `### AC: <id>` (a space after the
-  colon); cross-references use `<feature-path>#ac:<id>`.
+- Acceptance-criteria cross-references use `<feature-path>#ac:<id>` (heading
+  format is enforced by `specscore spec lint`).
 - Documentation — this file, README, everything under `spec/` and `docs/` —
   uses British English (*licence*, *behaviour*); Go code and code comments may
   use American English. Never mix within one file. See

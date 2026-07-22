@@ -78,8 +78,8 @@ private backstage. Decisions referenced below live in
 - **English:** documentation (README, `spec/`, `docs/`) uses British English
   ("licence", "behaviour"); Go code and code comments may use American English
   (ecosystem norm). Never mix within one file.
-- **Acceptance criteria headings:** `### AC: <id>` (space after the colon);
-  references use `<feature-path>#ac:<id>`.
+- **AC references:** `<feature-path>#ac:<id>` (heading format is
+  lint-enforced, not documented here).
 - **Attribution:** "an independent open-source project developed by Sneat.co" —
   Sneat is always suffixed (Sneat.co, sneat.dev), never bare.
 - **Em-dashes:** unspaced (`word—word`) in spec documents; either style in
