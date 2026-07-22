@@ -10,8 +10,9 @@ bot-facing APIs, while keeping scenarios neutral where platforms permit it.
 
 The repository currently contains an early Go runtime in [`chatwrite/`](chatwrite/README.md),
 the product specification in [`spec/`](spec/README.md), the phased
-[`roadmap`](docs/roadmap.md), and a connected PrimeNG Studio prototype in
-[`prototype/`](prototype/README.md).
+[`roadmap`](docs/roadmap.md), the [product](docs/product-strategy.md) and
+[Cloud](docs/cloud-strategy.md) strategies, and a connected PrimeNG Studio
+prototype in [`prototype/`](prototype/README.md).
 
 ## Explore the connected mock-ups
 
@@ -31,7 +32,7 @@ pnpm start
 | [Run inspector](prototype/src/app/pages/run/run.page.html) | [http://localhost:4200/run](http://localhost:4200/run) | Transcript, HTTP trace, assertions and first-class latency/message metrics |
 
 The prototype is intentionally local-only and uses sample state. It is a product
-conversation aid, not the hosted Chatwright application.
+conversation aid, not the managed Chatwright Cloud service.
 
 ## Product direction
 
@@ -40,8 +41,15 @@ conversation aid, not the hosted Chatwright application.
   delivery, fake Bot API capture and CI-ready failure reports.
 - **Next:** make the Playground a first-class consumer for manual offline testing, then add a
   portable structured scenario model and Starlark.
-- **Later:** AI actors and evidence-linked UX evaluation, followed by hosted
-  authoring, collaboration and run history.
+- **Later:** AI actors, fuzz testing and evidence-linked UX evaluation, followed
+  by optional Cloud Run infrastructure, flagship Cloud Intelligence and a
+  Marketplace for reusable assets.
+
+Everything required for local development—including the Runtime, CLI, Platform
+Emulators, Playground and Studio—is open source and works without an account.
+Commercial value should come from operated Cloud services, not from closing the
+local Studio. A free account should earn voluntary sign-in through additive sync,
+hosted reports, execution, collaboration and AI value.
 
 The [roadmap](docs/roadmap.md) explains the value gates and deliberately excluded
 scope. The [Chatwright idea](spec/ideas/chatwright.md) and
@@ -62,6 +70,8 @@ consumer.
 | [`spec/research/`](spec/research/README.md) | Explicit investigation backlog and evidence to collect |
 | [`spec/plans/`](spec/plans/README.md) | Near-term executable delivery plan |
 | [`prototype/`](prototype/README.md) | Connected Angular + PrimeNG mock-ups |
+| [`docs/product-strategy.md`](docs/product-strategy.md) | Platform vision, open-source boundary and adoption strategy |
+| [`docs/cloud-strategy.md`](docs/cloud-strategy.md) | Cloud Run, Cloud Intelligence, free-tier and paid-service direction |
 
 ## Status caveat
 
@@ -73,5 +83,7 @@ implemented code as proposed work. Full WhatsApp fidelity remains deferred.
 
 ## Licence
 
-The runtime is [Apache-2.0 licensed](chatwrite/LICENSE). No licence or pricing
-decision is made here for a future hosted service.
+Runtime, CLI, Platform Emulators, Playground and Studio are directed to use the
+[Apache License 2.0](chatwrite/LICENSE). The separately operated Cloud service
+may remain proprietary. Marketplace assets declare their own licences. Pricing
+and Cloud packaging remain undecided.

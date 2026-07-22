@@ -49,6 +49,21 @@ label evaluator/provider/model and distinguish fact from judgement.
 An exploratory run may be distilled into deterministic assertions, a reusable
 actor fixture or a portable scenario. The user selects which observations become
 requirements; Chatwright does not snapshot every generated phrase by default.
+Approved proposals become ordinary repository-owned regression tests that run
+locally without the original AI provider or Chatwright Cloud.
+
+### Exploration is not fuzzing
+
+AI exploration follows a persona, goal and constraints to choose meaningful
+actions. [Fuzz testing](../fuzz-testing/README.md) applies declared mutations to
+inputs, event order, payloads or time and evaluates robustness properties. An AI
+may drive either mode, but results identify which method and oracle were used.
+
+### Managed scale
+
+The local actor/evaluator contract remains provider-neutral and open. Optional
+[Cloud Intelligence](../cloud/intelligence/README.md) adds managed persona
+libraries, model comparison, evaluation and large-scale swarm orchestration.
 
 ## Dependencies
 
@@ -56,6 +71,7 @@ requirements; Chatwright does not snapshot every generated phrase by default.
 - [deterministic-testing](../deterministic-testing/README.md)
 - [scenario-authoring](../scenario-authoring/README.md)
 - [observability](../observability/README.md)
+- [fuzz-testing](../fuzz-testing/README.md)
 
 ## Acceptance Criteria
 
@@ -81,6 +97,14 @@ Scenario: An application event proves completion
 Given a verified booking-created event and a conflicting AI opinion
 When goal completion is resolved
 Then the deterministic evidence remains visible and takes configured precedence
+
+### AC: approved-regression-is-portable
+
+Scenario: AI exploration proposes a regression
+Given a captured failure, minimized conversation and proposed assertions
+When a developer approves the scenario
+Then the exact scenario is stored in a portable repository-owned format
+And it can run locally without an AI provider or cloud account
 
 ## Open Questions
 

@@ -12,8 +12,9 @@ The specification separates product intent from implementation evidence:
   answered with evidence.
 - [`plans/`](plans/README.md) turns approved scope into sequenced delivery.
 
-Narrative sequencing and long-term product strategy live in the
-[`roadmap`](../docs/roadmap.md).
+Narrative sequencing and long-term direction live in the
+[`roadmap`](../docs/roadmap.md), [product strategy](../docs/product-strategy.md)
+and [Cloud strategy](../docs/cloud-strategy.md).
 
 ## Open Questions
 

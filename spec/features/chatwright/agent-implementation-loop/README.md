@@ -11,9 +11,10 @@ status: Draft
 
 ## Summary
 
-Export a selected scenario or hierarchy as a bounded implementation task for a
-coding agent, attach executable acceptance evidence, and bring the resulting run
-status back to the scenario tree.
+Turn conversation design into a reviewable, evidence-driven implementation
+loop: generate scenarios, export a bounded task to a coding agent, run Chatwright,
+analyse failures, propose improvements and bring verified status back to the
+scenario tree.
 
 ## Problem
 
@@ -43,11 +44,33 @@ failure evidence and iterate. The returned result records commit/revision,
 scenario version, execution mode and pass/fail/flaky/unsupported status; it does
 not mark a scenario implemented from an unaudited prose claim.
 
+### First-class workflow
+
+The long-term workflow is:
+
+```text
+design conversation → generate/review scenarios → generate implementation prompt
+→ coding agent implements → run Chatwright → analyse failures
+→ generate/review improvements → repeat
+```
+
+Humans approve scenario requirements and repository changes. Cloud Intelligence
+may orchestrate generation and review, but the implementation contract and
+accepted scenarios remain portable and executable locally.
+
+### Implementation review
+
+Chatwright can compare the proposed implementation and resulting evidence with
+the selected scenario scope, identify untested claims or regressions, and create
+a follow-up prompt. Review findings link to diffs and run evidence rather than
+asserting quality from a prose summary alone.
+
 ## Dependencies
 
 - [scenario-authoring](../scenario-authoring/README.md)
 - [deterministic-testing](../deterministic-testing/README.md)
 - [developer-tooling](../developer-tooling/README.md)
+- [cloud/intelligence](../cloud/intelligence/README.md), for optional managed orchestration
 
 ## Acceptance Criteria
 
@@ -74,6 +97,14 @@ Given a selected implementation task
 When Chatwright creates the export
 Then repository instructions and relevant architecture decisions are included or
 referenced ahead of implementation suggestions
+
+### AC:loop-keeps-human-approval-boundaries
+
+Scenario: Failure analysis proposes a new requirement and code change
+Given a completed agent run with evidence-linked findings
+When Chatwright prepares the next iteration
+Then proposed scenario changes and implementation changes are separately visible
+And neither is accepted solely because an AI generated it
 
 ## Open Questions
 

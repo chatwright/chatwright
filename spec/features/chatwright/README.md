@@ -11,10 +11,11 @@ status: Specifying
 
 ## Summary
 
-An independently usable product that emulates messaging platforms locally so
-scripted, human, replay and AI actors can exercise real bot applications through
-their actual webhooks and platform API clients. The same run produces assertions,
-transcripts, traces and metrics for local development and CI.
+An open, local-first conversation development platform that emulates messaging
+platforms so scripted, human, replay and AI actors can exercise real bot
+applications through their actual webhooks and platform API clients. Optional
+Cloud services add managed execution, collaboration and intelligence without
+becoming a prerequisite for local development.
 
 ## Contents
 
@@ -24,11 +25,14 @@ transcripts, traces and metrics for local development and CI.
 | [conversation-runtime](conversation-runtime/README.md) | Environment, actors, identities, chats, scheduling and run lifecycle |
 | [deterministic-testing](deterministic-testing/README.md) | Scripted scenarios, fluent assertions, milestones and CI-safe failure reporting |
 | [ai-driven-testing](ai-driven-testing/README.md) | Goal-driven actors, constrained exploration and evidence-linked evaluation |
+| [fuzz-testing](fuzz-testing/README.md) | Seeded input, event-order and timing mutation plus AI-generated conversational perturbations |
 | [playground](playground/README.md) | Offline manual interaction, multiple chat panels, inspection and scenario recording |
 | [scenario-authoring](scenario-authoring/README.md) | Go, structured scenarios, Starlark, hierarchy, inheritance and breakpoints |
 | [agent-implementation-loop](agent-implementation-loop/README.md) | Exporting executable specifications to coding agents and tracking outcomes |
 | [observability](observability/README.md) | Transcript, trace, metrics, failure comparison and redaction |
-| [developer-tooling](developer-tooling/README.md) | CLI, local runner, CI, IDE/GitHub integration and hosted Studio boundary |
+| [developer-tooling](developer-tooling/README.md) | Open-source CLI, local runner, CI, IDE integrations and offline-capable Studio |
+| [cloud](cloud/README.md) | Optional managed infrastructure and intelligence, with a useful free-account path |
+| [marketplace](marketplace/README.md) | Open-source, community and commercial reusable conversation-development assets |
 
 ## Compatibility paths (not product hierarchy)
 
@@ -76,13 +80,18 @@ Real HTTP webhook delivery is the strongest and preferred integration mode.
 Direct transport invocation may trade fidelity for speed in narrower tests, but
 results must clearly identify the mode used.
 
-### Product layers
+### Open local stack, optional closed services
 
-The core Go runtime, deterministic engine, Platform Emulators, transcript model,
-CLI and a useful local Playground are candidates for open source. Hosted
-authoring, collaboration, run history and AI execution may become commercial
-services. Those boundaries remain revisable, but the open runtime must not
-depend on Sneat accounts or `sneat.work`.
+Everything required for local development is open source under Apache-2.0:
+Runtime, CLI, Platform Emulators, Playground and Studio. A developer can clone
+Chatwright, develop and test bots, emulate platforms, inspect transcripts,
+record scenarios and run deterministic suites without an account or network.
+
+Commercial value comes from the operated Cloud service: managed capacity,
+retained history, collaboration, organisations and intelligence at scale. Cloud
+service implementations may remain closed, but they consume portable scenarios
+and results rather than redefining them. Sneat authentication and `sneat.work`
+integration are optional hosted conveniences, never Chatwright dependencies.
 
 ## Dependencies
 
@@ -124,12 +133,22 @@ Given a bot project with no Sneat account or application dependencies
 When its webhook and platform API base URL are configured for Chatwright
 Then its supported scenarios can run locally and in CI
 
+### AC: complete-local-workflow-needs-no-account
+
+Scenario: A developer evaluates Chatwright entirely offline
+Given a clone containing the supported Runtime, CLI, Platform Emulator,
+Playground and Studio
+When the developer builds a bot, interacts with it, records a scenario, runs
+deterministic tests and inspects the resulting transcript
+Then every activity completes without a Chatwright Cloud or Sneat account
+And cloud-only capabilities are presented as optional enhancements
+
 ## Open Questions
 
-- Which parts of the Platform Emulators and Playground must be open source to
-  keep the local product genuinely independently useful?
 - Does a single environment own several platform clocks, or one shared logical
   clock with emulator-specific timestamps?
+- Which portable extension contract lets local tools, Cloud and Marketplace
+  assets interoperate without making the Cloud implementation public?
 
 ---
 *This document follows the https://specscore.md/feature-specification*

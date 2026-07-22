@@ -8,7 +8,7 @@ status: Implementing
 **Status:** Implementing
 **Date:** 2026-07-21
 **Owner:** alex
-**Promotes To:** chatwright, chatwright/agent-implementation-loop, chatwright/ai-driven-testing, chatwright/conversation-runtime, chatwright/deterministic-testing, chatwright/developer-tooling, chatwright/manual-emulator, chatwright/observability, chatwright/platform-adapters, chatwright/platform-emulators, chatwright/platform-emulators/discord, chatwright/platform-emulators/slack, chatwright/platform-emulators/telegram, chatwright/platform-emulators/telegram/client, chatwright/platform-emulators/telegram/server-api, chatwright/platform-emulators/whatsapp, chatwright/playground, chatwright/scenario-authoring
+**Promotes To:** chatwright, chatwright/agent-implementation-loop, chatwright/ai-driven-testing, chatwright/cloud, chatwright/cloud/intelligence, chatwright/cloud/intelligence/ai-swarm-testing, chatwright/cloud/run, chatwright/conversation-runtime, chatwright/deterministic-testing, chatwright/developer-tooling, chatwright/fuzz-testing, chatwright/manual-emulator, chatwright/marketplace, chatwright/marketplace/community-libraries, chatwright/observability, chatwright/platform-adapters, chatwright/platform-emulators, chatwright/platform-emulators/discord, chatwright/platform-emulators/slack, chatwright/platform-emulators/telegram, chatwright/platform-emulators/telegram/client, chatwright/platform-emulators/telegram/server-api, chatwright/platform-emulators/whatsapp, chatwright/playground, chatwright/scenario-authoring
 **Supersedes:** —
 **Related Ideas:** —
 
@@ -36,7 +36,8 @@ products.
 The current repository already proves a thin path: a Go harness can deliver
 Telegram-shaped messages to a real HTTP handler, capture fake Bot API calls and
 assert text, actions, edits and latency. Chatwright should turn that proof into
-independently useful open-source infrastructure before pursuing a hosted Studio.
+independently useful open-source infrastructure before pursuing managed Cloud
+services.
 
 ## Recommended Direction
 
@@ -54,10 +55,19 @@ replace it. Add a portable structured model and Starlark only after runtime
 semantics are stable. Add AI actors as another actor driver—not another execution
 engine—and require every AI judgement to point to transcript or state evidence.
 
-Keep the runtime open source and independent of Sneat application architecture.
-`bots-go-framework` is the initial integration and reference adapter source, not
-a permanent product boundary. A later hosted service may use Sneat accounts and
-integrate with `sneat.work`, but the runtime must remain usable without either.
+Keep the entire local development stack open source under Apache-2.0: Runtime,
+CLI, Platform Emulators, Playground and Studio. `bots-go-framework` is the
+initial integration and reference adapter source, not a permanent product
+boundary. Developers need no account to clone, run, develop, test, inspect or
+record locally.
+
+Build optional commercial Cloud services in two areas. Cloud Run provides
+managed execution and collaboration infrastructure. Cloud Intelligence provides
+managed actors, evaluation, model comparison, AI swarm exploration and an
+evidence-driven improvement loop. Add a Marketplace for portable open-source,
+community and commercial assets. Hosted services may use Sneat accounts and
+integrate with Sneat Work, while Chatwright stays independently usable and
+branded.
 
 ## Alternatives Considered
 
@@ -69,8 +79,11 @@ integrate with `sneat.work`, but the runtime must remain usable without either.
   brittle and do not express semantic intent or controlled state.
 - **AI-only testing.** Flexible, but inappropriate for permissions, exactly-once
   effects and other invariants; it also makes failures hard to reproduce.
-- **Hosted Studio first.** Visually attractive but delays the standalone
-  developer value and forces UI decisions before runtime semantics settle.
+- **Cloud platform first.** Attractive as a business surface but delays the
+  standalone developer value and managed jobs are not yet validated.
+- **Proprietary Studio.** Creates an artificial gate around local visual work;
+  commercial differentiation is stronger in operated infrastructure and
+  intelligence.
 
 ## MVP Scope
 
@@ -106,7 +119,9 @@ item above is production-ready.
 - Semantic AI milestones as MVP requirements—initial milestones remain
   deterministic.
 - Database-operation metrics—latency, tokens, message size and count come first.
-- Hosted collaboration, billing or final licensing/pricing decisions.
+- Hosted collaboration, billing or pricing decisions.
+- Cloud Run, Cloud Intelligence and Marketplace implementation; these remain
+  product direction rather than MVP scope.
 
 ## Key Assumptions to Validate
 
@@ -117,6 +132,8 @@ item above is production-ready.
 | Must-be-true | Developers can diagnose failures from one transcript/trace without attaching a debugger. | Give failing fixtures to unfamiliar developers; measure time to explain the failure. |
 | Should-be-true | The Playground converts exploratory sessions over the same Platform Emulator into maintainable scenarios. | Record five real sessions and assess how much generated output needs manual correction. |
 | Might-be-true | Teams will pay for hosted authoring, history and AI evaluation while using the runtime freely. | Interview runtime adopters only after repeat local/CI use is visible. |
+| Might-be-true | A useful free Cloud tier can earn voluntary sign-in without gating local use. | Compare repeat-user activation for sync, hosted reports and limited execution. |
+| Might-be-true | Community packs and commercial assets compound adoption without fragmenting scenario formats. | Publish one curated pack type and measure reuse, compatibility and maintenance cost. |
 
 ## SpecScore Integration
 
@@ -133,8 +150,8 @@ item above is production-ready.
   promising lossless round-tripping from arbitrary Go or Starlark?
 - Which deterministic evidence is sufficient for goal completion before an AI
   evaluator is allowed to contribute a judgement?
-- Where should the local Platform Emulators and Playground sit across the
-  open-source/hosted boundary?
+- Which managed Cloud job creates the strongest pull after repeat local use?
+- Which Marketplace asset should validate the extension and trust model first?
 
 ---
 *This document follows the https://specscore.md/idea-specification*
