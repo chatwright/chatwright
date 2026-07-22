@@ -283,7 +283,7 @@ journey demonstrates a real need.
 **Model:** Terra
 **Repository:** `chatwright/chatwright`
 **Depends-On:** 1
-**Status:** planning
+**Status:** complete
 
 Implement the smallest provider-neutral assertion layer from the data-state
 feature: attachment after settled message/action work, checkpoint gating,
