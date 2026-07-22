@@ -37,12 +37,16 @@ Offer a capture API bot developers call from their real bot — with SDKs as
 thin wrappers — recording conversations as standard run bundles, replayable
 in the Studio player:
 
-- **API-first (PostHog model):** a minimal capture contract — submit
+- **Interface-first:** the contract is a small recording interface — submit
   conversation events (inbound update, outbound call, chat action) keyed to a
-  chat/session — that any language can speak. Served locally first (a
-  collector in the chatwright CLI, or a library writing bundle files
-  directly); hosted ingestion is the later Cloud surface over the same
-  contract.
+  chat/session; cut/flush a bundle — with out-of-the-box sink
+  implementations behind it: a local `*.chatwright.json` file writer (the
+  zero-dependency default), a database sink (DALgo-backed, so any database
+  DALgo supports works), and an API wrapper posting to a collector (a local
+  collector in the chatwright CLI; hosted ingestion is the later Cloud
+  surface over the same wire contract — the PostHog-style capture API is one
+  sink, not the contract itself). Bots in languages without an SDK use the
+  capture API directly.
 - **SDKs as wrappers; first: a `bots-go-framework` middleware** (owned
   dependency — improve it upstream, dogfood on Listus Bot and Sneat Bot in
   production), capturing inbound updates and outbound Bot API calls into
