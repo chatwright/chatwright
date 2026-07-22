@@ -1,11 +1,11 @@
 ---
 format: https://specscore.md/idea-specification
-status: Draft
+status: Approved
 ---
 
 # Idea: Hybrid runs — deterministic and AI-goal parts in one run
 
-**Status:** Draft
+**Status:** Approved
 **Date:** 2026-07-22
 **Owner:** alex
 **Promotes To:** —
@@ -72,6 +72,11 @@ one environment, one cast and one continuous journal:
   explicit at the composition surface rather than hidden inside a step.
 
 ## MVP Scope
+
+**Founder decision (2026-07-22): hybrid runs are MVP day-one scope, not a
+follow-up.** The campaign execution path is built THROUGH the part-composition
+layer from the start — a plain campaign is a single ai-goal part — so no later
+rework of the campaign API, evidence wiring or Listus lanes is ever needed.
 
 - Bundle format: parts with kinds, journal boundaries, part-scoped goal/events
   (shipping in format v1; single-part writers today).
