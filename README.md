@@ -49,14 +49,17 @@ func TestGreeting(t *testing.T) {
 
 How it works: `chatwright.New(t)` boots an **emulated platform API server**
 (Telegram Bot API or WhatsApp Cloud API) on a local port; you point the bot
-under test's API base URL at `cw.BotAPIURL()` and hand Chatwright its webhook
-(an `http.Handler`, or a URL for an external process in any language —
-Chatwright only speaks HTTP). `SendText` POSTs a platform-native update to the
-webhook; the bot's replies to the emulated API are captured, normalised and
-asserted — including neutral `ExpectAction(...).Click()` on inline actions
-(Telegram today) and `ExpectEdited()` for in-place message edits. See
-[`examples/greetbot`](examples/greetbot/) for a complete real-bot example and
-[`example_test.go`](example_test.go) for a framework-free HTTP bot.
+under test's API base URL at `cw.BotAPIURL()` and, for webhook-driven bots,
+hand Chatwright its webhook (an `http.Handler`, or a URL for an external
+process in any language — Chatwright only speaks HTTP) with `ServeWebhook` or
+`WebhookAt`. `SendText` submits a neutral action to the emulator, which builds
+the platform-native update and owns delivering it — pushed to the webhook, or,
+for a Telegram bot that never registers one, queued for the bot's own
+`getUpdates` long-polling instead. The bot's replies to the emulated API are
+captured, normalised and asserted — including neutral `ExpectAction(...).Click()`
+on inline actions (Telegram today) and `ExpectEdited()` for in-place message
+edits. See [`examples/greetbot`](examples/greetbot/) for a complete real-bot
+example and [`example_test.go`](example_test.go) for a framework-free HTTP bot.
 
 The small CLI installs with:
 
