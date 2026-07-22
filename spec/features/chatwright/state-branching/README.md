@@ -7,7 +7,7 @@ status: Draft
 
 > [SpecScore.**Studio**](https://specscore.studio): | [Explore](https://specscore.studio/app/github.com/chatwright/chatwright/spec/features/chatwright/state-branching?op=explore) | [Edit](https://specscore.studio/app/github.com/chatwright/chatwright/spec/features/chatwright/state-branching?op=edit) | [Ask question](https://specscore.studio/app/github.com/chatwright/chatwright/spec/features/chatwright/state-branching?op=ask) | [Request change](https://specscore.studio/app/github.com/chatwright/chatwright/spec/features/chatwright/state-branching?op=request-change) |
 **Status:** Draft
-**Source Ideas:** chatwright
+**Source Ideas:** chatwright, app-state-branching
 
 ## Summary
 

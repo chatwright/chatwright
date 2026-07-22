@@ -7,6 +7,7 @@ user-grounded evidence before the corresponding feature is approved.
 
 | Document | IDs | Purpose |
 |---|---|---|
+| [App state branching](app-state-branching.md) | ASB-01–ASB-24 | Database-only checkpoint/branch consistency, provider architecture, determinism, hierarchy and evidence for DALgo-backed state holders |
 | [Runtime integration](runtime-integration.md) | I-01–I-03, I-11–I-12 | Existing framework seams, HTTP hosting, shared state, queues and event buses |
 | [Platform semantics](platform-semantics.md) | I-04–I-06 | Telegram inbound/outbound fidelity and bot-to-bot constraints |
 | [Conversation model](conversation-model.md) | I-07–I-10 | Neutral actions/messages/chats and actor/persona/identity boundaries |

@@ -7,7 +7,7 @@ status: Draft
 
 > [SpecScore.**Studio**](https://specscore.studio): | [Explore](https://specscore.studio/app/github.com/chatwright/chatwright/spec/features/chatwright/state-branching/database-state-holders?op=explore) | [Edit](https://specscore.studio/app/github.com/chatwright/chatwright/spec/features/chatwright/state-branching/database-state-holders?op=edit) | [Ask question](https://specscore.studio/app/github.com/chatwright/chatwright/spec/features/chatwright/state-branching/database-state-holders?op=ask) | [Request change](https://specscore.studio/app/github.com/chatwright/chatwright/spec/features/chatwright/state-branching/database-state-holders?op=request-change) |
 **Status:** Draft
-**Source Ideas:** chatwright
+**Source Ideas:** chatwright, app-state-branching
 
 ## Summary
 

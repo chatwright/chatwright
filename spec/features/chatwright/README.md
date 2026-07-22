@@ -30,6 +30,7 @@ prerequisite for local development.
 | [agent-harnesses](agent-harnesses/README.md) | Controlled MCP tool-boundary testing (draft); batch/terminal agent-CLI adapters parked as an idea |
 | [deterministic-testing](deterministic-testing/README.md) | Scripted scenarios, fluent assertions, milestones and CI-safe failure reporting |
 | [ai-driven-testing](ai-driven-testing/README.md) | Goal-driven actors, constrained exploration and evidence-linked evaluation |
+| [goal-driven-ai-testing](goal-driven-ai-testing/README.md) | Goal-and-task AI campaigns that explore a bot autonomously, verify state via data assertions and return evidence-backed reports |
 | [fuzz-testing](fuzz-testing/README.md) | Seeded input, event-order and timing mutation plus AI-generated conversational perturbations |
 | [observation-model](observation-model/README.md) | Actor-neutral projection of visible messages, generic actions, observation lineage and journey context shared by every actor |
 | [playground](playground/README.md) | Offline manual interaction, multiple chat panels, inspection and scenario recording |

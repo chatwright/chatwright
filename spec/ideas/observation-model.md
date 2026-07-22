@@ -10,7 +10,7 @@ status: Specifying
 **Owner:** alex
 **Promotes To:** chatwright/observation-model, chatwright/observation-model/visible-conversation, chatwright/observation-model/actor-actions, chatwright/observation-model/observation-lineage, chatwright/observation-model/observation-context
 **Supersedes:** —
-**Related Ideas:** —
+**Related Ideas:** extends:app-state-branching, extends:local-studio-continuity
 
 ## Executive Summary
 
