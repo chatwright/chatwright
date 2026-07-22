@@ -1,17 +1,17 @@
 ---
 format: https://specscore.md/decision-specification
-status: Approved
+status: Superseded
 ---
 
 # Decision: Open runtime with a separable, potentially commercial hosted Studio
 
-**Status:** Approved
+**Status:** Superseded
 **Date:** 2026-07-21
 **Owner:** alex
 **Tags:** open-source, hosted, commercial, accounts
 **Source Idea:** chatwright
 **Supersedes:** —
-**Superseded By:** —
+**Superseded By:** 0007
 
 ## Context
 
@@ -76,6 +76,12 @@ this repository at decision time; the PrimeNG UI is explicitly a local mock.
 - Which collaboration and AI workloads create enough recurring value to support
   the hosted product?
 - Where is the fair boundary between the basic emulator and advanced Studio?
+
+## Supersession
+
+[Decision 0007](0007-open-local-stack-closed-cloud.md) opens the complete local
+development stack, including Studio, under Apache-2.0 and moves the potentially
+proprietary commercial boundary to optional operated Cloud services.
 
 ---
 *This document follows the https://specscore.md/decision-specification*

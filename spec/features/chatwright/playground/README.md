@@ -116,7 +116,7 @@ And asserts only the selected observations
 ## Open Questions
 
 - Which Playground capabilities belong in the open-source local product versus
-  a hosted Studio?
+  the local Studio and optional Cloud services?
 - How should several local bot processes advertise webhook and platform API
   configuration without framework-specific setup?
 - Which recorded platform details remain fixtures versus portable scenario intent?

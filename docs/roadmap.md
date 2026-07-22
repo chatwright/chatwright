@@ -1,15 +1,15 @@
 # Chatwright roadmap
 
-- **Updated:** 2026-07-21
-- **Product:** Chatwright — deterministic and AI-driven testing for conversational
-  applications
+- **Updated:** 2026-07-22
+- **Product:** Chatwright — the open local development and managed intelligence
+  platform for conversational applications
 - **Roadmap rule:** a phase advances when its user-value gate is met, not merely
   when its feature list has code.
 
 ## Review of the original brief
 
 The brief has the right product split: runtime, deterministic tests, AI tests,
-manual emulation, authoring and hosted tooling must remain distinct. Its strongest
+manual emulation, authoring and Cloud services must remain distinct. Its strongest
 idea is also the most practical one: exercise the real webhook over HTTP and make
 the fake outbound platform API the source of simulated chat state.
 
@@ -25,7 +25,7 @@ Three corrections improve it:
    emulation remains deferred; the existing text adapter is a valuable
    architecture probe, not a WhatsApp Platform Emulator.
 3. **The hierarchy is a map, not a simultaneous backlog.** AI evaluation,
-   Starlark, visual authoring and hosted collaboration are important, but they
+   Starlark, visual authoring, Cloud and Marketplace are important, but they
    should not dilute the immediate developer promise: test a real local bot
    offline and understand a failure in one screenful.
 
@@ -58,10 +58,15 @@ message reaches the bot.
    but it cannot overwrite observed state, events or assertions.
 4. **One semantic transcript, one technical trace.** Correlate them; do not force
    users to choose between readability and causality.
-5. **Open local value.** A bot team must receive substantial value without an
-   account, cloud run or Sneat dependency.
+5. **The complete local workflow is open.** Runtime, CLI, Platform Emulators,
+   Playground and Studio use Apache-2.0 and require no account, Cloud or Sneat
+   dependency.
 6. **Fidelity is declared.** HTTP/direct, faithful/logical and supported/partial
    platform modes are visible in every result.
+7. **Earn sign-in.** Free Cloud capabilities should make developers choose an
+   account for additive value, never to unlock local usage.
+8. **Sell operated value.** Commercial differentiation comes from managed
+   infrastructure, collaboration and intelligence rather than a closed Studio.
 
 ## Phase 0 — Consolidate the proof into a product contract
 
@@ -130,7 +135,7 @@ framework-independent HTTP fixture run the supported slice; repeated suites meet
 an agreed duration/flake budget; unfamiliar developers can explain supplied
 failures from the result bundle alone.
 
-## Phase 1.x — Chatwright Playground
+## Phase 1.x — Chatwright Playground and open Studio foundation
 
 **Goal:** make Chatwright valuable before a test has been written.
 
@@ -140,6 +145,8 @@ failures from the result bundle alone.
 - Selective recording: choose observations that become assertions; export a Go
   scenario and structured draft.
 - Buttons and message edits within the Phase 1 Telegram fidelity boundary.
+- Apache-2.0 Studio packaging, offline operation and a local CLI/runtime bridge;
+  optional Cloud actions fail gracefully when disconnected.
 
 **Immediate gain:** developers interact with several local bot identities without
 accounts, tunnels or deployments, then keep the useful session as a CI scenario.
@@ -148,7 +155,7 @@ accounts, tunnels or deployments, then keep the useful session as a CI scenario.
 observations and run the result headlessly with no manual clean-up of core actors,
 actions or message identities.
 
-## Phase 2 — Portable scenarios and AI actors
+## Phase 2 — Portable scenarios, fuzzing and AI actors
 
 **Goal:** separate scenario ownership from Go while adding outcome-oriented
 testing without creating a second runtime.
@@ -167,6 +174,13 @@ testing without creating a second runtime.
 - Evidence-linked UX reports, uncertainty and evaluator/model/token metadata.
 - Exploratory-run extraction into deterministic regressions or reusable fixtures.
 
+### Fuzz testing
+
+- Seeded text, payload, event-order and timing mutation with replay manifests.
+- Stateful minimization and promotion of failures into local regression inputs.
+- AI-generated perturbations captured as concrete sequences, reported separately
+  from persona/goal-driven exploration.
+
 **Immediate gain:** product/QA authors can own portable scenarios, and teams can
 explore conversational recovery/wording without weakening hard invariants.
 
@@ -174,31 +188,61 @@ explore conversational recovery/wording without weakening hard invariants.
 equivalent semantic runs; AI evaluation reaches an agreed evidence/agreement bar
 and never silently changes deterministic outcomes.
 
-## Phase 3 — Hosted Chatwright Studio
+## Phase 3 — Cloud Run and voluntary account pull
 
-**Goal:** turn individual runs into a collaborative product loop.
+**Goal:** validate the smallest managed-infrastructure jobs that repeat local
+users choose to connect.
 
-- Connected hierarchy, authoring, Playground and run-inspector views over the
-  same Platform Emulator state.
-- Hosted execution, history, comparison, dashboards and CI/GitHub integration.
-- Team collaboration, reusable scenario/persona libraries and organisation policy.
-- Scenario/subtree export to coding agents with versioned evidence returned.
-- Hosted AI actors and evaluation at scale.
-- Optional Sneat accounts and `sneat.work` integration, with standalone Chatwright
-  tenancy and URLs remaining first-class.
+- Optional sign-in from the offline-capable Studio; local state remains usable
+  before, during and after account connection.
+- Test a generous free direction with personal workspace, sync, hosted reports,
+  web Studio, public projects and bounded execution.
+- Hosted execution, queues, schedules, CI integration, history, transcript
+  storage, notifications and comparison.
+- Shared workspaces and organisation capabilities only after personal Cloud Run
+  value is demonstrated.
+- Reports for regression, latency, AI cost, coverage, flakes and platform
+  compatibility, always linked to versioned run evidence.
 
 **Commercial hypothesis:** teams pay for collaboration, retained evidence,
-managed execution and AI operating cost—not for the ability to run core scenarios
-locally.
+managed execution and operational scale—not for the ability to run, author,
+record or inspect locally.
 
-**Exit gate:** repeat open-runtime users validate a paid hosted job; tenant/auth
-boundaries do not leak into the runtime or portable result formats.
+**Exit gate:** repeat local users voluntarily activate and revisit at least one
+managed job; cost and retention are understood; tenant/auth boundaries do not
+leak into local or portable formats.
+
+## Phase 4 — Cloud Intelligence and Marketplace
+
+**Goal:** convert managed exploration into trustworthy, reusable improvements
+and begin compounding an ecosystem.
+
+- Managed AI actors, persona libraries, AI evaluation and UX review.
+- Conversation-quality and prompt analysis, model comparison and benchmarks.
+- Autonomous exploration and bounded AI swarm campaigns across personas, models,
+  temperatures, seeds, goals and constraints.
+- Failure clustering, UX observations and developer-approved deterministic
+  regression proposals.
+- First-class design → scenario → implementation prompt → coding agent → run →
+  analyse → improve loop, with evidence and approval at each boundary.
+- A minimal Marketplace for versioned, licensed and provenance-visible personas,
+  scenarios, assertions, milestones, evaluators, adapters, fixtures, templates
+  and industry packs.
+- Optional Sneat account and Sneat Work integration, while standalone Chatwright
+  tenancy, URLs and workflows remain first-class.
+
+**Commercial hypothesis:** teams pay for managed orchestration, evaluation,
+historical intelligence, private libraries, governance and scale. Open-source
+and community assets expand the local ecosystem.
+
+**Exit gate:** one Intelligence job produces evidence-linked findings with an
+acceptable approval yield and cost; approved regressions replay locally; one
+asset type demonstrates safe community reuse before broader Marketplace work.
 
 ## Later options, not commitments
 
-Production-conversation replay, fuzz/probabilistic actors, load testing,
-multilingual persona testing, model/prompt comparison, voice/SMS/email, Slack,
-Discord, Teams, embedded website chat and formal human usability studies. Each
+Production-conversation replay, load testing, voice/SMS/email, Slack, Discord,
+Teams, embedded website chat and formal human usability studies. Each
 must enter through the actor/platform/observability seams rather than expand the
 core model pre-emptively.
 
@@ -212,13 +256,17 @@ core model pre-emptively.
 | Offline usefulness | Runs/manual sessions completed without real platform accounts, public endpoints or hosted Chatwright |
 | Portable intent | Share of common scenarios using neutral operations; number and clarity of required platform extensions |
 | AI trust | Evaluation agreement, evidence-link completeness and rate of deterministic-evidence conflicts |
-| Sustainable product | Repeat local/CI users who later activate collaboration, history or managed AI workflows |
+| Voluntary Cloud pull | Repeat local/CI users who connect and revisit sync, reports or managed execution without a local feature gate |
+| Cloud utility | Time/operations saved, report revisit/share rate and hosted-run cost |
+| Intelligence yield | Useful findings per cost; developer approval rate; approved regressions replaying locally |
+| Ecosystem reuse | Projects reusing pinned community assets; compatibility and maintenance burden |
 
 ## Dependency order
 
 `platform evidence → neutral model → runtime lifecycle → deterministic assertions
-→ result bundle → manual recording → structured format/Starlark → AI evaluation
-→ hosted collaboration`
+→ result bundle → manual recording/open Studio → structured format/Starlark
+→ deterministic fuzzing → AI evaluation → Cloud Run → Cloud Intelligence
+→ Marketplace`
 
 Skipping leftward work creates attractive surfaces over unstable semantics. The
 connected prototype intentionally explores the UX now, but it does not move web

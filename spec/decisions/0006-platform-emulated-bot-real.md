@@ -43,7 +43,7 @@ primary product boundary.
 This model retains the production-relevant seams—webhooks, platform APIs,
 identity, ordering and state—while allowing fully local and deterministic runs.
 It also separates a reusable platform capability from any one UI such as the
-Playground or hosted Studio.
+Playground, open-source Studio or optional Cloud services.
 
 ## Declined Alternatives
 

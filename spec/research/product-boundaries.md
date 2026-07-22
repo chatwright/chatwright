@@ -3,7 +3,7 @@
 **Date:** 2026-07-21
 **Owner:** alex
 **Status:** Proposed
-**Consumed by:** [`developer-tooling`](../features/chatwright/developer-tooling/README.md), [`agent-implementation-loop`](../features/chatwright/agent-implementation-loop/README.md)
+**Consumed by:** [`developer-tooling`](../features/chatwright/developer-tooling/README.md), [`agent-implementation-loop`](../features/chatwright/agent-implementation-loop/README.md), [`cloud`](../features/chatwright/cloud/README.md)
 
 ## Purpose
 
@@ -16,8 +16,8 @@ licensing and hosted integration boundaries.
 |---|---|---|
 | I-29 | What CLI shape supports Go tests, external processes, local emulation, machine-readable CI and platform selection? | Command/config prototype, exit-code contract and three workflow transcripts. |
 | I-30 | Which packages/repositories should contain runtime, Platform Emulator internals, examples, scenario libraries, Playground UI and hosted services? | Dependency/release map with criteria for splitting rather than speculative repositories. |
-| I-31 | Does Apache-2.0 remain the right runtime licence, and what notice/third-party obligations arise from adapter reuse? | Licence review and automated dependency notice process; no pricing decision required. |
-| I-32 | Which functions must work entirely locally, and which hosted capabilities may be proprietary or paid? | Boundary table tested against the independent-use promise and realistic operating costs. |
+| I-31 | Which notice and third-party obligations apply across the Apache-2.0 Runtime, CLI, Platform Emulators, Playground and Studio? | Licence review and automated dependency notice process across each distributable repository. |
+| I-32 | Which portable seams keep the closed Cloud service optional while the full local workflow stays open? | Boundary table and offline acceptance suite covering run, develop, test, emulate, inspect and record. |
 | I-33 | How may a hosted product use Sneat accounts without coupling the runtime or open formats? | Auth boundary/tenant model and a no-account local/CI acceptance fixture. |
 | I-34 | What integration with `sneat.work` adds user value without making it Chatwright's canonical application shell? | Product flow and data/URL ownership proposal with standalone-hosted fallback. |
 

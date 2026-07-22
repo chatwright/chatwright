@@ -14,6 +14,8 @@ user-grounded evidence before the corresponding feature is approved.
 | [Authoring, emulator and AI](authoring-and-ai.md) | I-20–I-28 | Manual UI, recording, formats, AI providers/evaluation, agent export and SpecScore |
 | [Product boundaries](product-boundaries.md) | I-29–I-34 | CLI, repository/licence/hosted boundaries and Sneat integration |
 | [Platform Emulator architecture](platform-emulators.md) | I-35–I-48 | Shared emulator infrastructure, Telegram compatibility, state engines and offline/manual workflows |
+| [Fuzzing and AI exploration](fuzzing-and-exploration.md) | I-49–I-54 | Deterministic and AI-generated fuzzing, stateful minimization, replay and regression extraction |
+| [Cloud and Marketplace strategy](cloud-and-marketplace.md) | I-55–I-65 | Cloud pull, free tier, sync, reports, hosted trust, managed intelligence and ecosystem assets |
 
 ## Completion rule
 
