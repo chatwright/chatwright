@@ -1,11 +1,11 @@
 ---
 format: https://specscore.md/plan-specification
-status: Draft
+status: Executing
 ---
 
 # Plan: Goal-driven MVP — slice 2 (loop, provider replay, bindings, report)
 
-**Status:** Draft
+**Status:** Executing
 **Source:** idea:goal-driven-ai-bot-testing
 **Features:** chatwright/goal-driven-ai-testing, chatwright/goal-driven-ai-testing/autonomous-exploration, chatwright/goal-driven-ai-testing/dtql-state-verification, chatwright/goal-driven-ai-testing/campaign-reporting, chatwright/ai-driven-testing
 **Date:** 2026-07-22
@@ -17,8 +17,8 @@ status: Draft
 Turn slice 1's foundations (goal contract, observation slice) into a runnable
 campaign: the observe–plan–act–validate loop over a provider seam with
 record/replay, DTQL run-scoped bindings, and the evidence-backed campaign
-report. Exit: the first reproducible Listus campaign. Draft until slice 1
-merges; lane boundaries below assume slice 1's exported APIs.
+report. Exit: the first reproducible Listus campaign. Slice 1 merged 2026-07-22 (goal 864e82c, observe 280e20c); lanes C and D
+execute combined in one implementation lane.
 
 ## Design decisions (binding for the lanes)
 
