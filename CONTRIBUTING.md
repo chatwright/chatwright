@@ -1,5 +1,8 @@
 # Contributing to Chatwright
 
+Start with the development principles in [AGENTS.md](AGENTS.md) — they apply
+to every contribution, human or AI-assisted.
+
 Thank you for considering a contribution. Chatwright is an Apache-2.0 project:
 the Go runtime, CLI, Platform Emulators, Playground and Studio are open source
 permanently (see [decision 0007](spec/decisions/0007-open-local-stack-closed-cloud.md)

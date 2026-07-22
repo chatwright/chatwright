@@ -137,6 +137,7 @@ consumer.
 | [`prototype/`](prototype/README.md) | Connected Angular + PrimeNG mock-ups |
 | [`docs/product-strategy.md`](docs/product-strategy.md) | Platform vision, open-source boundary and adoption strategy |
 | [`docs/cloud-strategy.md`](docs/cloud-strategy.md) | Cloud Run, Cloud Intelligence, free-tier and paid-service direction |
+| [`AGENTS.md`](AGENTS.md) | Development principles and working conventions — for humans and AI agents alike |
 | [`docs/glossary.md`](docs/glossary.md) | Canonical vocabulary for every Chatwright surface |
 | [`docs/compatibility/telegram.md`](docs/compatibility/telegram.md) | The honest, code-verified Telegram compatibility profile: which Bot API methods, update types and capabilities are supported, partial or unsupported today |
 
