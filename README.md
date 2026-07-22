@@ -138,6 +138,7 @@ consumer.
 | [`docs/product-strategy.md`](docs/product-strategy.md) | Platform vision, open-source boundary and adoption strategy |
 | [`docs/cloud-strategy.md`](docs/cloud-strategy.md) | Cloud Run, Cloud Intelligence, free-tier and paid-service direction |
 | [`docs/glossary.md`](docs/glossary.md) | Canonical vocabulary for every Chatwright surface |
+| [`docs/compatibility/telegram.md`](docs/compatibility/telegram.md) | The honest, code-verified Telegram compatibility profile: which Bot API methods, update types and capabilities are supported, partial or unsupported today |
 
 The Go runtime previously lived in a `chatwrite/` subdirectory (module
 `github.com/chatwright/chatwright/chatwrite`). It now lives at the repository
@@ -152,6 +153,23 @@ already moved beyond that point: Telegram text/actions/edits and an early
 WhatsApp text adapter exist. Specifications therefore distinguish **observed
 baseline**, **approved direction**, and **future intent** rather than labelling
 implemented code as proposed work. Full WhatsApp fidelity remains deferred.
+
+## Open source and what stays open
+
+Chatwright's complete local development stack is Apache-2.0, permanently: the
+Go runtime, the Chatwright CLI, Platform Emulators (Telegram today, WhatsApp
+and others as they land), the Playground, Chatwright Studio, and every result
+and evidence format they produce — transcripts, traces, metrics and
+assertions. None of it requires an account, a network connection to any
+Chatwright service, or a Sneat.co account to clone, run, develop against and
+test a real bot locally.
+
+The only closed layer is the optional, separately operated **Chatwright
+Cloud**: managed execution, retained history, collaboration and organisation
+capabilities. Its portable inputs and exports, and any regression tests it
+helps produce, remain usable by the open local stack — see
+[decision 0007](spec/decisions/0007-open-local-stack-closed-cloud.md) for the
+full boundary and rationale.
 
 ## Licence
 
