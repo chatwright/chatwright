@@ -15,6 +15,8 @@ format: https://specscore.md/decisions-index-specification
 | [0006](0006-platform-emulated-bot-real.md) | The messaging platform is emulated; the bot under test is real | Approved | 2026-07-21 | product, emulator, boundary | platform-emulators, playground |
 | [0007](0007-open-local-stack-closed-cloud.md) | Apache-2.0 local stack with optional commercial Cloud services | Approved | 2026-07-22 | open-source, studio, cloud | developer-tooling, cloud, marketplace |
 | [0008](0008-declared-endpoint-profiles.md) | Declared endpoint profiles generalise the execution boundary (amends 0006) | Approved | 2026-07-22 | product, runtime, boundary | chatwright, conversation-runtime, agent-harnesses |
+| [0009](0009-complete-environment-branching.md) | Branch a coordinated environment with replay fallback | In Review | 2026-07-22 | checkpoint, branch, replay | state-branching |
+| [0010](0010-dalgo-branchable-database-providers.md) | Use DALgo with dalgo2memory and inGitDB first | Approved | 2026-07-22 | dalgo, ingitdb, provider | state-branching |
 
 ## Open Questions
 
