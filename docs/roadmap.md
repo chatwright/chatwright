@@ -29,10 +29,9 @@ Three corrections improve it:
    should not dilute the immediate developer promise: test a real local bot
    offline and understand a failure in one screenful.
 
-One repository concern is deliberately left as an investigation: runtime files,
-including `.github`, currently live under `chatwrite/`. Renaming or relocating
-them in this specification/prototype task would mix a potentially disruptive
-repository restructure into product definition.
+The former repository concern about runtime files living under `chatwrite/` is
+resolved (I-30, 2026-07-22): the Go runtime, `.github` CI and `cmd/chatwright`
+now live at the repository root as module `github.com/chatwright/chatwright`.
 
 ## North star
 
@@ -80,7 +79,8 @@ message reaches the bot.
 - Record what the current seed actually supports and mark everything else
   experimental/unsupported.
 - Make repository structure, root orientation, package entry point and CI working
-  directory unambiguous (after I-30 decides whether `chatwrite/` is intentional).
+  directory unambiguous (done 2026-07-22: runtime at root, module
+  `github.com/chatwright/chatwright`).
 - Capture a representative passing result and three failures: wrong text, missed
   deadline and invalid outbound request.
 - Measure baseline suite duration and repeat runs enough to expose ordering/flaky

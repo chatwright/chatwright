@@ -1,7 +1,26 @@
+# Go binaries & artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+/bin/
+*.test
+*.out
+coverage.txt
+coverage.html
+go.work
+go.work.sum
+
+# Prototype (Angular)
 node_modules/
 dist/
 .angular/
-.DS_Store
 coverage/
 prototype/.env.local
 prototype/src/app/primeui-license.local.ts
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+*.swp

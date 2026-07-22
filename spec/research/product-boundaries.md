@@ -23,11 +23,11 @@ licensing and hosted integration boundaries.
 
 ## Existing structure concern
 
-The runtime currently sits under a `chatwrite/` subdirectory, including its own
-`.github` directory, after a recent repository move. This task deliberately does
-not rename or relocate runtime code. I-30 must determine whether that path is an
-intentional future module boundary, a temporary staging location or a typo before
-packaging and CI assume it.
+Resolved 2026-07-22: the runtime moved from the `chatwrite/` subdirectory to the
+repository root as module `github.com/chatwright/chatwright`, with `.github` CI
+and `cmd/chatwright` at the root. The nested
+`github.com/chatwright/chatwright/chatwrite` module path remains resolvable for
+consumers pinned to historical pseudo-versions.
 
 ## Open Questions
 
