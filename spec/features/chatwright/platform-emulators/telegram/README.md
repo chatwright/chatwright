@@ -20,7 +20,7 @@ emulated; the bot under development is the real application.
 | Child | Purpose |
 |---|---|
 | [Telegram Client Emulator](client/README.md) | Users, identities, chats and actions as Telegram clients observe and produce them |
-| [Telegram Server/API Emulator](server-api/README.md) | Updates, webhooks, Bot API endpoints, platform state and delivery behaviour |
+| [Telegram Server/API Emulator](server-api/README.md) | Updates, webhooks, Bot API endpoints and delivery behaviour over the shared platform state engine |
 
 The public product hierarchy intentionally stops at these two children.
 Protocol fixtures, transports, state stores and method handlers belong in
@@ -46,6 +46,16 @@ text messages, inline actions/callbacks, in-place edits, real HTTP webhook
 delivery, fake Bot API endpoints, stable platform identifiers and correlated
 evidence. The hierarchy describes the complete product area; support expands
 only when behaviour is modelled faithfully and tested.
+
+### One state engine, two ports
+
+Internally the Telegram Platform Emulator keeps a single authoritative platform
+state engine: chats, users, messages with one per-chat message-identifier
+sequence, the update queue and the event journal. The two public children are
+ports over that engine, not stateful services of their own — the Client
+Emulator presents actor-facing actions and client-view projections; the
+Server/API Emulator presents the bot-facing wire surface and delivery
+behaviour. Neither port owns a separate copy of platform state.
 
 ### Offline development loop
 
@@ -82,8 +92,9 @@ And the reply arrives through the emulator's fake Bot API and appears in chat
 Scenario: The Telegram MVP compatibility profile is evaluated
 Given a declared supported user interaction
 When it runs end to end
-Then the Client Emulator owns the user/chat-facing action and state
-And the Server/API Emulator owns update delivery and the bot-facing API surface
+Then the Client Emulator carries the user/chat-facing action and its projection
+And the Server/API Emulator carries update delivery and the bot-facing API surface
+And both operate on the emulator's single platform state engine
 
 ### AC: profile-does-not-claim-full-parity
 

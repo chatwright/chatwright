@@ -11,9 +11,10 @@ status: Implementing
 
 ## Summary
 
-The bot-facing half of the Telegram Platform Emulator: a local Telegram-like
-server that generates updates, delivers webhooks and exposes fake Bot API
-endpoints that the real bot calls as it would call Telegram.
+The bot-facing port of the Telegram Platform Emulator: a local Telegram-like
+wire surface that generates updates, delivers webhooks and exposes fake Bot API
+endpoints that the real bot calls as it would call Telegram — mutating the
+emulator's single platform state engine through validated operations.
 
 ## Problem
 
@@ -38,12 +39,15 @@ IDs, ordering, delivery, retries, duplicates, webhook secrets and scheduling as
 they enter supported profiles. Real HTTP delivery is the strongest mode; direct
 handler invocation is a separately labelled lower-fidelity option.
 
-### Platform ownership
+### Wire surface over shared state
 
-The server owns bot registration, authentication policy, chats, message
-identifiers, callback queries, inline and reply keyboards, API responses, API
-errors and rate-limit behaviour for the supported surface. Bot credentials may be
-local fixtures, but the bot process and its application state remain real.
+The server port owns the bot-facing wire concerns: bot registration,
+authentication policy, callback queries, inline and reply keyboards, API
+responses, API errors and rate-limit behaviour for the supported surface. Chats
+and message identifiers live in the emulator's single platform state engine,
+which this port mutates through validated operations — it holds no separate
+copy. Bot credentials may be local fixtures, but the bot process and its
+application state remain real.
 
 ### Inspectable evidence
 
@@ -65,7 +69,7 @@ Scenario: A real bot sends and edits a Telegram message
 Given its Bot API base URL targets the Server/API Emulator
 When the bot calls supported send and edit endpoints
 Then the emulator validates the real HTTP requests and returns Telegram-shaped responses
-And one stateful message is created then versioned in the Client Emulator
+And one stateful message is created then versioned in the platform state engine, visible through the Client Emulator's projection
 
 ### AC: webhook-behaviour-is-evidence
 

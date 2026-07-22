@@ -11,9 +11,11 @@ status: Implementing
 
 ## Summary
 
-The user- and chat-facing half of the Telegram Platform Emulator. One instance
-can represent many Telegram users, identities, chats and bots simultaneously and
-accept actions from human, scripted, replay or AI actors.
+The actor-facing port of the Telegram Platform Emulator: semantic client
+actions in, client-view projections out, over the emulator's single platform
+state engine. One instance can represent many Telegram users, identities, chats
+and bots simultaneously and accept actions from human, scripted, replay or AI
+actors.
 
 ## Problem
 
@@ -25,9 +27,11 @@ multi-user workflows and understand what Telegram participants would observe.
 
 ### Users, identities and chats
 
-The Client Emulator owns client-visible private and group chats, users, platform
-identities, chat history and concurrent views involving multiple users and bots.
-Message identity and versions remain stable across supported edits and deletes.
+The Client Emulator presents client-visible private and group chats, users,
+platform identities, chat history and concurrent views involving multiple users
+and bots — all projections over the emulator's single platform state engine; the
+port owns no state of its own. Message identity and versions remain stable
+across supported edits and deletes.
 
 ### Interaction horizon
 
