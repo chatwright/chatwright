@@ -16,6 +16,7 @@ described in [docs/release-process.md](docs/release-process.md).
   dependency cycles and negative budgets. Pure contract — no AI, emulator or
   I/O, and time comes from an injected clock rather than `time.Now` so
   behaviour is deterministic in tests.
+- Structured journal read seam (`platform.Emulator.Journal`, `platform.JournalEntry`) with `Transcript` now rendering from the same data in both emulators, plus a new `observe` package (`Observation`, `Engine`, stale-action `Validate`) providing the minimum Observation Model slice — visible messages with stable logical IDs/versions, generic available actions and explicit changes — without exposing raw platform payloads (e.g. Telegram callback data) to actors.
 
 ## v0.1.0 — 2026-07-22
 
