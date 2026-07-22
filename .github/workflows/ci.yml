@@ -1,36 +1,34 @@
-name: CI
+name: Go CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+    tags:
+      - 'v[0-9]+\.[0-9]+\.[0-9]+'
+    paths:
+      - '.github/workflows/**.yml'
+      - '**/go.*'
+      - '**/*.go'
   pull_request:
-    branches: [main]
+    branches:
+      - '**'
+    paths:
+      - '.github/workflows/**.yml'
+      - '**/go.*'
+      - '**/*.go'
 
 jobs:
-  build-test:
-    name: build & test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.26'
-          cache: true
-
-      - name: Verify gofmt
-        run: |
-          unformatted=$(gofmt -l .)
-          if [ -n "$unformatted" ]; then
-            echo "These files are not gofmt-clean:"; echo "$unformatted"; exit 1
-          fi
-
-      - name: go vet
-        run: go vet ./...
-
-      - name: Build
-        run: go build ./...
-
-      - name: Test (race + coverage)
-        run: go test -race -coverprofile=coverage.txt ./...
+  strongo_workflow:
+    uses: strongo/cicd/.github/workflows/workflow.yml@main
+    permissions:
+      contents: write
+    secrets:
+      # No private Go modules — the built-in token is sufficient.
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    with:
+      code_coverage: true
+      # Releases are deliberate pre-1.0 (docs/release-process.md): manual
+      # annotated tags + CHANGELOG, not auto-bumped patches.
+      disable-version-bumping: true
