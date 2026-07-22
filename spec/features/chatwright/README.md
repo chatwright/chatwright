@@ -28,6 +28,7 @@ becoming a prerequisite for local development.
 | [fuzz-testing](fuzz-testing/README.md) | Seeded input, event-order and timing mutation plus AI-generated conversational perturbations |
 | [playground](playground/README.md) | Offline manual interaction, multiple chat panels, inspection and scenario recording |
 | [scenario-authoring](scenario-authoring/README.md) | Go, structured scenarios, Starlark, hierarchy, inheritance and breakpoints |
+| [state-branching](state-branching/README.md) | Named database-state checkpoints, isolated scenario continuations and replay fallback |
 | [agent-implementation-loop](agent-implementation-loop/README.md) | Exporting executable specifications to coding agents and tracking outcomes |
 | [observability](observability/README.md) | Transcript, trace, metrics, failure comparison and redaction |
 | [developer-tooling](developer-tooling/README.md) | Open-source CLI, local runner, CI, IDE integrations and offline-capable Studio |

@@ -23,6 +23,12 @@ round-tripping between arbitrary code and a form editor.
 
 ## Behavior
 
+### Child features
+
+| Child | Purpose |
+|---|---|
+| [scenario-composition](scenario-composition/README.md) | Reuse scenario fragments with explicit inputs, outputs, checkpoints and provenance |
+
 ### Go-first API
 
 The Go API remains the first executable interface and may use fluent operations
@@ -53,6 +59,7 @@ executed descendants and distinguishes not-run from unsupported.
 
 - [conversation-runtime](../conversation-runtime/README.md)
 - [deterministic-testing](../deterministic-testing/README.md)
+- [state-branching](../state-branching/README.md)
 - SpecScore hierarchy/scoring research in [`spec/research`](../../../research/README.md)
 
 ## Acceptance Criteria
