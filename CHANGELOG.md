@@ -4,6 +4,19 @@ User-visible changes per release. Format follows
 [Keep a Changelog](https://keepachangelog.com/); pre-1.0 versioning intent is
 described in [docs/release-process.md](docs/release-process.md).
 
+## Unreleased
+
+### Added
+
+- New `goal` package: the goal/task/budget contract for goal-driven AI
+  testing (`Goal`, `Task`, `Budgets`) and a guarded `CampaignState` state
+  machine with deterministic `StopReason`s (`goal-complete`, `budget-steps`,
+  `budget-duration`, `repeated-failure`, `cancelled`, `error`);
+  construction-time validation rejects duplicate/unresolved task ids,
+  dependency cycles and negative budgets. Pure contract — no AI, emulator or
+  I/O, and time comes from an injected clock rather than `time.Now` so
+  behaviour is deterministic in tests.
+
 ## v0.1.0 — 2026-07-22
 
 First tagged release. Telegram-first deterministic conversation testing:
