@@ -1,12 +1,12 @@
 ---
 format: https://specscore.md/plan-specification
-status: Draft
+status: Implemented
 ---
 
 # Plan: Listus branchable reference scenario
 
-**Status:** Draft
-**Source:** chatwright/scenario-authoring/scenario-composition, chatwright/state-branching, chatwright/state-branching/database-state-holders
+**Status:** Implemented
+**Source:** idea:chatwright
 **Date:** 2026-07-22
 **Owner:** alex
 **Supersedes:** —
@@ -150,7 +150,7 @@ are read-only inputs, never integration targets.
 
 **Model:** Sol
 **Depends-On:** —
-**Status:** planning
+**Status:** complete
 
 Clone or fast-forward every repository that will be read or edited, record its
 remote/default branch/revision and current focused test results, create one clean
@@ -162,7 +162,7 @@ integration order before editing runtime code.
 
 **Model:** Sol
 **Depends-On:** 0
-**Status:** planning
+**Status:** complete
 
 Convert the feature acceptance criteria into contract tests and an architecture
 note. Freeze semantics, not cosmetic API names: uniquely named holders,
@@ -173,7 +173,7 @@ capabilities and database-only manifests. Do not add methods to `dal.DB`.
 ### Wave 0 contract freeze
 
 The committed Chatwright runtime for this plan is the Go module rooted at
-`chatwrite/` (`github.com/chatwright/chatwright`). The fresh checkout contains
+`chatwrite/` (`github.com/chatwright/chatwright/chatwrite`). The fresh checkout contains
 no `cli/` runtime, and no second implementation may be introduced beside
 `chatwrite/`.
 
@@ -256,7 +256,7 @@ overlap.
 **Model:** Terra
 **Repository:** `chatwright/chatwright`
 **Depends-On:** 1
-**Status:** planning
+**Status:** complete
 
 Implement the smallest typed fragment/execution-context layer that preserves
 parent invocation path, fragment source, effective inputs and qualified
@@ -268,7 +268,7 @@ journey demonstrates a real need.
 **Model:** Sol
 **Repository:** `chatwright/chatwright`
 **Depends-On:** 1
-**Status:** planning
+**Status:** complete
 
 Implement the generic named-holder/composite boundary with fake-holder tests.
 Prove duplicate-name rejection, deterministic order, no partial publication,
@@ -280,7 +280,7 @@ partial branch failure.
 **Model:** Sol
 **Repository:** DALgo
 **Depends-On:** 1
-**Status:** planning
+**Status:** complete
 
 Place an optional branching primitive beside, not inside, mandatory `dal.DB`.
 Build a provider-neutral conformance harness around application-supplied seed,
@@ -292,7 +292,7 @@ record enumeration.
 **Model:** Terra
 **Repository:** `sneat-bots`
 **Depends-On:** 1
-**Status:** planning
+**Status:** complete
 
 Characterise and freeze current add/re-add, mark-bought and selected-item removal
 behaviour through the existing direct conversation test path; existing behaviour
@@ -306,7 +306,7 @@ facade rather than teaching action catalogs about DALgo.
 **Model:** Sol
 **Repository:** `sneat-go` with narrowly scoped test seams in `sneat-bots`
 **Depends-On:** 1
-**Status:** planning
+**Status:** complete
 
 Prove a new ListusBot user can complete `/start` and language selection with fake
 auth while the Sneat auth system auto-creates and assigns the default family
@@ -322,7 +322,7 @@ harness to pre-seed it.
 **Model:** Terra
 **Repository:** DALgo (`adapters/dalgo2memory`)
 **Depends-On:** 4
-**Status:** planning
+**Status:** complete
 
 Implement checkpoint/branch for the default serialised engine. Deep-copy record
 key parent chains and mutable byte values; create a fresh database per branch;
@@ -335,7 +335,7 @@ conformance harness and race tests.
 **Model:** Sol
 **Repository:** `chatwright/chatwright`, then the narrow Listus harness seam
 **Depends-On:** 3, 6, 7
-**Status:** planning
+**Status:** complete
 
 Bind a complete holder group into a fresh application/environment factory
 before the branch continues. For the Telegram harness create a fresh bot,
@@ -348,7 +348,7 @@ mode is process-global.
 **Model:** Terra
 **Repository:** `sneat-bots`
 **Depends-On:** 2, 5, 7
-**Status:** planning
+**Status:** complete
 
 Implement the reusable new-user setup contract, existing-user setup contract
 and shared list-items fragment in `sneat-bots`. Execute the definition through
@@ -362,7 +362,7 @@ diagnostic rung, not the final fidelity claim.
 **Model:** Sol
 **Repository:** `sneat-go`
 **Depends-On:** 2, 5, 8, 9
-**Status:** planning
+**Status:** complete
 
 Add a `sneat-go` test host, preferably beside the Listus profile tests, which
 executes the scenario definitions owned by `sneat-bots` against the actual
@@ -379,7 +379,7 @@ handles.
 
 **Model:** Sol
 **Depends-On:** 2–10
-**Status:** planning
+**Status:** complete
 
 Integrate commits in dependency order, remove temporary replacements, run
 focused and affected suites with race detection, and repeat the complete
@@ -390,7 +390,7 @@ state and cleanup evidence. Record any retained experimental API as internal.
 
 **Model:** Terra; Luna is acceptable for purely mechanical link/status updates
 **Depends-On:** 11
-**Status:** planning
+**Status:** complete
 
 Update package docs, runnable commands, SpecScore status and implementation
 links. Keep deferred inGitDB, parallel execution and non-database holders clearly
@@ -434,6 +434,45 @@ Use **Luna only for mechanical fixture expansion, link/status updates or repetit
 table-driven cases after a Sol/Terra-owned test pattern exists**. Luna is not
 currently exposed as a selectable subagent model in this workspace, so the
 practical first run should use Sol and Terra only rather than block on it.
+
+## Implementation Result
+
+The database-only MVP is implemented on the four local integration branches.
+The canonical Chatwright runtime remains under `chatwrite/`; its publishable Go
+module path is `github.com/chatwright/chatwright/chatwrite`, matching that nested
+repository location.
+
+### Integrated milestones
+
+| Repository | Integration commits | Result |
+|---|---|---|
+| Chatwright | `d59cd13`, `398ec13`, `3a027f5`, `0728ea2`, `9ae60c9` | contract freeze, scenario composition, grouped coordinator, immutable message observations and publishable module path |
+| DALgo | `27fea2b`, `9dd0947`, `9bb4023` | optional branching contract, conformance harness and serialised `dalgo2memory` provider |
+| `sneat-bots` | `8c56977`, `7cc9037`, `cdb3b68`, `2ea811f`, `eedc0a2`, `3071a82`, `cc51035` | characterised mutations, confirmed bulk removal, reusable scenarios/direct rung, profile compatibility and dependency integration |
+| `sneat-go` | `865d4586`, `155bdcaa`, `be692df5`, `98266280` | auth-managed default spaces, valid bot identities, actual Telegram webhook host and dependency integration |
+
+### Release evidence
+
+- `GOWORK=off GOPROXY=off go test -p=1 ./...` passed in every modified Go
+  module, including the complete `sneat-go` repository.
+- `TestListusReferenceScenarioDirect` and
+  `TestListusReferenceScenarioTelegramWebhook` each passed 20 consecutive runs.
+- Affected race tests passed for Chatwright, DALgo branching and memory,
+  `sneat-bots` Listus/profile packages, and the `sneat-go` host/auth packages.
+- The real Telegram rung uses the actual ListusBot webhook with fake auth and a
+  closed HTTP transport that redirects only Telegram API calls to Chatwright's
+  fake Bot API. It starts the new-user database empty and observes the auth
+  system creating and assigning the default family.
+- Evidence checks require the two qualified checkpoints, one shared fragment,
+  the three ordered isolated siblings, fresh database/application/bot/driver
+  handles, released cleanup, and explicit `database-only` exclusions.
+- DALgo separately passes the two-memory-database group and partial capture and
+  branch failure cleanup coverage. Columnar/custom memory engines are rejected;
+  inGitDB and non-database holders remain absent.
+
+No cross-repository `replace` directive is committed. `sneat-bots` and
+`sneat-go` use checksummed pseudo-versions for the local integration milestones.
+Those revisions remain intentionally unpushed pending explicit authorization.
 
 ## Release Gate
 
@@ -536,11 +575,10 @@ not push, publish, deploy or release without explicit user authorization.
   remove-done or remove-all operation requires explicit confirmation and a
   cancellation path.
 
-## Open Question
+## Open Questions
 
-- Which committed Chatwright runtime path should replace the current ambiguous
-  `chatwrite/` versus unversioned `cli/` split? Task 0 must resolve and record
-  this before parallel implementation begins.
+- None for the database-only MVP. Task 0 resolved the runtime location as the
+  committed `chatwrite/` module and aligned its module path with that directory.
 
 ---
 *This document follows the https://specscore.md/plan-specification*
