@@ -22,9 +22,13 @@ Read this before working in any Chatwright repository.
 5. **Dogfood first.** Our own bots (Listus Bot, then Sneat Bot) are the first
    customer of every capability; a capability is proven when it has served one
    of them end to end.
+6. **Each feature proves its existence.** A capability enters the product only
+   with a working proof — an executable scenario, gate test or dogfooded run
+   that demonstrates it. Specs without proofs stay ideas; code without proofs
+   stays unmerged; features whose proofs disappear get retired.
 
-(Deliberately short — max 7. Propose additions to the founder; don't append
-unilaterally.)
+(Deliberately short — max 7; six taken. Propose additions to the founder;
+don't append unilaterally.)
 
 ## Working conventions
 
