@@ -11,7 +11,7 @@ status: Superseded
 **Tags:** open-source, hosted, commercial, accounts
 **Source Idea:** chatwright
 **Supersedes:** —
-**Superseded By:** 0007
+**Superseded By:** 0007-open-local-stack-closed-cloud
 
 ## Context
 
@@ -67,9 +67,9 @@ this repository at decision time; the PrimeNG UI is explicitly a local mock.
 
 ## Affected Features
 
-- [`manual-emulator`](../features/chatwright/manual-emulator/README.md)
-- [`developer-tooling`](../features/chatwright/developer-tooling/README.md)
-- [`agent-implementation-loop`](../features/chatwright/agent-implementation-loop/README.md)
+- [`manual-emulator`](../../features/chatwright/manual-emulator/README.md)
+- [`developer-tooling`](../../features/chatwright/developer-tooling/README.md)
+- [`agent-implementation-loop`](../../features/chatwright/agent-implementation-loop/README.md)
 
 ## Open Questions
 
@@ -79,7 +79,7 @@ this repository at decision time; the PrimeNG UI is explicitly a local mock.
 
 ## Supersession
 
-[Decision 0007](0007-open-local-stack-closed-cloud.md) opens the complete local
+[Decision 0007](../0007-open-local-stack-closed-cloud.md) opens the complete local
 development stack, including Studio, under Apache-2.0 and moves the potentially
 proprietary commercial boundary to optional operated Cloud services.
 

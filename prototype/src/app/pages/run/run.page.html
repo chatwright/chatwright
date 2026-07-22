@@ -56,7 +56,7 @@
           <button
             type="button"
             class="trace-row"
-            [class.selected]="selectedTraceIndex === $index"
+            [class.selected]="selectedTraceIndex() === $index"
             (click)="selectTrace($index)"
           >
             <span class="trace-time">{{ event.time }}</span>
@@ -72,31 +72,70 @@
     </article>
 
     <article class="surface detail-panel">
-      <header class="surface-header">
-        <div><h2>Selected event</h2><p>Outbound platform API · span 5f2a</p></div>
-        <p-tag value="HTTP 200" severity="success" />
-      </header>
-      <div class="detail-title">
-        <span class="detail-icon"><i class="pi pi-pencil"></i></span>
-        <div><span class="eyebrow">Telegram Bot API</span><strong>{{ store.messageVersion() > 1 ? 'editMessageText' : 'sendMessage' }}</strong><small>{{ store.messageVersion() > 1 ? '03.337' : '00.041' }} · localhost:41209</small></div>
-      </div>
-      <div class="detail-tabs"><button class="active">Request</button><button>Response</button><button>State diff</button></div>
-      <div class="request-meta">
-        <div><small>METHOD</small><strong>POST</strong></div>
-        <div><small>PATH</small><strong class="mono">/bot•••/{{ store.messageVersion() > 1 ? 'editMessageText' : 'sendMessage' }}</strong></div>
-        <div><small>DURATION</small><strong>12 ms</strong></div>
-      </div>
-      <pre class="payload"><span>{{ '{' }}</span>
-  <b>"chat_id"</b>: <em>894211</em>,
-  <b>"message_id"</b>: <em>27</em>,
-  <b>"text"</b>: <i>"{{ store.greeting() }}"</i>,
-  <b>"reply_markup"</b>: <span>{{ '{' }} "inline_keyboard": […] {{ '}' }}</span>
-<span>{{ '}' }}</span></pre>
-      <div class="state-diff">
-        <div><span>-</span><code>message[27].version = {{ store.messageVersion() > 1 ? store.messageVersion() - 1 : 0 }}</code></div>
-        <div><span>+</span><code>message[27].version = {{ store.messageVersion() }}</code></div>
-        <p><i class="pi pi-link"></i> Correlated to assertion <strong>In-place edit</strong></p>
-      </div>
+      @if (selectedTrace(); as event) {
+        <header class="surface-header">
+          <div><h2>Selected event</h2><p>{{ event.operation }} · {{ event.kind }} · {{ event.time }}</p></div>
+          <p-tag [value]="event.status" severity="success" />
+        </header>
+        <div class="detail-title">
+          <span class="detail-icon"><i [class]="event.kind === 'actor' ? 'pi pi-user' : event.kind === 'http' ? 'pi pi-globe' : event.kind === 'api' ? 'pi pi-send' : 'pi pi-check'"></i></span>
+          <div><span class="eyebrow">{{ event.kind === 'api' ? 'Telegram Bot API' : event.kind === 'http' ? 'Local HTTP transport' : 'Correlated evidence' }}</span><strong>{{ event.title }}</strong><small>{{ event.detail }}</small></div>
+        </div>
+        <div class="detail-tabs" role="tablist" aria-label="Selected event views">
+          <button type="button" role="tab" [class.active]="detailTab() === 'request'" [attr.aria-selected]="detailTab() === 'request'" (click)="selectDetailTab('request')">Request</button>
+          <button type="button" role="tab" [class.active]="detailTab() === 'response'" [attr.aria-selected]="detailTab() === 'response'" (click)="selectDetailTab('response')">Response</button>
+          <button type="button" role="tab" [class.active]="detailTab() === 'rendered'" [attr.aria-selected]="detailTab() === 'rendered'" (click)="selectDetailTab('rendered')">Rendered view</button>
+          <button type="button" role="tab" [class.active]="detailTab() === 'state'" [attr.aria-selected]="detailTab() === 'state'" (click)="selectDetailTab('state')">State diff</button>
+        </div>
+
+        @if (detailTab() === 'request') {
+          <div class="request-meta">
+            <div><small>OPERATION</small><strong>{{ event.operation }}</strong></div>
+            <div><small>EVENT</small><strong class="mono">{{ event.title }}</strong></div>
+            <div><small>DURATION</small><strong>{{ event.durationMs }} ms</strong></div>
+          </div>
+          <pre class="payload plain-json">{{ selectedTracePayload() }}</pre>
+        } @else if (detailTab() === 'response') {
+          <div class="request-meta">
+            <div><small>STATUS</small><strong class="response-status">{{ event.status }}</strong></div>
+            <div><small>CORRELATION</small><strong class="mono">{{ store.runID }} · {{ selectedTraceIndex() }}</strong></div>
+            <div><small>DURATION</small><strong>{{ event.durationMs }} ms</strong></div>
+          </div>
+          <pre class="payload plain-json">{{ selectedTraceResponse() }}</pre>
+        } @else if (detailTab() === 'rendered') {
+          @if (isRenderableMessage()) {
+            <div class="rendered-view" [class.telegram-light]="store.telegramTheme() === 'light'">
+              <header><i class="pi pi-send"></i><span>Telegram · rendered platform message</span><b>message 27 · v{{ store.messageVersion() }}</b></header>
+              <div class="rendered-message-row">
+                <span class="rendered-avatar"><i class="pi pi-sparkles"></i></span>
+                <div class="rendered-message-stack">
+                  <span class="rendered-author">Greeter bot <b>BOT</b></span>
+                  <div class="rendered-bubble">
+                    <p>{{ store.greeting() }}</p>
+                    <footer><span>00.049</span><i class="pi pi-check-circle"></i></footer>
+                  </div>
+                  <div class="rendered-keyboard">
+                    @for (language of store.languages; track language.code) {
+                      <span [class.selected]="store.selectedLanguageCode() === language.code">{{ language.label }}</span>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          } @else {
+            <div class="no-rendered-view">
+              <span><i class="pi pi-eye-slash"></i></span>
+              <div><strong>No rendered representation</strong><p>{{ event.kind === 'http' ? 'HTTP transport events are inspected as payload and timing data.' : 'This evidence event does not produce a platform message.' }}</p></div>
+            </div>
+          }
+        } @else {
+          <div class="state-diff state-only">
+            <div><span>-</span><code>message[27].version = {{ store.messageVersion() > 1 ? store.messageVersion() - 1 : 0 }}</code></div>
+            <div><span>+</span><code>message[27].version = {{ store.messageVersion() }}</code></div>
+            <p><i class="pi pi-link"></i> Correlated to assertion <strong>In-place edit</strong></p>
+          </div>
+        }
+      }
     </article>
   </div>
 

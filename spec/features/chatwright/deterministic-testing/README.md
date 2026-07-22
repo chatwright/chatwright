@@ -21,6 +21,12 @@ HTTP boundaries. Critical conversational invariants need semantic, chainable
 assertions that wait deterministically and explain the observed conversation on
 failure.
 
+## Contents
+
+| Child | Purpose |
+|---|---|
+| [data-state-assertions](data-state-assertions/README.md) | Execute DTQL after messages and at checkpoints to prove persisted application state |
+
 ## Behavior
 
 ### Scripted scenarios
@@ -48,6 +54,13 @@ AI-inferred milestones are excluded from this feature's first release.
 A failure identifies source location, scenario, actor, bot, platform, expected
 and actual values, timing, relevant metrics, transcript, simulated time, pending
 jobs and related platform calls. CI output must remain useful without the web UI.
+
+### Persisted-state evidence
+
+Conversation expectations may be paired with
+[DTQL data-state assertions](data-state-assertions/README.md). They execute only
+after the relevant application work settles and can gate a checkpoint, so a bot
+reply is not accepted as proof that its claimed database mutation occurred.
 
 ## Dependencies
 

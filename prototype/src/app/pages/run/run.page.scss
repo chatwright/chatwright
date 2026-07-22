@@ -75,6 +75,8 @@
 .payload b { color: var(--cw-blue); font-weight: 500; }
 .payload em { color: var(--cw-violet); font-style: normal; }
 .payload i { color: var(--cw-amber); font-style: normal; }
+.plain-json { min-height: 15.2rem; color: var(--cw-muted-strong); white-space: pre-wrap; }
+.response-status { color: var(--cw-green) !important; }
 .state-diff { padding: 0.7rem 0.9rem; }
 .state-diff > div { display: grid; grid-template-columns: 0.8rem 1fr; gap: 0.2rem; padding: 0.2rem 0.35rem; border-radius: 0.3rem; font-size: 0.5rem; }
 .state-diff > div:first-child { color: var(--cw-red); background: rgba(255,120,147,0.04); }
@@ -82,6 +84,38 @@
 .state-diff code { border: 0; background: transparent; padding: 0; color: inherit; }
 .state-diff p { margin: 0.65rem 0 0; color: var(--cw-muted); font-size: 0.51rem; }
 .state-diff p i { margin-right: 0.28rem; color: var(--cw-blue); }
+.state-only { min-height: 18.8rem; padding-top: 1rem; }
+
+.rendered-view {
+  --tg-canvas: #0e1621;
+  --tg-panel: #182533;
+  --tg-text: #eef5fb;
+  --tg-muted: #8192a2;
+  --tg-line: rgba(185,207,226,0.13);
+  --tg-accent: #64b5ef;
+  min-height: 18.8rem;
+  color: var(--tg-text);
+  background: radial-gradient(circle at 50% 30%, rgba(100,181,239,0.06), transparent 16rem), var(--tg-canvas);
+}
+.rendered-view.telegram-light { --tg-canvas: #e7ebee; --tg-panel: #ffffff; --tg-text: #182330; --tg-muted: #7f8c98; --tg-line: rgba(38,61,82,0.12); --tg-accent: #2481cc; }
+.rendered-view > header { min-height: 2.8rem; display: flex; align-items: center; gap: 0.4rem; padding: 0.65rem 0.8rem; border-bottom: 1px solid var(--tg-line); color: var(--tg-accent); font: 650 0.5rem var(--cw-mono); }
+.rendered-view > header b { margin-left: auto; color: var(--tg-muted); font-weight: 600; }
+.rendered-message-row { display: flex; align-items: flex-start; gap: 0.55rem; padding: 1.4rem; }
+.rendered-avatar { width: 2rem; height: 2rem; display: grid; place-items: center; flex: 0 0 auto; margin-top: 1rem; border-radius: 0.62rem; color: #70c9a7; background: rgba(112,201,167,0.1); font-size: 0.68rem; }
+.rendered-message-stack { width: min(22rem, calc(100% - 2.5rem)); display: grid; gap: 0.28rem; }
+.rendered-author { color: var(--tg-muted); font-size: 0.55rem; }
+.rendered-author b { margin-left: 0.22rem; padding: 0.1rem 0.25rem; border-radius: 0.25rem; color: #70c9a7; background: rgba(112,201,167,0.1); font: 700 0.42rem var(--cw-mono); }
+.rendered-bubble { padding: 0.8rem 0.85rem 0.5rem; border: 1px solid var(--tg-line); border-radius: 0.25rem 0.9rem 0.9rem 0.9rem; background: var(--tg-panel); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+.rendered-bubble p { margin: 0; font-size: 0.68rem; line-height: 1.5; }
+.rendered-bubble footer { display: flex; justify-content: flex-end; gap: 0.35rem; margin-top: 0.5rem; color: var(--tg-muted); font: 500 0.46rem var(--cw-mono); }
+.rendered-keyboard { display: grid; grid-template-columns: 1fr 1fr; gap: 0.16rem; }
+.rendered-keyboard span { min-height: 1.9rem; display: grid; place-items: center; padding: 0.35rem; border: 1px solid var(--tg-line); border-radius: 0.42rem; color: var(--tg-accent); background: color-mix(in srgb, var(--tg-accent) 8%, var(--tg-panel)); font: 650 0.52rem var(--cw-sans); }
+.rendered-keyboard span.selected { color: #70c9a7; border-color: rgba(112,201,167,0.28); background: color-mix(in srgb, #70c9a7 10%, var(--tg-panel)); }
+.no-rendered-view { min-height: 18.8rem; display: flex; align-items: center; justify-content: center; gap: 0.8rem; padding: 1.4rem; text-align: left; }
+.no-rendered-view > span { width: 2.6rem; height: 2.6rem; display: grid; place-items: center; flex: 0 0 auto; border-radius: 0.75rem; color: var(--cw-muted); background: var(--cw-panel-soft); }
+.no-rendered-view div { max-width: 18rem; display: grid; gap: 0.3rem; }
+.no-rendered-view strong { font-size: 0.72rem; }
+.no-rendered-view p { margin: 0; color: var(--cw-muted); font-size: 0.6rem; line-height: 1.5; }
 
 .assertions-panel { overflow: hidden; }
 .assertion-score { min-width: 11rem; display: grid; grid-template-columns: 1fr; gap: 0.35rem; color: var(--cw-green); font: 600 0.52rem var(--cw-mono); text-align: right; }

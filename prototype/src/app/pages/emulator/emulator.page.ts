@@ -1,14 +1,23 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  computed,
+  signal,
+  viewChild
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
+import hljs from 'highlight.js/lib/core';
+import json from 'highlight.js/lib/languages/json';
 
-import { DemoLanguage, DemoStore } from '../../demo.store';
+import { DemoLanguage, DemoStore, TraceEvent } from '../../demo.store';
+
+hljs.registerLanguage('json', json);
 
 type ChatID = 'alice-greeter' | 'bob-reminder' | 'launch-crew';
 
@@ -24,15 +33,20 @@ interface ChatPreview {
   group?: boolean;
 }
 
+interface SentChatMessage {
+  id: string;
+  author: string;
+  text: string;
+  time: string;
+}
+
 @Component({
   selector: 'cw-emulator-page',
   imports: [
     AvatarModule,
     ButtonModule,
-    FormsModule,
     InputTextModule,
     RouterLink,
-    SelectModule,
     TagModule,
     TooltipModule
   ],
@@ -42,7 +56,31 @@ interface ChatPreview {
 })
 export class EmulatorPage {
   readonly store: DemoStore;
-  activeChat: ChatID = 'alice-greeter';
+  readonly messageCanvas = viewChild<ElementRef<HTMLElement>>('messageCanvas');
+  readonly composerInput = viewChild<ElementRef<HTMLInputElement>>('composerInput');
+  readonly activeChat = signal<ChatID>('alice-greeter');
+  readonly drafts = signal<Record<ChatID, string>>({
+    'alice-greeter': '',
+    'bob-reminder': '',
+    'launch-crew': ''
+  });
+  readonly sentMessages = signal<Record<ChatID, SentChatMessage[]>>({
+    'alice-greeter': [],
+    'bob-reminder': [],
+    'launch-crew': []
+  });
+  readonly activeDraft = computed(() => this.drafts()[this.activeChat()]);
+  readonly activeSentMessages = computed(() => this.sentMessages()[this.activeChat()]);
+  readonly tracePreview = signal<TraceEvent | null>(null);
+  readonly tracePreviewTop = signal(0);
+  readonly tracePreviewLeft = signal(0);
+  readonly highlightedTracePayload = computed(() => {
+    const preview = this.tracePreview();
+    return preview
+      ? hljs.highlight(JSON.stringify(preview.payload, null, 2), { language: 'json' }).value
+      : '';
+  });
+  private readonly sentMessageSequence = signal(0);
 
   readonly chats: ChatPreview[] = [
     {
@@ -81,15 +119,75 @@ export class EmulatorPage {
   }
 
   selectChat(chatID: ChatID): void {
-    this.activeChat = chatID;
+    this.activeChat.set(chatID);
   }
 
   translate(code: DemoLanguage['code']): void {
     this.store.translateGreeting(code);
   }
 
+  showTracePreview(domEvent: MouseEvent | FocusEvent, event: TraceEvent): void {
+    const target = domEvent.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    const width = Math.min(512, window.innerWidth - 32);
+    const height = Math.min(500, window.innerHeight - 32);
+
+    this.tracePreviewLeft.set(Math.max(16, rect.left - width - 12));
+    this.tracePreviewTop.set(Math.min(Math.max(16, rect.top - 8), window.innerHeight - height - 16));
+    this.tracePreview.set(event);
+  }
+
+  hideTracePreview(): void {
+    this.tracePreview.set(null);
+  }
+
+  updateDraft(event: Event): void {
+    const text = (event.target as HTMLInputElement).value;
+    const chatID = this.activeChat();
+    this.drafts.update((drafts) => ({ ...drafts, [chatID]: text }));
+  }
+
+  sendMessage(): void {
+    const text = this.activeDraft().trim();
+    if (!text) {
+      return;
+    }
+
+    const chatID = this.activeChat();
+    const sequence = this.sentMessageSequence() + 1;
+    const author = chatID === 'bob-reminder' ? 'Bob' : 'Alice';
+    const time = new Intl.DateTimeFormat('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).format(new Date());
+
+    this.sentMessageSequence.set(sequence);
+    this.sentMessages.update((messages) => ({
+      ...messages,
+      [chatID]: [
+        ...messages[chatID],
+        { id: `${chatID}-${sequence}`, author, text, time }
+      ]
+    }));
+    this.drafts.update((drafts) => ({ ...drafts, [chatID]: '' }));
+    const composer = this.composerInput()?.nativeElement;
+    if (composer) {
+      composer.value = '';
+    }
+
+    requestAnimationFrame(() => {
+      const canvas = this.messageCanvas()?.nativeElement;
+      canvas?.scrollTo({ top: canvas.scrollHeight, behavior: 'smooth' });
+    });
+  }
+
   reset(): void {
-    this.activeChat = 'alice-greeter';
+    this.activeChat.set('alice-greeter');
+    this.drafts.set({ 'alice-greeter': '', 'bob-reminder': '', 'launch-crew': '' });
+    this.sentMessages.set({ 'alice-greeter': [], 'bob-reminder': [], 'launch-crew': [] });
+    this.sentMessageSequence.set(0);
+    this.tracePreview.set(null);
     this.store.resetRun();
   }
 }

@@ -28,6 +28,7 @@ round-tripping between arbitrary code and a form editor.
 | Child | Purpose |
 |---|---|
 | [scenario-composition](scenario-composition/README.md) | Reuse scenario fragments with explicit inputs, outputs, checkpoints and provenance |
+| [portable-scenario-documents](portable-scenario-documents/README.md) | Versioned application-owned manifests and structured scenarios for cross-repository execution and verification binding |
 
 ### Go-first API
 
@@ -93,8 +94,8 @@ Then unsupported is reported separately from passing, failing and not-run
   map to SpecScore artefacts?
 - Which Go Starlark implementation offers appropriate sandboxing, cancellation
   and debugging?
-- Is the structured document source-of-truth for visual scenarios only, or for
-  all portable scenarios?
+- Which Go-first concepts have stable enough execution semantics to graduate
+  from an invocation manifest into the portable structured document?
 
 ---
 *This document follows the https://specscore.md/feature-specification*
