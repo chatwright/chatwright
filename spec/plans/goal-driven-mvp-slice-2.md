@@ -90,6 +90,14 @@ AI judges/evaluation of UX quality (deterministic + DTQL evidence only in this
 slice); persona traits beyond a system-prompt string; parallel actors;
 Sneat Bot campaign (follows Listus).
 
+## Status note (2026-07-22)
+
+Lanes C and D are complete (`f2fe064`): the scripted-provider gate test runs a
+campaign against greetbot through the real Telegram emulator to a completed
+report, in replay-capable form at zero token cost. Remaining before this plan
+closes: the recorded live Listus campaign replay (needs the real provider and
+the Listus-side lanes tracked in the Listus reference plan).
+
 ## Gate
 
 A scripted-provider campaign runs end to end against the greetbot fixture in
