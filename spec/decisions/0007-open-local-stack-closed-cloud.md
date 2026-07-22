@@ -10,7 +10,7 @@ status: Approved
 **Owner:** alex
 **Tags:** open-source, studio, cloud, commercial, accounts
 **Source Idea:** chatwright
-**Supersedes:** 0005
+**Supersedes:** 0005-open-runtime-hosted-studio
 **Superseded By:** —
 
 ## Context
@@ -69,7 +69,7 @@ and violates the offline development promise.
 Not required by the local-development promise. Cloud service code may remain
 closed while formats and local workflows stay portable.
 
-## Consequences
+## Consequences at Decision Time
 
 - Studio needs an Apache-2.0 LICENSE, NOTICE and public positioning.
 - Local tools need complete offline paths and graceful optional Cloud actions.
@@ -78,6 +78,14 @@ closed while formats and local workflows stay portable.
 - Marketplace assets declare their own licence and provenance; essential local
   workflows do not depend on commercial assets.
 - Repository-level dependency notices still require investigation and upkeep.
+
+## Observed Consequences
+
+The product specifications and local Studio prototype now treat Studio as part
+of the open local stack, and optional Cloud capabilities are separated into
+their own feature hierarchy. Local development and CI remain account-free. No
+Cloud pricing, hosted-service implementation or account dependency has been
+introduced into this repository.
 
 ## Affected Features
 
