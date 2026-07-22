@@ -3,7 +3,7 @@ format: https://specscore.md/idea-specification
 status: Implementing
 ---
 
-# Idea: Chatwright conversation execution platform
+# Idea: Chatwright
 
 **Status:** Implementing
 **Date:** 2026-07-21

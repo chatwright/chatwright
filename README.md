@@ -4,10 +4,10 @@
 
 [![CI](https://github.com/chatwright/chatwright/actions/workflows/ci.yml/badge.svg)](https://github.com/chatwright/chatwright/actions/workflows/ci.yml)
 
-Chatwright is an independent open-source conversation execution, simulation and
-testing product developed by [Sneat.co](https://sneat.co). Chatwright emulates
-the messaging platform; the bot under development is the real software under
-test. It exercises real bot webhooks through platform-shaped updates and local
+Chatwright is an open, local-first conversation development platform — an
+independent open-source project developed by [Sneat.co](https://sneat.co).
+Chatwright emulates the messaging platform; the bot under development is the
+real software under test. It exercises real bot webhooks through platform-shaped updates and local
 bot-facing APIs, while keeping scenarios neutral where platforms permit it.
 
 This repository contains the Go runtime and test API at its root (importable as
@@ -137,6 +137,7 @@ consumer.
 | [`prototype/`](prototype/README.md) | Connected Angular + PrimeNG mock-ups |
 | [`docs/product-strategy.md`](docs/product-strategy.md) | Platform vision, open-source boundary and adoption strategy |
 | [`docs/cloud-strategy.md`](docs/cloud-strategy.md) | Cloud Run, Cloud Intelligence, free-tier and paid-service direction |
+| [`docs/glossary.md`](docs/glossary.md) | Canonical vocabulary for every Chatwright surface |
 
 The Go runtime previously lived in a `chatwrite/` subdirectory (module
 `github.com/chatwright/chatwright/chatwrite`). It now lives at the repository
