@@ -13,14 +13,9 @@ status: Draft
 
 Optional managed services that extend the open local platform with hosted
 infrastructure, collaboration and intelligence. Cloud enhances Chatwright; it
-does not unlock or replace essential local development.
-
-## Contents
-
-| Child | Purpose |
-|---|---|
-| [run](run/README.md) | Hosted execution, queues, CI, history, reports, workspaces and organisations |
-| [intelligence](intelligence/README.md) | Managed AI actors, evaluation, comparison, exploration and improvement workflows |
+does not unlock or replace essential local development. See
+[Decision 0007: Apache-2.0 local stack with optional commercial Cloud
+services](../../../decisions/0007-open-local-stack-closed-cloud.md).
 
 ## Product principles
 
@@ -37,14 +32,6 @@ Candidate benefits include a personal workspace, cloud and transcript sync,
 hosted reports, web Studio, community personas, public projects, limited AI runs
 and limited Cloud Run minutes. Exact limits remain deliberately undecided.
 
-### Sell operated value
-
-Paid value can include greater managed execution and AI capacity, large-scale
-swarm testing, advanced reports, organisation workspaces, collaboration,
-historical analytics, private persona libraries, audit logs, enterprise SSO,
-custom models and hosted execution at scale. This is a capability direction,
-not a pricing or packaging decision.
-
 ### Portable boundary
 
 Cloud may be a closed commercial service, but scenarios, selected evidence,
@@ -52,12 +39,22 @@ approved regression tests and documented export formats remain usable by local
 open-source tools. Deleting or losing a cloud account must not make a repository's
 local test suite unusable.
 
-### Independent product, optional Sneat integration
+## Planned scope (not yet specified in detail)
 
-Chatwright remains independently branded and addressable. Hosted services may
-authenticate with Sneat accounts, integrate into Sneat Work or eventually join
-the Sneat Developer Platform, provided standalone Chatwright accounts, URLs and
-portable artefacts remain first-class.
+- **Cloud Run:** hosted execution, queues, scheduled runs and CI integration
+  that preserve local scenario meaning; retained run history, transcript
+  evidence and reports (regression, latency, cost, coverage trends).
+- **Cloud Intelligence:** managed AI actors, evaluators and a persona library
+  for evaluation, review and conversation-quality analysis, with findings kept
+  distinguishable from raw model output.
+- **Model and prompt benchmarking:** comparing LLMs, prompts and evaluator
+  combinations against the same versioned scenarios on cost, latency, success
+  and quality rather than one model's opinion.
+- **AI swarm testing:** large-scale controlled exploration across personas,
+  models and conditions, consolidated into failure reports and candidate
+  regressions that can leave the cloud as portable scenarios.
+- **Collaboration and governance:** shared workspaces, organisations, audit
+  logs and enterprise SSO layered on top of the same portable artefacts.
 
 ## Acceptance Criteria
 
@@ -81,7 +78,12 @@ And does not imply that an account is required for local use
 
 - Which two free Cloud capabilities most strongly convert repeat local users
   without creating an unsustainable operating cost?
-- Which portable data must be exportable before a hosted beta can be trusted?
+- Which portable data and evidence must be exportable or redactable before a
+  hosted beta (Cloud Run, Cloud Intelligence and swarm testing) can be trusted?
+- What is the smallest hosted job repeat local users will pay to avoid
+  operating themselves?
+- Which evaluations and swarm sampling/stopping rules have enough agreement and
+  coverage quality to gate CI or justify cross-project aggregation?
 
 ---
 *This document follows the https://specscore.md/feature-specification*

@@ -26,7 +26,7 @@ into visible messages and generic actions; Chatwright translates a validated
 actor intent back into the platform operation.
 
 The working representation is structured YAML with Markdown in human-readable
-text fields. Stable message and observation identities, explicit revisions and
+text fields. Stable message and observation identities, explicit versions and
 a structured change list make the model usable by deterministic actors and AI
 actors without requiring either to reverse-engineer a platform or diff two
 large snapshots.
@@ -88,7 +88,7 @@ fixtures.
   calls and platform-native IDs stop at the Observation Model boundary. They
   remain available in authorised developer diagnostics.
 - **Stable reference:** logical messages and observations have identities;
-  message edits advance a revision instead of manufacturing a new message.
+  message edits advance a version instead of manufacturing a new message.
 - **Traceable synthetic identity:** the observation and its visual rendering use
   the same Chatwright-generated IDs to resolve objects back to authoritative
   internal Platform Emulator state. Developer inspectors expose the native
@@ -102,7 +102,7 @@ fixtures.
 - **Complete conversational units:** chronological context preserves whole
   turns, complete bot responses and every currently visible action.
 - **Authoritative runtime:** an actor proposes; Chatwright validates current
-  state, revision, availability, permissions and platform semantics.
+  state, version, availability, permissions and platform semantics.
 - **Context without AI coupling:** goals, journey state, milestones and facts
   may help any actor and do not make the model an `AIActor` prompt format.
 
@@ -116,7 +116,7 @@ previous_observation_id: obs41
 
 messages:
   - id: msg7
-    revision: 2
+    version: 2
     actor: appointment_bot
     type: text
     text: |
@@ -136,8 +136,8 @@ changes:
   - actor: appointment_bot
     type: message_edited
     message_id: msg6
-    previous_revision: 1
-    revision: 2
+    previous_version: 1
+    version: 2
   - actor: appointment_bot
     type: message_created
     message_id: msg7
@@ -158,7 +158,7 @@ itself.
 
 ## Messages and Formatting
 
-A message should have at least a stable logical `id`, monotonic `revision`,
+A message should have at least a stable logical `id`, monotonic `version`,
 producing `actor` and semantic `type`. The `id` is a synthetic Chatwright
 identity mapped internally to the corresponding Platform Emulator object. The
 same ID appears in actor observations, rendered/visual nodes and inspection
@@ -197,7 +197,7 @@ observation_id: obs42
 action: click
 target: action1
 message_id: msg7
-message_revision: 2
+message_version: 2
 ~~~
 
 Chatwright resolves `action1` internally to the current Platform Emulator
@@ -210,7 +210,7 @@ determine whether the action catalogue normally needs a semantic type or
 whether opaque ID plus label is sufficient, and how links, Web Apps, deep links
 and actions not attached to one message fit the model.
 
-## Identity, Revisions and Changes
+## Identity, Versions and Changes
 
 Observations have stable identities and optional predecessor links. Actor
 proposals reference the observation from which the target was perceived. This
@@ -222,7 +222,7 @@ The structured `changes` list complements the current view. A change identifies:
 - the actor responsible;
 - a semantic change type;
 - affected message, action or context identities;
-- old/new revisions or other minimal transition facts where relevant.
+- old/new versions or other minimal transition facts where relevant.
 
 Changes must be sufficient to explain created, edited and deleted messages,
 action availability and actor interactions. They are runtime facts, not an
@@ -304,11 +304,11 @@ the HumanActor or other actor observation.
 
 - One versioned YAML envelope consumed by every local actor strategy.
 - Normalised Markdown text for visible logical messages.
-- Stable Chatwright message ID, monotonic revision, actor and semantic type.
+- Stable Chatwright message ID, monotonic version, actor and semantic type.
 - Observation ID, optional predecessor and structured changes.
 - Generic visible actions plus actor proposals referencing their source
   observation.
-- Authoritative validation for staleness, revisions, availability, permissions
+- Authoritative validation for staleness, versions, availability, permissions
   and Platform Emulator semantics.
 - Chronological conversation projection that preserves complete current turns,
   bot responses and actions under a defined window policy.
@@ -345,7 +345,7 @@ must not imply that application state was restored.
 
 The local bridge can expose the same normalised observation and change model to
 terminal and Studio clients while retaining raw platform envelopes as separate
-diagnostic evidence. Studio can later visualise message revisions, observation
+diagnostic evidence. Studio can later visualise message versions, observation
 lineage, action availability and stale attempts.
 
 ### Platform Emulators
@@ -371,7 +371,7 @@ exercise shopping-list actions and react to explicit changes safely.
 | Feature | Responsibility |
 |---|---|
 | [Observation Model](../features/chatwright/observation-model/README.md) | Actor-neutral envelope and platform boundary |
-| [Visible Conversation](../features/chatwright/observation-model/visible-conversation/README.md) | Messages, revisions, Markdown, ordering, links, replies and media |
+| [Visible Conversation](../features/chatwright/observation-model/visible-conversation/README.md) | Messages, versions, Markdown, ordering, links, replies and media |
 | [Actor Actions](../features/chatwright/observation-model/actor-actions/README.md) | Generic action catalogue, actor proposals and authoritative validation |
 | [Observation Lineage](../features/chatwright/observation-model/observation-lineage/README.md) | Observation identity, explicit changes, staleness and concurrency |
 | [Observation Context](../features/chatwright/observation-model/observation-context/README.md) | Semantic window, summary, journey, goals, milestones and relevant facts |

@@ -92,6 +92,19 @@ The Listus campaign starts with a new user and must attempt:
 The second campaign applies the same runtime contract to Sneat Bot with
 target-specific goals, resolvers and assertions.
 
+## Regression Gate and Fix Loop
+
+Campaigns are not only exploratory. A completed campaign's findings become
+regression gates for AI-driven development of the bot itself:
+
+1. Chatwright runs the campaign or promoted scenario.
+2. A failure becomes a filed, evidence-linked bug.
+3. A coding agent is dispatched with the executable scenario (see the
+   [agent implementation loop](../agent-implementation-loop/README.md)).
+4. The agent implements a fix and re-runs the scenario.
+5. The gate passes only on verified run evidence — never on the agent's prose
+   claim. The AI actor reaching its goal is the acceptance test.
+
 ## Dependencies
 
 - [Observation Model](../observation-model/README.md) for actor perception,

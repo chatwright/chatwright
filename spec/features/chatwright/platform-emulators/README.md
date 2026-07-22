@@ -21,8 +21,6 @@ run and test their real bot application against it.
 |---|---|---|
 | [Telegram Platform Emulator](telegram/README.md) | Implementing | MVP and reference implementation |
 | [WhatsApp Platform Emulator](whatsapp/README.md) | Draft | Planned future emulator |
-| [Slack Platform Emulator](slack/README.md) | Draft | Planned future emulator |
-| [Discord Platform Emulator](discord/README.md) | Draft | Planned future emulator |
 
 ## Problem
 
@@ -95,8 +93,11 @@ And does not silently approximate it as different platform behaviour
 
 ## Open Questions
 
-- Which shared abstractions remain useful after Telegram, WhatsApp, Slack and
-  Discord semantics are compared in detail?
+- Which shared abstractions remain useful after Telegram and WhatsApp semantics
+  are compared in detail? Further platforms (Slack, Discord and others) enter
+  through the same seams if the [public roadmap's later
+  options](../../../../docs/roadmap.md#later-options-not-commitments) are ever
+  taken up.
 - How should compatibility profiles and versions be named, negotiated and
   included in run evidence?
 

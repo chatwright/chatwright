@@ -25,7 +25,7 @@ prerequisite for local development.
 
 | Child | Purpose |
 |---|---|
-| [platform-emulators](platform-emulators/README.md) | Local messaging platforms; Telegram MVP plus planned WhatsApp, Slack and Discord emulators |
+| [platform-emulators](platform-emulators/README.md) | Local messaging platforms; Telegram MVP plus a planned WhatsApp emulator (further platforms via the roadmap's later options) |
 | [conversation-runtime](conversation-runtime/README.md) | Environment, actors, identities, chats, scheduling and run lifecycle |
 | [agent-harnesses](agent-harnesses/README.md) | Controlled MCP tool-boundary testing (draft); batch/terminal agent-CLI adapters parked as an idea |
 | [deterministic-testing](deterministic-testing/README.md) | Scripted scenarios, fluent assertions, milestones and CI-safe failure reporting |

@@ -43,11 +43,11 @@ observation_id: obs42
 action: click
 target: action1
 message_id: msg7
-message_revision: 2
+message_version: 2
 ~~~
 
 The exact redundancy is unresolved. Observation ID is needed for staleness;
-message ID/revision may make diagnostics and fine-grained validation stronger.
+message ID/version may make diagnostics and fine-grained validation stronger.
 Text entry, uploads, navigation and compound interactions may require proposal
 shapes beyond `click` while retaining the same actor-neutral contract.
 
@@ -63,7 +63,7 @@ Before resolving a proposal, Chatwright checks at least:
 
 - the referenced observation exists and satisfies freshness policy;
 - the target action existed in that observation;
-- the owning message and revision still match where required;
+- the owning message and version still match where required;
 - the action remains visible and available;
 - the actor has permission to perform it;
 - supplied values satisfy the generic action contract;

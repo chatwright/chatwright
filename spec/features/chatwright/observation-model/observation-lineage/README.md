@@ -50,8 +50,8 @@ changes:
   - actor: appointment_bot
     type: message_edited
     message_id: msg6
-    previous_revision: 1
-    revision: 2
+    previous_version: 1
+    version: 2
   - actor: appointment_bot
     type: message_created
     message_id: msg8
@@ -65,7 +65,7 @@ needed for self-contained evidence.
 ## Staleness and Concurrency
 
 The runtime compares a proposal's observation lineage, target identity and
-revisions with authoritative current state. It may reject stale intent, ask the
+versions with authoritative current state. It may reject stale intent, ask the
 actor to observe again or reconcile only when semantics prove the action is
 still equivalent.
 

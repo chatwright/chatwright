@@ -35,7 +35,7 @@ replaying a recording, driving a bot or introduced later.
 ~~~text
 Observation Model
 ├── Visible Conversation
-│   ├── Stable Message Identity and Revisions
+│   ├── Stable Message Identity and Versions
 │   ├── Normalised Markdown
 │   ├── Chronological Conversation Ordering
 │   └── Links, Replies and Media
@@ -58,7 +58,7 @@ Observation Model
 - All actor types receive the same semantic observation contract.
 - Platform-native callback data, webhook payloads, API requests and internal
   messenger IDs are absent from the actor-facing model.
-- Messages have stable logical identity and monotonic revision across edits.
+- Messages have stable logical identity and monotonic version across edits.
 - Message/action IDs are synthetic Chatwright IDs shared by the observation and
   visual representation, with an internal resolver back to authoritative
   Platform Emulator state; raw platform details stay outside actor input and
@@ -70,7 +70,7 @@ Observation Model
   preserves complete turns, complete responses and current visible actions.
 - Actions use opaque Chatwright IDs plus user-visible semantics. Actors submit
   generic proposals tied to the observation in which the action appeared.
-- Chatwright validates action existence, currentness, revisions, availability,
+- Chatwright validates action existence, currentness, versions, availability,
   permissions and platform semantics before executing anything.
 - Goals and journey facts are actor-neutral context, not a special AI prompt.
 - Raw platform evidence remains separately available to developers for
@@ -140,10 +140,10 @@ And neither receives platform-native callback or webhook data
 ### AC: edit-preserves-logical-message
 
 Scenario: A bot edits a visible message
-Given message `msg7` at revision 1
+Given message `msg7` at version 1
 When the platform reports an edit to the same logical message
-Then the next observation contains `msg7` at revision 2
-And its change list identifies the actor, message and revision transition
+Then the next observation contains `msg7` at version 2
+And its change list identifies the actor, message and version transition
 
 ### AC: visual-object-resolves-to-emulator-state
 

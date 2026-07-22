@@ -50,7 +50,7 @@ without leaking platform implementation details into the actor contract.
 |---|---|---|
 | OM-07 | How should Markdown be normalised across platforms? | Telegram and at least one second source corpus covering headings, bold, italic, links, code, lists, quotes, spoilers and emoji with a loss matrix. |
 | OM-08 | How should media be represented? | Image, video, audio, document, sticker and caption fixtures defining visible metadata, attachment references, accessibility and sensitive URLs/IDs. |
-| OM-09 | How should edits be represented? | Repeated-edit fixture proving stable message ID, monotonic revision, current content and explicit change records. |
+| OM-09 | How should edits be represented? | Repeated-edit fixture proving stable message ID, monotonic version, current content and explicit change records. |
 | OM-10 | How should deleted messages appear? | User-visible deletion/tombstone matrix across platforms and replay, including actions invalidated by deletion. |
 | OM-11 | How should message ordering work with edits? | Ordering model separating conversational position from edit-event order with chronological rendering examples. |
 | OM-12 | How should quoted replies be represented? | Reply fixtures for available, edited, deleted and windowed-out source messages with stable logical references. |
@@ -61,7 +61,7 @@ without leaking platform implementation details into the actor contract.
 |---|---|---|
 | OM-13 | Should actions always belong to messages? | Compare inline buttons, persistent keyboards, global navigation, commands, Web Apps and harness capabilities. |
 | OM-14 | Should action IDs be globally unique? | Identity-scope and retention model across observations, messages, conversations, branches and process restarts. |
-| OM-15 | How should stale observations be detected? | Validation matrix using observation ID, predecessor, message revision and action availability; define accept/reject/refresh/reconcile outcomes. |
+| OM-15 | How should stale observations be detected? | Validation matrix using observation ID, predecessor, message version and action availability; define accept/reject/refresh/reconcile outcomes. |
 | OM-16 | How should multiple simultaneous actor actions be represented? | Two-actor race fixtures establishing proposal ordering, authoritative outcomes, rejected intent and resulting change records. |
 
 ### Branching, replay, Studio and ecosystem
@@ -70,7 +70,7 @@ without leaking platform implementation details into the actor contract.
 |---|---|---|
 | OM-17 | How should observation snapshots integrate with App State Branching? | Checkpoint manifest sketch and restored-branch fixture that associates actor-visible state without treating it as the complete environment. |
 | OM-18 | Should observations be replayable? | ReplayActor experiment defining whether observations, accepted actions, raw events or a combination is authoritative across schema versions. |
-| OM-19 | How should Studio visualise observation changes? | Prototype of message revisions, created/edited/deleted changes, current actions, lineage and stale attempts on desktop and narrow layouts. |
+| OM-19 | How should Studio visualise observation changes? | Prototype of message versions, created/edited/deleted changes, current actions, lineage and stale attempts on desktop and narrow layouts. |
 | OM-20 | Should observations become a public API for third-party AI agents? | Threat/compatibility analysis plus an external agent proof using version negotiation, redaction and capability discovery. |
 
 ### Extended contract questions

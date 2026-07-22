@@ -13,7 +13,7 @@ status: Draft
 ## Summary
 
 Project the conversation as a chronological sequence of user-visible logical
-messages with stable identity, revisions and normalised Markdown. Preserve the
+messages with stable identity, versions and normalised Markdown. Preserve the
 semantics actors need while keeping messenger markup, transport IDs and API
 payloads outside the model.
 
@@ -24,7 +24,7 @@ The minimum working fields are:
 | Field | Meaning |
 |---|---|
 | `id` | Stable synthetic Chatwright identity for one logical visible message and its authoritative emulator mapping |
-| `revision` | Monotonic version of that logical message |
+| `version` | Monotonic version of that logical message |
 | `actor` | Identity of the actor that produced the message |
 | `type` | Semantic message/content category |
 | `text` | Normalised Markdown where textual content exists |
@@ -54,7 +54,7 @@ content or discover actions.
 - Messages are ordered chronologically, oldest to newest.
 - Windowing preserves complete conversational turns and complete bot responses.
 - Every currently visible action remains discoverable.
-- An edit advances the existing logical message revision.
+- An edit advances the existing logical message version.
 - The message keeps its conversational position; the change feed records when
   the edit happened.
 - Deleted messages, quoted replies and simultaneous edits need explicit
@@ -90,10 +90,10 @@ And no Telegram HTML or MarkdownV2 syntax is required to interpret it
 ### AC: message-edit-keeps-identity
 
 Scenario: Available times are refreshed in place
-Given one logical message at revision 2
+Given one logical message at version 2
 When the bot edits its text and actions
-Then the observation retains the message ID at revision 3
-And current content replaces revision 2 in chronological position
+Then the observation retains the message ID at version 3
+And current content replaces version 2 in chronological position
 
 ### AC: rendered-message-keeps-synthetic-id
 

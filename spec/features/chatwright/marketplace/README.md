@@ -15,12 +15,6 @@ A discoverable ecosystem of reusable Chatwright assets from the project,
 community and commercial publishers, without making Marketplace access a local
 development prerequisite.
 
-## Contents
-
-| Child | Purpose |
-|---|---|
-| [community-libraries](community-libraries/README.md) | Community-maintained personas, conversation packs, regression suites, platform profiles and recipes |
-
 ## Asset directions
 
 Marketplace may distribute personas, scenario and assertion libraries,
@@ -32,6 +26,17 @@ Every asset exposes publisher, version, compatible Chatwright/platform profiles,
 licence, provenance and required capabilities before use. Trust, review and
 supply-chain policy must be investigated before executable third-party modules
 are treated like data-only packs.
+
+Community-maintained assets—personas, conversation packs, regression suites,
+platform profiles and testing recipes—are the first planned direction. They use
+versioned portable formats and declare compatibility, licence, maintainers and
+provenance; a project can pin a library revision, inspect its contents and
+retain the revision needed to reproduce a run. Community status is not a claim
+of Chatwright endorsement. Useful early candidates are focused packs with
+observable value: platform compatibility profiles, common recovery
+conversations and testing recipes. Persona libraries require explicit
+safeguards against stereotyping, sensitive attributes and unsupported claims
+about real populations.
 
 ## Boundaries
 
@@ -63,6 +68,9 @@ And Cloud is required only for explicitly selected hosted capabilities
 - Which single asset type creates enough reuse to validate a Marketplace?
 - Which executable extension types require sandboxing, signatures or manual
   review before distribution?
+- Should the first community registry be a curated index of source repositories
+  rather than a hosted package service?
+- What maintainer and deprecation signals help teams assess long-lived packs?
 
 ---
 *This document follows the https://specscore.md/feature-specification*
