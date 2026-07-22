@@ -79,7 +79,7 @@ identities.
 
 ## Acceptance Criteria
 
-### AC:platform-markup-is-normalised
+### AC: platform-markup-is-normalised
 
 Scenario: Telegram renders formatted service instructions
 Given source content uses Telegram-specific markup
@@ -87,7 +87,7 @@ When Chatwright projects the visible message
 Then actors receive semantically equivalent Markdown
 And no Telegram HTML or MarkdownV2 syntax is required to interpret it
 
-### AC:message-edit-keeps-identity
+### AC: message-edit-keeps-identity
 
 Scenario: Available times are refreshed in place
 Given one logical message at revision 2
@@ -95,7 +95,7 @@ When the bot edits its text and actions
 Then the observation retains the message ID at revision 3
 And current content replaces revision 2 in chronological position
 
-### AC:rendered-message-keeps-synthetic-id
+### AC: rendered-message-keeps-synthetic-id
 
 Scenario: A message is rendered in Studio
 Given the observation identifies the message as `msg7`
@@ -103,7 +103,7 @@ When Studio renders and selects that message
 Then its visual representation retains `msg7`
 And Chatwright can resolve `msg7` to authoritative emulator state
 
-### AC:window-does-not-split-response
+### AC: window-does-not-split-response
 
 Scenario: A bot response contains several visible messages
 Given a size-constrained observation

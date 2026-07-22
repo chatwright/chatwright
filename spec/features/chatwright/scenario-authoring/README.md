@@ -81,7 +81,7 @@ When Chatwright opens it
 Then it is migrated or rejected with an actionable version error
 And its original content is not silently discarded
 
-### AC:coverage-does-not-hide-unsupported
+### AC: coverage-does-not-hide-unsupported
 
 Scenario: One branch cannot run on WhatsApp
 Given a suite with passing Telegram results and an unsupported WhatsApp branch

@@ -95,7 +95,7 @@ at the most specific proven scope.
 
 ## Acceptance Criteria
 
-### AC:rehearse-delegates-chat-semantics
+### AC: rehearse-delegates-chat-semantics
 
 Scenario: Rehearse executes a Chatwright verification block
 Given a block referencing the Listus `add-items` case
@@ -104,7 +104,7 @@ Then Chatwright owns actor, message, platform, checkpoint, branch and database
 execution
 And Rehearse consumes the versioned result without interpreting those steps
 
-### AC:case-outcome-maps-to-criterion
+### AC: case-outcome-maps-to-criterion
 
 Scenario: One Chatwright manifest exposes several cases
 Given only `add-items` verifies the selected persistence acceptance criterion
@@ -112,7 +112,7 @@ When the complete run report is returned
 Then Rehearse records the matching case outcome against that criterion
 And outcomes from unrelated cases are not used as its proof
 
-### AC:rich-artifacts-are-preserved
+### AC: rich-artifacts-are-preserved
 
 Scenario: A Listus DTQL assertion fails in a mutation branch
 Given Chatwright produced a transcript, branch lineage, canonical query and
@@ -122,7 +122,7 @@ Then the normalized failure retains durable references and digests for those
 artifacts
 And the evidence is not reduced to terminal text alone
 
-### AC:dtql-runs-in-chatwright-branch-context
+### AC: dtql-runs-in-chatwright-branch-context
 
 Scenario: Rehearse invokes a data-asserting branch scenario
 Given the case uses a replacement DALgo database holder
@@ -130,7 +130,7 @@ When its DTQL assertion executes
 Then Chatwright queries that branch-bound holder exactly once
 And Rehearse ingests the result without opening or querying another database
 
-### AC:execution-profile-is-explicit
+### AC: execution-profile-is-explicit
 
 Scenario: The same case runs directly and through Telegram emulation
 Given both executions pass
@@ -139,7 +139,7 @@ Then each result identifies its transport, platform emulator and state-provider
 profile
 And one mode is not silently presented as evidence for the other
 
-### AC:non-pass-status-is-not-false-proof
+### AC: non-pass-status-is-not-false-proof
 
 Scenario: A requested Chatwright capability is unsupported by the installed
 runner
@@ -148,7 +148,7 @@ When Rehearse summarizes and exports the run
 Then it does not create passing verified-behavior evidence
 And it preserves `unsupported` separately from product assertion failure
 
-### AC:binding-conflict-fails-before-ingestion
+### AC: binding-conflict-fails-before-ingestion
 
 Scenario: A wrapper claims a criterion not declared by its selected case
 Given the two sources disagree and no explicit narrowing rule resolves them

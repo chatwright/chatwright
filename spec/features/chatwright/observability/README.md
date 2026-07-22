@@ -63,7 +63,7 @@ When a developer selects the reply
 Then the transcript entry links to its inbound update, webhook span and outbound
 API call by stable correlation IDs
 
-### AC:metrics-aggregate-without-double-counting
+### AC: metrics-aggregate-without-double-counting
 
 Scenario: A run contains two bots and three chats
 Given message-level size, count and latency metrics
@@ -71,7 +71,7 @@ When totals are requested by bot, actor, chat and run
 Then each aggregation is reproducible from message metrics
 And the run total does not count the same message twice
 
-### AC:redaction-is-visible
+### AC: redaction-is-visible
 
 Scenario: A trace contains a configured secret field
 Given an evidence export with redaction enabled

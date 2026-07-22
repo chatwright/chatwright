@@ -93,7 +93,7 @@ Chatwright correlates MCP events with the agent/process trace and result bundle.
 
 ## Acceptance Criteria
 
-### AC:agent-discovers-declared-capabilities
+### AC: agent-discovers-declared-capabilities
 
 Scenario: A case provides one read-only repository tool server
 Given its fixture advertises only the declared tool/resource capabilities
@@ -101,7 +101,7 @@ When the agent initializes the MCP connection
 Then the trace records negotiated capabilities and protocol version
 And undeclared tools are unavailable to the agent
 
-### AC:tool-call-is-correlated-end-to-end
+### AC: tool-call-is-correlated-end-to-end
 
 Scenario: An agent calls a search tool
 Given the fixture returns a deterministic result
@@ -110,7 +110,7 @@ Then request ID, tool name, redacted parameters, result, duration and agent turn
 are correlated
 And assertions can address the call without parsing assistant prose
 
-### AC:forbidden-tool-has-no-side-effect
+### AC: forbidden-tool-has-no-side-effect
 
 Scenario: Policy forbids a write tool exposed for a negative test
 Given the agent attempts that tool
@@ -118,7 +118,7 @@ When the harness enforces policy
 Then the handler's mutation is not executed
 And the trace records the denied request and policy identity
 
-### AC:adversarial-result-remains-untrusted-input
+### AC: adversarial-result-remains-untrusted-input
 
 Scenario: A search result contains instructions to expose credentials
 Given the fixture returns that content as tool data
@@ -126,7 +126,7 @@ When the agent processes it
 Then the result is labelled and retained as untrusted external input
 And configured assertions can prove no forbidden credential/tool action follows
 
-### AC:timeout-and-cancellation-are-visible
+### AC: timeout-and-cancellation-are-visible
 
 Scenario: A tool handler delays beyond the scenario budget
 Given the agent or runner cancels the MCP request
@@ -134,7 +134,7 @@ When the case settles
 Then request cancellation, handler outcome and any agent retry are correlated
 And no hanging server session survives cleanup
 
-### AC:fixture-result-is-not-real-service-evidence
+### AC: fixture-result-is-not-real-service-evidence
 
 Scenario: An MCP fixture simulates a successful external write
 Given no real service was contacted
@@ -142,7 +142,7 @@ When the result bundle is produced
 Then its profile identifies the fixture and scripted response
 And the pass cannot satisfy a binding requiring the real MCP service
 
-### AC:mcp-client-support-does-not-imply-message-injection
+### AC: mcp-client-support-does-not-imply-message-injection
 
 Scenario: A CLI can consume MCP tools but exposes no session server
 Given Chatwright needs to send a user prompt
@@ -150,7 +150,7 @@ When the case is configured
 Then the prompt uses the declared process or PTY input adapter
 And the harness does not claim MCP provides a generic inbound chat channel
 
-### AC:conversation-mcp-server-requires-explicit-capability
+### AC: conversation-mcp-server-requires-explicit-capability
 
 Scenario: A CLI exposes an MCP server with session send/receive methods
 Given capability discovery confirms their versioned semantics

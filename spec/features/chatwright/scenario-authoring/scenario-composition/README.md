@@ -101,7 +101,7 @@ nor creates a reverse `sneat-bots` dependency on `sneat-go`.
 
 ## Acceptance Criteria
 
-### AC:one-fragment-serves-new-and-existing-users
+### AC: one-fragment-serves-new-and-existing-users
 
 Scenario: List modification is reused under two setup paths
 Given one parent onboards a new Listus user
@@ -111,7 +111,7 @@ Then the same fragment definition and assertions execute in each parent
 And neither parent contains a copied list-mutation sequence
 And the `sneat-go` execution host does not copy the `sneat-bots` scenario steps
 
-### AC:fragment-provenance-is-visible
+### AC: fragment-provenance-is-visible
 
 Scenario: An assertion inside a reused fragment fails
 Given a fragment invoked from an existing-user scenario
@@ -119,7 +119,7 @@ When one of its list assertions fails
 Then the result identifies the parent invocation path and fragment source
 And the failure is not attributed only to an opaque helper call
 
-### AC:checkpoint-identities-do-not-collide
+### AC: checkpoint-identities-do-not-collide
 
 Scenario: Two parents invoke a fragment with the same checkpoint label
 Given each invocation creates `few-items-added`
@@ -127,7 +127,7 @@ When results and branch references are produced
 Then each checkpoint has a distinct qualified machine identity
 And both may retain the same human-readable label
 
-### AC:fragment-inputs-are-isolated
+### AC: fragment-inputs-are-isolated
 
 Scenario: One invocation overrides the groceries list fixture
 Given two parents invoke the same fragment

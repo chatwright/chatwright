@@ -75,7 +75,7 @@ scripted actor to assert, an AI actor to recover and Studio to explain.
 
 ## Acceptance Criteria
 
-### AC:callback-data-is-not-actor-input
+### AC: callback-data-is-not-actor-input
 
 Scenario: A Telegram inline button has callback data
 Given the Platform Emulator projects that button
@@ -85,7 +85,7 @@ And Chatwright resolves the ID to callback data for execution
 And an authorised developer inspector can display that callback data
 But AI and automation actors do not receive it in their observation
 
-### AC:rendered-control-and-observation-share-id
+### AC: rendered-control-and-observation-share-id
 
 Scenario: Studio renders a generic action
 Given action `action1` is visible in the observation
@@ -93,7 +93,7 @@ When the corresponding control is rendered
 Then the rendered control retains synthetic ID `action1`
 And inspection and actor proposals resolve through the same authoritative map
 
-### AC:unavailable-action-is-rejected
+### AC: unavailable-action-is-rejected
 
 Scenario: A bot replaces its available actions
 Given an actor observed action `action1`
@@ -101,7 +101,7 @@ When the message is edited and `action1` disappears
 Then a proposal targeting `action1` is not executed
 And the result identifies unavailable or stale intent
 
-### AC:actor-kind-does-not-change-validation
+### AC: actor-kind-does-not-change-validation
 
 Scenario: Human and replay actors propose the same action
 Given equivalent actor permissions and the same current observation

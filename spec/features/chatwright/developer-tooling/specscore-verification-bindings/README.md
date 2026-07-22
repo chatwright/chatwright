@@ -105,7 +105,7 @@ does not by itself approve the feature or prove unbound requirements.
 
 ## Acceptance Criteria
 
-### AC:cross-repository-scenario-is-canonical
+### AC: cross-repository-scenario-is-canonical
 
 Scenario: A Listus criterion binds to its Chatwright product scenario
 Given the criterion is indexed outside `sneat-bots`
@@ -114,7 +114,7 @@ When SpecScore resolves the binding
 Then it records the scenario URL, selected case and repository revision
 And does not require a copied scenario in the feature repository
 
-### AC:lock-covers-transitive-proof-definition
+### AC: lock-covers-transitive-proof-definition
 
 Scenario: A reusable fragment or DTQL assertion changes
 Given neither file is the root scenario manifest
@@ -122,7 +122,7 @@ When SpecScore compares the resolved scenario with its lock
 Then the binding becomes stale
 And the diagnostic identifies the changed transitive component
 
-### AC:lock-does-not-contain-runtime-secrets
+### AC: lock-does-not-contain-runtime-secrets
 
 Scenario: A scenario uses secret-backed bot configuration
 Given the binding is resolved in an environment where the secret exists
@@ -130,7 +130,7 @@ When the verification lock is generated
 Then it contains only the declared secret/profile identity needed for resolution
 And never contains the resolved credential value
 
-### AC:required-modes-produce-partial-status
+### AC: required-modes-produce-partial-status
 
 Scenario: A criterion requires direct and Telegram-emulated proof
 Given the direct case has current passing evidence
@@ -139,7 +139,7 @@ When criterion verification status is computed
 Then the criterion is `partial`, not `verified`
 And the missing required mode is visible
 
-### AC:evidence-staleness-is-distinct-from-binding-staleness
+### AC: evidence-staleness-is-distinct-from-binding-staleness
 
 Scenario: Application code changes after a locked scenario passes
 Given the scenario proof graph still matches its lock
@@ -147,7 +147,7 @@ When SpecScore evaluates the newer application revision
 Then the binding remains current
 And its earlier passing evidence is reported stale for that application revision
 
-### AC:fresh-failure-is-not-hidden-by-old-pass
+### AC: fresh-failure-is-not-hidden-by-old-pass
 
 Scenario: A locked case passed and later fails for the same evaluated revision
 Given both result records remain available
@@ -155,7 +155,7 @@ When SpecScore computes current verification status
 Then the current failure prevents a verified status
 And the older passing evidence remains inspectable as history
 
-### AC:generated-summary-is-not-source-of-truth
+### AC: generated-summary-is-not-source-of-truth
 
 Scenario: A generated feature verification summary is deleted
 Given canonical criteria, bindings, lock and result facts still exist
@@ -163,7 +163,7 @@ When SpecScore regenerates the feature view
 Then the same mappings and statuses are restored
 And no Chatwright scenario content is recovered from or written into the summary
 
-### AC:verification-does-not-imply-feature-approval
+### AC: verification-does-not-imply-feature-approval
 
 Scenario: Every currently bound Chatwright case passes
 Given the feature has an unbound acceptance criterion or unresolved product

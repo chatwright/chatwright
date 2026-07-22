@@ -107,7 +107,7 @@ redaction and crash cleanup have their own release gate and do not block Listus.
 
 ## Acceptance Criteria
 
-### AC:multiple-holders-are-one-checkpoint
+### AC: multiple-holders-are-one-checkpoint
 
 Scenario: An application registers primary and audit databases
 Given both holders are at one application-declared boundary
@@ -115,7 +115,7 @@ When a checkpoint succeeds
 Then the manifest references one generation of both named holders
 And a branch receives replacement handles for both before continuation
 
-### AC:partial-checkpoint-is-not-published
+### AC: partial-checkpoint-is-not-published
 
 Scenario: The second holder fails during checkpoint creation
 Given the first holder already captured temporary state
@@ -123,7 +123,7 @@ When the second capture fails
 Then no usable group checkpoint is published
 And the first holder is cleaned in compensation order
 
-### AC:partial-branch-does-not-run
+### AC: partial-branch-does-not-run
 
 Scenario: The audit database cannot start a branch
 Given a valid two-holder checkpoint
@@ -131,7 +131,7 @@ When primary starts but audit fails
 Then no application factory or scenario continuation runs
 And the primary branch is cleaned or explicitly quarantined
 
-### AC:memory-branches-are-independent
+### AC: memory-branches-are-independent
 
 Scenario: Two branches start from one serialised dalgo2memory checkpoint
 Given records with nested keys and mutable caller values
@@ -139,7 +139,7 @@ When branch A inserts, updates and deletes records
 Then branch B and the checkpoint retain the original semantic digest
 And no key/data pointer alias leaks mutation between them
 
-### AC:unsupported-engine-fails-honestly
+### AC: unsupported-engine-fails-honestly
 
 Scenario: A dalgo2memory database uses an unsupported storage engine
 Given the first provider cannot clone its configuration safely

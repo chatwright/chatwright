@@ -101,7 +101,7 @@ Opaque provider sessions and live process memory are never assumed clonable.
 
 ## Acceptance Criteria
 
-### AC:headless-run-needs-no-platform
+### AC: headless-run-needs-no-platform
 
 Scenario: A conversational engine has no messenger integration
 Given an in-process endpoint supporting semantic text and assistant messages
@@ -109,7 +109,7 @@ When a scripted actor completes a multi-turn scenario
 Then the run uses no Platform Emulator, webhook or platform API
 And retains normal Chatwright transcript, assertions, metrics and cleanup
 
-### AC:typed-engine-events-remain-structured
+### AC: typed-engine-events-remain-structured
 
 Scenario: An engine requests a Listus add-item action
 Given the endpoint declares typed-action support
@@ -117,7 +117,7 @@ When the engine emits the action with item parameters
 Then Chatwright records and asserts the action and parameters structurally
 And does not infer them only from assistant prose
 
-### AC:turn-settles-after-registered-work
+### AC: turn-settles-after-registered-work
 
 Scenario: An assistant response schedules an application database write
 Given the endpoint emits its terminal turn event before the write completes
@@ -125,7 +125,7 @@ When Chatwright waits for the turn to settle
 Then it also drains the registered application work
 And a following DTQL assertion observes the committed state
 
-### AC:stream-is-correlated-to-final-message
+### AC: stream-is-correlated-to-final-message
 
 Scenario: An engine streams several assistant chunks
 Given all chunks share one response identity
@@ -133,7 +133,7 @@ When the endpoint emits completion
 Then the transcript preserves the chunks and one assembled semantic message
 And final-message assertions do not pass before completion
 
-### AC:headless-proof-does-not-satisfy-platform-mode
+### AC: headless-proof-does-not-satisfy-platform-mode
 
 Scenario: An acceptance criterion requires direct and Telegram evidence
 Given the neutral scenario passes through the headless endpoint only
@@ -141,7 +141,7 @@ When verification status is computed
 Then the direct binding can pass
 And the criterion remains partial until the Telegram-emulated case passes
 
-### AC:unsupported-capability-fails-explicitly
+### AC: unsupported-capability-fails-explicitly
 
 Scenario: A scenario sends an action unsupported by an engine endpoint
 Given capability discovery reports text-only input
@@ -149,7 +149,7 @@ When the action case is validated
 Then execution does not flatten the action into guessed text
 And the result identifies the unsupported input capability
 
-### AC:branch-replay-is-declared
+### AC: branch-replay-is-declared
 
 Scenario: Engine memory cannot be snapshotted at a checkpoint
 Given the application database can branch
@@ -158,7 +158,7 @@ Then each uses a fresh engine and the qualified prefix is replayed
 And evidence distinguishes replayed conversation state from branched database
 state
 
-### AC:model-provenance-is-honest
+### AC: model-provenance-is-honest
 
 Scenario: A hosted model does not support deterministic seeds
 Given a scenario requests the provider's supported configuration

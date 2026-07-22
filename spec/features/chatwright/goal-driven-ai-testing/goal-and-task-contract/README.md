@@ -36,7 +36,7 @@ semantics—without prescribing the exact messages or buttons used.
 
 ## Acceptance Criteria
 
-### AC:several-tasks-share-one-goal
+### AC: several-tasks-share-one-goal
 
 Scenario: A shopping-list goal contains lifecycle tasks
 Given onboarding, add, duplicate, buy, edit and delete tasks
@@ -44,7 +44,7 @@ When the campaign begins
 Then the runner retains each task identity and dependency
 And the report produces an outcome for every task
 
-### AC:goal-does-not-leak-platform-mechanics
+### AC: goal-does-not-leak-platform-mechanics
 
 Scenario: Listus presents commands differently
 Given a goal expressed through user-visible intent

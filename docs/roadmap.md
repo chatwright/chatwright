@@ -135,6 +135,27 @@ framework-independent HTTP fixture run the supported slice; repeated suites meet
 an agreed duration/flake budget; unfamiliar developers can explain supplied
 failures from the result bundle alone.
 
+## Phase 1.5 — State branching, data-state assertions and the headless rung
+
+Already executing through the Listus branching reference plan, ahead of the
+Phase 1 exit gate — acknowledged here so the roadmap matches reality rather
+than pretending this work waits its turn.
+
+- Named database-state checkpoints, all-or-none branch coordination and replay
+  fallback ([state-branching](../spec/features/chatwright/state-branching/README.md),
+  decisions 0009/0010).
+- Data-state assertions gating checkpoint publication
+  ([data-state-assertions](../spec/features/chatwright/deterministic-testing/data-state-assertions/README.md)).
+- The headless engine harness as the fast diagnostic rung beneath the
+  platform-emulated gate
+  ([headless-engine-harness](../spec/features/chatwright/conversation-runtime/headless-engine-harness/README.md),
+  decision 0008).
+
+**Exit gate:** the Listus reference plan's frozen contract tests and dual-rung
+scenario pass repeatedly; branching evidence labels the database-only scope and
+the mechanism used; this work does not displace the Phase 0/1 gates, which
+remain the release blockers for v0.1.0.
+
 ## Phase 1.x — Chatwright Playground and open Studio foundation
 
 **Goal:** make Chatwright valuable before a test has been written.
@@ -264,9 +285,9 @@ core model pre-emptively.
 ## Dependency order
 
 `platform evidence → neutral model → runtime lifecycle → deterministic assertions
-→ result bundle → manual recording/open Studio → structured format/Starlark
-→ deterministic fuzzing → AI evaluation → Cloud Run → Cloud Intelligence
-→ Marketplace`
+→ state branching/data-state assertions → result bundle → manual recording/open
+Studio → structured format/Starlark → deterministic fuzzing → AI evaluation
+→ Cloud Run → Cloud Intelligence → Marketplace`
 
 Skipping leftward work creates attractive surfaces over unstable semantics. The
 connected prototype intentionally explores the UX now, but it does not move web

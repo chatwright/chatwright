@@ -74,7 +74,7 @@ prerequisites.
 
 ## Acceptance Criteria
 
-### AC:local-run-needs-no-account
+### AC: local-run-needs-no-account
 
 Scenario: A developer runs Chatwright in CI
 Given an open-source bot repository and supported local dependencies
@@ -82,21 +82,21 @@ When the Chatwright command runs its deterministic suite
 Then no Chatwright/Sneat account or hosted API is required
 And process status and machine-readable results reflect scenario outcomes
 
-### AC:views-preserve-context
+### AC: views-preserve-context
 
 Scenario: A developer opens a failure from the scenario tree
 Given a failing scenario and recorded run
 When they navigate to the run inspector and Playground
 Then the selected workspace, scenario, run and actors remain identifiable
 
-### AC:framework-integration-is-not-hard-boundary
+### AC: framework-integration-is-not-hard-boundary
 
 Scenario: A non-Go bot exposes HTTP configuration
 Given a bot that accepts platform-shaped webhooks and a replaceable API base URL
 When configured against Chatwright
 Then it can use the same supported Platform Emulator without importing `bots-go-framework`
 
-### AC:studio-works-offline
+### AC: studio-works-offline
 
 Scenario: A developer opens Studio without a network connection
 Given a local bot, Platform Emulator and result bundle

@@ -96,7 +96,7 @@ normalization, assertion truth, checkpoint gating or branch selection.
 
 ## Acceptance Criteria
 
-### AC:captured-failure-opens-without-database
+### AC: captured-failure-opens-without-database
 
 Scenario: A Listus branch has already been released
 Given its failed DTQL assertion bundle contains the canonical query and captured
@@ -105,7 +105,7 @@ When the developer opens it in DataTug without a database connection
 Then DataTug displays the executed query, expected shape and captured mismatch
 And clearly labels row limits, redaction and the original branch/run identity
 
-### AC:deep-link-does-not-carry-sensitive-data
+### AC: deep-link-does-not-carry-sensitive-data
 
 Scenario: Chatwright opens a local DataTug investigation
 Given the bundle contains private list records
@@ -114,7 +114,7 @@ Then it contains only the local endpoint, tab identity and one-time code in the
 fragment
 And contains no query text, row data or database credential
 
-### AC:live-rerun-is-explicit-and-distinct
+### AC: live-rerun-is-explicit-and-distinct
 
 Scenario: A developer reruns a captured Listus query
 Given they map its holder profile to a local read-only DataTug connection
@@ -122,7 +122,7 @@ When the query executes against current or fixture state
 Then the new result records its own target and execution time
 And does not overwrite or masquerade as the Chatwright-captured recordset
 
-### AC:mutation-is-not-possible
+### AC: mutation-is-not-possible
 
 Scenario: An investigation is connected to a live product fixture
 Given a user attempts to change or delete records through the query tab
@@ -130,7 +130,7 @@ When DataTug handles the request
 Then the mutation is refused or rejected by a read-only session
 And the database remains unchanged
 
-### AC:dtql-round-trips-losslessly
+### AC: dtql-round-trips-losslessly
 
 Scenario: A developer edits a parent-scoped Listus query in DataTug
 Given the query is represented by the canonical DALgo AST
@@ -138,7 +138,7 @@ When DataTug exports DTQL and Chatwright parses it
 Then the resulting structured query is semantically identical to the edited AST
 And its new canonical digest is reproducible
 
-### AC:edited-query-does-not-rewrite-evidence
+### AC: edited-query-does-not-rewrite-evidence
 
 Scenario: A developer fixes a filter which caused a failed assertion
 Given the original bundle and run are retained
@@ -146,7 +146,7 @@ When the edited DTQL is exported to the scenario repository
 Then the old evidence continues to reference the original query digest
 And the criterion is not marked passing until Chatwright executes the new query
 
-### AC:chatwright-remains-independent
+### AC: chatwright-remains-independent
 
 Scenario: DataTug is not installed in CI
 Given a scenario contains supported DTQL assertions
@@ -154,7 +154,7 @@ When Chatwright executes it
 Then assertions and evidence bundles complete without DataTug
 And only the optional open/investigate action is unavailable
 
-### AC:credentials-resolve-locally
+### AC: credentials-resolve-locally
 
 Scenario: A holder profile names a secured database
 Given the evidence bundle contains only its non-secret profile reference

@@ -57,7 +57,7 @@ exist in Alice's family space”.
 
 ## Acceptance Criteria
 
-### AC:ids-are-resolved-after-onboarding
+### AC: ids-are-resolved-after-onboarding
 
 Scenario: Sneat auth auto-creates a family space
 Given the AI completes onboarding as `alice`
@@ -65,7 +65,7 @@ When the onboarding milestone resolves assertion context
 Then exactly one application user and expected default family space are bound
 And subsequent list checks use those run-scoped values
 
-### AC:wrong-space-write-is-a-failure
+### AC: wrong-space-write-is-a-failure
 
 Scenario: The bot stores an item in another space
 Given `family_space_id` identifies Alice's expected space
@@ -74,7 +74,7 @@ But DTQL finds the record only in another space
 Then the task is not reported as verified success
 And the campaign records a state-consistency finding
 
-### AC:bindings-do-not-leak-across-runs
+### AC: bindings-do-not-leak-across-runs
 
 Scenario: Two campaigns create different users
 Given each run resolves its own user and family space

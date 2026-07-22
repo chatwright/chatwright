@@ -46,7 +46,7 @@ path” and “verification was unavailable”.
 
 ## Acceptance Criteria
 
-### AC:report-separates-defect-from-navigation
+### AC: report-separates-defect-from-navigation
 
 Scenario: The AI cannot find an edit operation
 Given no visible path is discovered within budget
@@ -54,7 +54,7 @@ When the report is generated
 Then it records a discoverability or coverage finding
 And does not claim that editing is functionally broken without evidence
 
-### AC:state-mismatch-has-linked-proof
+### AC: state-mismatch-has-linked-proof
 
 Scenario: Visible confirmation disagrees with DTQL
 Given the task, observation and assertion evidence
@@ -62,7 +62,7 @@ When a state-consistency finding is emitted
 Then a developer can navigate from the finding to both visible and database
 evidence
 
-### AC:url-report-preserves-independent-phases
+### AC: url-report-preserves-independent-phases
 
 Scenario: A reachable URL contains the wrong space ID
 Given availability passed and the information check failed

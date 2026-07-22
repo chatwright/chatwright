@@ -136,7 +136,7 @@ scenario execution to another process.
 
 ## Acceptance Criteria
 
-### AC:message-assertion-observes-committed-state
+### AC: message-assertion-observes-committed-state
 
 Scenario: A Listus user adds milk
 Given a DTQL assertion attached after the add-item conversation step
@@ -144,7 +144,7 @@ When the bot response and registered application work have settled
 Then the assertion queries the current environment's registered Listus database
 And the returned list record contains an active item titled milk
 
-### AC:checkpoint-is-gated-by-data
+### AC: checkpoint-is-gated-by-data
 
 Scenario: The populated-list checkpoint is created
 Given the chat transcript claims four groceries were added
@@ -152,7 +152,7 @@ When the `few-items-added` checkpoint assertion returns a missing or extra item
 Then checkpoint publication fails with the DTQL and actual records
 And no child branch can start from that checkpoint
 
-### AC:query-uses-branch-database
+### AC: query-uses-branch-database
 
 Scenario: A sibling branch removes list items
 Given the assertion targets the named Listus database holder
@@ -160,7 +160,7 @@ When its branch-completion DTQL executes
 Then it reads the replacement database bound to that sibling
 And mutations from the source or another sibling are not visible
 
-### AC:listus-parented-record-is-queryable
+### AC: listus-parented-record-is-queryable
 
 Scenario: DTQL selects the Listus groceries list
 Given the default family-space module key and the parent-scoped `lists`
@@ -169,7 +169,7 @@ When the concrete DTQL query executes through `dalgo2memory`
 Then it returns only the `buy!groceries` list record for that parent
 And evidence can show its `count` and nested `items` fields
 
-### AC:record-evidence-is-bounded-and-redacted
+### AC: record-evidence-is-bounded-and-redacted
 
 Scenario: A data assertion fails with a large or sensitive result
 Given configured result limits and redaction policy
@@ -177,7 +177,7 @@ When failure evidence is produced
 Then it declares the query, holder, total/returned row counts and truncation
 And no configured sensitive field is printed or persisted in plaintext
 
-### AC:dtql-is-the-shared-artifact
+### AC: dtql-is-the-shared-artifact
 
 Scenario: A developer investigates a failed state assertion
 Given the run contains the concrete canonical DTQL and result schema

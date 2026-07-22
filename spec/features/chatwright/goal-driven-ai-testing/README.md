@@ -107,7 +107,7 @@ target-specific goals, resolvers and assertions.
 
 ## Acceptance Criteria
 
-### AC:listus-goal-runs-without-command-map
+### AC: listus-goal-runs-without-command-map
 
 Scenario: A new AI actor receives the Listus shopping-list goal
 Given an isolated Listus Bot environment and fresh user
@@ -116,7 +116,7 @@ When the campaign runs
 Then the actor attempts onboarding, list discovery and every requested task
 And records a structured outcome for each task
 
-### AC:family-space-state-is-verified
+### AC: family-space-state-is-verified
 
 Scenario: Listus confirms that an item was added
 Given onboarding resolved `app_user_id` and `family_space_id`
@@ -124,7 +124,7 @@ When the add task reaches its verification point
 Then a parameterised DTQL assertion queries that family space
 And the campaign does not claim verified success from bot prose alone
 
-### AC:campaign-stops-within-budget
+### AC: campaign-stops-within-budget
 
 Scenario: The bot returns the same non-progressing response
 Given a finite step, duration and repeated-failure budget
@@ -132,7 +132,7 @@ When the AI cannot make progress
 Then the campaign stops deterministically
 And reports the active task, attempted recovery and budget/stop reason
 
-### AC:url-correctness-and-availability-are-independent
+### AC: url-correctness-and-availability-are-independent
 
 Scenario: Listus exposes a structurally correct URL whose endpoint times out
 Given the URL contains the expected runtime-bound family-space information
@@ -140,7 +140,7 @@ When deterministic URL verification runs
 Then the structure phase passes
 And the configured availability phase fails with timeout and vantage evidence
 
-### AC:report-links-evidence
+### AC: report-links-evidence
 
 Scenario: A state inconsistency is found
 Given the bot confirms an operation but DTQL disagrees

@@ -99,7 +99,7 @@ When status is imported
 Then each updated scenario references the exact scenario revision and run result
 And an unexecuted scenario cannot become passing
 
-### AC:prompt-preserves-repository-rules
+### AC: prompt-preserves-repository-rules
 
 Scenario: A target repository has agent instructions
 Given a selected implementation task
@@ -107,7 +107,7 @@ When Chatwright creates the export
 Then repository instructions and relevant architecture decisions are included or
 referenced ahead of implementation suggestions
 
-### AC:loop-keeps-human-approval-boundaries
+### AC: loop-keeps-human-approval-boundaries
 
 Scenario: Failure analysis proposes a new requirement and code change
 Given a completed agent run with evidence-linked findings

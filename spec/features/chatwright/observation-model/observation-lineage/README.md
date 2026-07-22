@@ -83,7 +83,7 @@ and retention obligations and is not implied by the initial in-memory contract.
 
 ## Acceptance Criteria
 
-### AC:changes-are-explicit
+### AC: changes-are-explicit
 
 Scenario: A bot edits one message and creates another
 Given an actor previously received `obs41`
@@ -91,7 +91,7 @@ When `obs42` is created
 Then `obs42` links to `obs41`
 And changes identify both affected messages and the responsible actor
 
-### AC:actor-does-not-diff-snapshots
+### AC: actor-does-not-diff-snapshots
 
 Scenario: An AI actor receives a large conversation
 Given only three objects changed since its previous observation
@@ -99,7 +99,7 @@ When the next observation is delivered
 Then the three semantic changes are listed explicitly
 And correctness does not depend on the AI computing a textual diff
 
-### AC:simultaneous-intent-has-one-authoritative-order
+### AC: simultaneous-intent-has-one-authoritative-order
 
 Scenario: Two actors choose from the same observation
 Given both proposals reference `obs42`

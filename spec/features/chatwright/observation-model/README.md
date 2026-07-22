@@ -115,7 +115,7 @@ self-contained or transported incrementally remains under investigation.
 
 ## Dependencies and Relationships
 
-- Goal-Driven AI Testing (private, pre-announcement) is the MVP #1
+- [Goal-Driven AI Testing](../goal-driven-ai-testing/README.md) is the MVP #1
   consumer and defines the first required observation/action slice.
 - Platform Emulators must project platform-visible content/actions and resolve
   accepted generic actions back into platform semantics.
@@ -129,7 +129,7 @@ self-contained or transported incrementally remains under investigation.
 
 ## Acceptance Criteria
 
-### AC:same-observation-serves-different-actors
+### AC: same-observation-serves-different-actors
 
 Scenario: Scripted and AI actors reach the same decision point
 Given one visible conversation projected by a Platform Emulator
@@ -137,7 +137,7 @@ When a ScriptedActor and an AIActor observe it independently
 Then both receive the same observation schema and semantic content
 And neither receives platform-native callback or webhook data
 
-### AC:edit-preserves-logical-message
+### AC: edit-preserves-logical-message
 
 Scenario: A bot edits a visible message
 Given message `msg7` at revision 1
@@ -145,7 +145,7 @@ When the platform reports an edit to the same logical message
 Then the next observation contains `msg7` at revision 2
 And its change list identifies the actor, message and revision transition
 
-### AC:visual-object-resolves-to-emulator-state
+### AC: visual-object-resolves-to-emulator-state
 
 Scenario: Studio selects a rendered action
 Given the observation and rendered control share a synthetic action ID
@@ -154,7 +154,7 @@ Then Chatwright resolves the authoritative internal emulator action and trace
 And the developer inspector can display native IDs and callback payloads
 But those raw details do not become actor input
 
-### AC:stale-action-is-validated
+### AC: stale-action-is-validated
 
 Scenario: An actor selects an action from an obsolete observation
 Given the action was visible in `obs41`
@@ -163,7 +163,7 @@ When the actor submits the old target with `obs41`
 Then Chatwright does not blindly execute the platform operation
 And reports a deterministic stale, refresh or reconciliation outcome
 
-### AC:chronology-preserves-actionable-context
+### AC: chronology-preserves-actionable-context
 
 Scenario: The observation window reaches its size policy
 Given an older conversation and a current multi-message bot response

@@ -56,7 +56,7 @@ validates all proposed actions.
 
 ## Acceptance Criteria
 
-### AC:current-actions-survive-windowing
+### AC: current-actions-survive-windowing
 
 Scenario: An actionable message is near a history boundary
 Given the observation must be size-limited
@@ -64,14 +64,14 @@ When the context policy selects content
 Then all currently visible actions remain addressable
 And their owning message/context remains intelligible
 
-### AC:complete-turns-are-preserved
+### AC: complete-turns-are-preserved
 
 Scenario: A turn contains several user and bot messages
 Given including one message would split the semantic turn
 When the observation window is built
 Then the complete turn is retained or replaced with an explicit summary
 
-### AC:journey-context-is-actor-neutral
+### AC: journey-context-is-actor-neutral
 
 Scenario: A milestone is active
 Given HumanActor and AIActor observe the same run state

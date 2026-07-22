@@ -115,7 +115,7 @@ Deferred:
 
 ## Acceptance Criteria
 
-### AC:named-checkpoints-form-lineage
+### AC: named-checkpoints-form-lineage
 
 Scenario: Listus creates two checkpoints in one journey
 Given onboarding completes before the reusable list fragment runs
@@ -123,7 +123,7 @@ When the fragment adds baseline groceries
 Then `few-items-added` records `onboarding-complete` in its lineage
 And both identities include their scenario/fragment invocation path
 
-### AC:sibling-database-mutations-do-not-leak
+### AC: sibling-database-mutations-do-not-leak
 
 Scenario: Listus branches from a populated groceries list
 Given milk, bread, eggs and apples at `few-items-added`
@@ -131,7 +131,7 @@ When one branch marks and removes items
 Then every later sibling starts with the original four active items
 And semantic comparison does not depend on generated record IDs
 
-### AC:branch-uses-a-fresh-driver
+### AC: branch-uses-a-fresh-driver
 
 Scenario: A branch begins after a database-only checkpoint
 Given a message was rendered before the checkpoint
@@ -139,7 +139,7 @@ When the application factory starts the branch
 Then the branch receives fresh database and chat-driver handles
 And it does not reuse the pre-checkpoint message handle
 
-### AC:scope-is-not-overstated
+### AC: scope-is-not-overstated
 
 Scenario: Database state branches but platform state does not
 Given a successful database checkpoint
@@ -147,7 +147,7 @@ When branch evidence is rendered
 Then it is labelled `database-only`
 And excluded emulator, clock, queue and process state is visible
 
-### AC:replay-is-distinguishable
+### AC: replay-is-distinguishable
 
 Scenario: A database holder cannot branch
 Given replayable deterministic setup

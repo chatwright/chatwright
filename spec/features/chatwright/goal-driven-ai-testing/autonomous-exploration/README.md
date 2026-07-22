@@ -40,7 +40,7 @@ Destructive actions are allowed only inside the declared isolated test scope.
 
 ## Acceptance Criteria
 
-### AC:actor-discovers-shopping-list
+### AC: actor-discovers-shopping-list
 
 Scenario: The initial screen does not expose the shopping list directly
 Given a goal to test shopping items
@@ -48,7 +48,7 @@ When the AI explores visible commands and actions
 Then it can record the discovered path
 And no platform callback data is required
 
-### AC:loop-detection-stops-repeat
+### AC: loop-detection-stops-repeat
 
 Scenario: The AI alternates between two menus
 Given a repeated-state/action threshold

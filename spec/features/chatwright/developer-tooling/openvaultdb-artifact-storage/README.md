@@ -114,7 +114,7 @@ authority, revision and conflict semantics.
 
 ## Acceptance Criteria
 
-### AC:local-run-does-not-require-openvaultdb
+### AC: local-run-does-not-require-openvaultdb
 
 Scenario: A developer runs Chatwright offline
 Given no OpenVaultDB provider or credentials are configured
@@ -122,7 +122,7 @@ When the scenario completes
 Then its complete supported local bundle is written and inspectable
 And the scenario outcome does not depend on remote storage
 
-### AC:publication-is-explicit-and-least-privilege
+### AC: publication-is-explicit-and-least-privilege
 
 Scenario: A user connects Chatwright to an existing vault
 Given the OpenVaultDB Connect picker displays available vaults
@@ -131,7 +131,7 @@ Then Chatwright receives access scoped to its application namespace and required
 record operations
 And no owner-wide credential is written to the repository or result bundle
 
-### AC:redaction-precedes-network-write
+### AC: redaction-precedes-network-write
 
 Scenario: A transcript and DTQL recordset contain configured sensitive values
 Given remote publication is enabled
@@ -140,7 +140,7 @@ Then those values are redacted before the first OpenVaultDB request body or
 retry record is created
 And the manifest declares the applied redaction/truncation policy
 
-### AC:unsafe-host-is-rejected-before-upload
+### AC: unsafe-host-is-rejected-before-upload
 
 Scenario: Evidence policy requires at-rest encryption
 Given the selected host does not advertise an accepted encryption capability
@@ -148,7 +148,7 @@ When publication is requested
 Then no artifact bytes are sent
 And the local result remains available with an actionable publication failure
 
-### AC:manifest-publishes-after-artifacts
+### AC: manifest-publishes-after-artifacts
 
 Scenario: Upload fails after some artifacts are written
 Given the final run manifest has not been published
@@ -156,7 +156,7 @@ When another client lists complete Chatwright runs
 Then the interrupted upload is not presented as a complete run
 And an idempotent retry can finish without duplicating verified artifacts
 
-### AC:retrieval-verifies-content
+### AC: retrieval-verifies-content
 
 Scenario: A stored transcript no longer matches its manifest digest
 Given Studio retrieves the run from the vault
@@ -164,7 +164,7 @@ When Chatwright validates the requested artifacts
 Then it reports an integrity failure and does not trust the altered transcript
 And the other historical metadata is not silently used as complete evidence
 
-### AC:artifact-storage-does-not-register-branch-state
+### AC: artifact-storage-does-not-register-branch-state
 
 Scenario: A run publishes evidence to OpenVaultDB
 Given the application has registered its DALgo database as a branchable holder
@@ -173,7 +173,7 @@ Then only the application holder participates in branching
 And the evidence vault is used after/during reporting without being cloned as
 application state
 
-### AC:git-scenario-remains-canonical
+### AC: git-scenario-remains-canonical
 
 Scenario: A run stores the scenario document needed for provenance
 Given the canonical scenario is committed in a product repository

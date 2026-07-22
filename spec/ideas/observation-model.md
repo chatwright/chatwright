@@ -361,7 +361,7 @@ actor strategy, not runtime perception. Concrete observations and accepted
 actions can be retained to promote an exploratory path into a replay or scripted
 scenario.
 
-Autonomous Goal-Driven Bot Testing (a private, pre-announcement initiative) is the
+[Autonomous Goal-Driven Bot Testing](goal-driven-ai-bot-testing.md) is the
 number-one MVP consumer of this model. The first Observation Model slice should
 therefore be selected by what the Listus campaign needs to discover onboarding,
 exercise shopping-list actions and react to explicit changes safely.
