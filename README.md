@@ -53,8 +53,8 @@ under test's API base URL at `cw.BotAPIURL()` and hand Chatwright its webhook
 (an `http.Handler`, or a URL for an external process in any language —
 Chatwright only speaks HTTP). `SendText` POSTs a platform-native update to the
 webhook; the bot's replies to the emulated API are captured, normalised and
-asserted — including neutral `ExpectAction(...).Click()` on inline actions and
-`ExpectEdited()` for in-place message edits. See
+asserted — including neutral `ExpectAction(...).Click()` on inline actions
+(Telegram today) and `ExpectEdited()` for in-place message edits. See
 [`examples/greetbot`](examples/greetbot/) for a complete real-bot example and
 [`example_test.go`](example_test.go) for a framework-free HTTP bot.
 
@@ -74,7 +74,9 @@ go install github.com/chatwright/chatwright/cmd/chatwright@latest
 | `.../cmd/chatwright` | Command-line entry point |
 
 Status: Telegram supports text + inline actions + in-place edits; WhatsApp is
-text-only (interactive replies next); AI actors and Starlark are Phase 2. The
+text only — interactive replies are not captured yet, so `ExpectAction` cannot
+be used against a WhatsApp bot (interactive replies planned); AI actors and
+Starlark are Phase 2. The
 [roadmap](docs/roadmap.md) records the supported slice and exclusions honestly.
 
 ## Explore the connected mock-ups
