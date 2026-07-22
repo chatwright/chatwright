@@ -3,7 +3,7 @@ format: https://specscore.md/idea-specification
 status: Draft
 ---
 
-# Idea: Live-recording SDK — record real bot conversations as run bundles
+# Idea: Live-recording API/SDK — record real bot conversations as run bundles
 
 **Status:** Draft
 **Date:** 2026-07-22
@@ -21,15 +21,32 @@ replay, share or annotate it. Yet the bot process itself already sees both
 directions of every conversation: platform updates in, API calls out —
 exactly what a journal records.
 
+## Context
+
+The run-bundle format v1 is already a platform-neutral conversation
+container: a declared `endpointProfile` string, an extensible `PartKind`
+discriminator, an actors roster that includes `human`, and journal entries
+with identity and timing. The player is local-file with no server dependency.
+Chatwright's any-language positioning (the pybot proof) means recording must
+not require Go. The model to follow is PostHog's: a small capture API is the
+product's contract, and SDKs are thin conveniences over it.
+
 ## Recommended Direction
 
-Offer an SDK bot developers embed in their real bot to record conversations
-as standard run bundles, replayable in the Studio player:
+Offer a capture API bot developers call from their real bot — with SDKs as
+thin wrappers — recording conversations as standard run bundles, replayable
+in the Studio player:
 
-- **First host: a `bots-go-framework` middleware** (owned dependency —
-  improve it upstream, dogfood on Listus Bot and Sneat Bot in production),
-  capturing inbound updates and outbound Bot API calls into journal entries.
-  Standalone Go and JS SDKs can follow.
+- **API-first (PostHog model):** a minimal capture contract — submit
+  conversation events (inbound update, outbound call, chat action) keyed to a
+  chat/session — that any language can speak. Served locally first (a
+  collector in the chatwright CLI, or a library writing bundle files
+  directly); hosted ingestion is the later Cloud surface over the same
+  contract.
+- **SDKs as wrappers; first: a `bots-go-framework` middleware** (owned
+  dependency — improve it upstream, dogfood on Listus Bot and Sneat Bot in
+  production), capturing inbound updates and outbound Bot API calls into
+  journal entries. Standalone Go and JS SDKs can follow.
 - **Fidelity declared:** recordings carry their own endpoint profile label
   (e.g. `live-recorded`) — the bundle format's `endpointProfile` is already a
   plain declared string, so no schema change. Recorded evidence is never
