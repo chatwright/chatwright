@@ -96,16 +96,14 @@ Early, under active construction:
 - ✅ Platform-agnostic scenario API mapped to platform-specific calls
 - ✅ Clicking actions (`Click()`) — callback query / interactive reply back to the bot
 - ✅ In-place message edits (`ExpectEdited()`) — assert a Telegram `editMessageText`-style edit
-- ✅ Telegram platform — full (text + inline actions + edits), via `bots-api-telegram`
+- ✅ Telegram platform — text + inline actions + edits, via `bots-api-telegram`
 - ✅ WhatsApp platform — text (MVP), via `bots-api-whatsapp`; interactive replies next
 - ✅ Real bots driven over HTTP; emulated platform API servers
 - ✅ Latency-aware assertions (`ExpectBotMessage().Within(...)`) + first-class metrics
 - ⏳ AI actors, Starlark scripting — Phase 2
 
-See the seed vision (problem, architecture direction, MVP boundaries, investigation
-roadmap) in the [Sneat backstage idea doc][idea].
-
-[idea]: https://github.com/sneat-co/backstage/blob/main/spec/ideas/chatwright.md
+See the [Chatwright specification](../spec/README.md) and [roadmap](../docs/roadmap.md)
+for the problem, architecture direction and MVP boundaries.
 
 ## Packages
 
