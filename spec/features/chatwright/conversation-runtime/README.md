@@ -11,25 +11,45 @@ status: Implementing
 
 ## Summary
 
-The stateful, isolated environment that owns actors, platform identities, bots,
-chats, messages, dependencies, event queues, simulated time and a complete run
-lifecycle.
+The stateful, isolated environment that owns actors, conversations, optional
+platform identities, endpoint sessions, messages/events, dependencies, event
+queues, simulated time and a complete run lifecycle.
 
 ## Problem
 
 A conversation is more than ordered strings. Bot behaviour depends on identities,
 message IDs, edits, callbacks, retries, shared application state and asynchronous
-work. If each test re-creates those pieces ad hoc, multi-user and multi-bot flows
-are unreliable and impossible to inspect consistently.
+work. If each test re-creates those pieces ad hoc, multi-user and multi-system
+flows are unreliable and impossible to inspect consistently.
+
+## Contents
+
+| Child | Purpose |
+|---|---|
+| [headless-engine-harness](headless-engine-harness/README.md) | Exercise a real conversational engine directly through semantic events without inventing or claiming messenger-platform behavior |
 
 ## Behavior
 
 ### Environment ownership
 
-One environment owns every resource created for a run: multiple platforms,
-bots, users, identities, private and group chats, platform state, shared
-dependencies, queues, event buses, transcript entries and metrics. Teardown must
-close servers and release waiters even after a failed assertion.
+One environment owns every resource created for a run: selected conversational
+endpoints, optional platforms, bots/engines/agents, users, identities,
+conversations/chats, endpoint state, shared dependencies, queues, event buses,
+transcript entries and metrics. Teardown must close endpoints, processes,
+servers and waiters even after a failed assertion.
+
+### Endpoint and profile separation
+
+A run declares how semantic actor events reach the system under test. A
+platform-emulated profile uses a Platform Emulator and real bot webhook/API
+boundary. A headless profile uses a declared conversational-engine endpoint.
+Future profiles (for example process or terminal endpoints, currently parked at
+the idea stage) would enter through this same seam per decision
+[0008](../../../decisions/0008-declared-endpoint-profiles.md).
+
+The runtime owns lifecycle and semantic evidence across profiles; each endpoint
+owns its transport mechanics and declares capabilities. Evidence cannot silently
+substitute one profile for another.
 
 ### Identity and actor separation
 
@@ -88,6 +108,8 @@ separately reportable
   draining can promise that the run is idle?
 - Can one user safely hold several identities on the same platform and bot?
 - Which message state is canonical versus platform-specific extension data?
+- Which semantic event types belong in the runtime core versus endpoint-specific
+  extensions?
 
 ---
 *This document follows the https://specscore.md/feature-specification*

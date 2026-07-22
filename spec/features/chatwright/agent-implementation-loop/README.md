@@ -65,6 +65,15 @@ the selected scenario scope, identify untested claims or regressions, and create
 a follow-up prompt. Review findings link to diffs and run evidence rather than
 asserting quality from a prose summary alone.
 
+### Implementer versus system under test
+
+This feature uses a coding agent as an implementer of another product. When the
+agent itself is the behavior being tested—its tool choices, permissions,
+commands, diffs or terminal interaction—the scenario belongs to
+[AI agent harnesses](../agent-harnesses/README.md). A workflow may use both, but
+product acceptance evidence and agent-quality evidence retain separate
+identities and cannot substitute for one another.
+
 ## Dependencies
 
 - [scenario-authoring](../scenario-authoring/README.md)

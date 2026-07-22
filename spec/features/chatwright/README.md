@@ -13,9 +13,13 @@ status: Specifying
 
 An open, local-first conversation development platform that emulates messaging
 platforms so scripted, human, replay and AI actors can exercise real bot
-applications through their actual webhooks and platform API clients. Optional
-Cloud services add managed execution, collaboration and intelligence without
-becoming a prerequisite for local development.
+applications through their actual webhooks and platform API clients. Systems
+without a messenger boundary run through explicitly declared endpoint profiles
+(headless engine today; see decision
+[0008](../../decisions/0008-declared-endpoint-profiles.md)), whose evidence is
+never interchangeable with platform-emulated evidence. Optional Cloud services
+add managed execution, collaboration and intelligence without becoming a
+prerequisite for local development.
 
 ## Contents
 
@@ -23,6 +27,7 @@ becoming a prerequisite for local development.
 |---|---|
 | [platform-emulators](platform-emulators/README.md) | Local messaging platforms; Telegram MVP plus planned WhatsApp, Slack and Discord emulators |
 | [conversation-runtime](conversation-runtime/README.md) | Environment, actors, identities, chats, scheduling and run lifecycle |
+| [agent-harnesses](agent-harnesses/README.md) | Controlled MCP tool-boundary testing (draft); batch/terminal agent-CLI adapters parked as an idea |
 | [deterministic-testing](deterministic-testing/README.md) | Scripted scenarios, fluent assertions, milestones and CI-safe failure reporting |
 | [ai-driven-testing](ai-driven-testing/README.md) | Goal-driven actors, constrained exploration and evidence-linked evaluation |
 | [fuzz-testing](fuzz-testing/README.md) | Seeded input, event-order and timing mutation plus AI-generated conversational perturbations |
@@ -45,21 +50,35 @@ and Platform Emulators respectively.
 
 ## Problem
 
-Testing one bot behaviour currently requires teams to choose between fast but
-unrealistic handler tests and slow, network-dependent manual platform tests.
+Testing conversational behavior currently forces teams to assemble different
+harnesses for direct engines, AI-agent processes and messenger bots, or to choose
+between fast but narrow handler tests and slow network-dependent manual tests.
 Meanwhile manual conversation design, deterministic assertions and AI UX
 exploration tend to create separate artefacts that drift. Chatwright needs one
-execution model that is realistic at platform boundaries, deterministic where
-required and open to different actor drivers and authoring formats.
+execution model with explicit fidelity profiles, deterministic evidence where
+required and support for different actor, endpoint and authoring formats.
 
 ## Behavior
 
 ### One environment, multiple drivers
 
-An environment owns bots, users, platform identities, chats, simulated platform
-state, application dependencies, scheduling, transcripts and metrics for one
-isolated run. Scripted, human, replay and AI actors produce actions through the
-same environment and Platform Emulator; no actor type bypasses platform delivery.
+An environment owns systems under test, users, optional platform identities,
+conversations/chats, endpoint state, application dependencies, scheduling,
+transcripts and metrics for one isolated run. Scripted, human, replay and AI
+actors produce semantic actions through the same environment. Within a
+platform-emulated run no actor type bypasses platform delivery; a headless or
+agent-harness run uses its explicitly declared endpoint instead.
+
+### Messenger platforms are optional execution boundaries
+
+A conversational product may expose an in-process/HTTP engine, a batch process,
+an interactive terminal, a structured session endpoint or a messenger webhook.
+Chatwright shares actors, scenarios, assertions, branching and evidence across
+those profiles while each adapter owns its transport-specific mechanics.
+
+Passing evidence always names its profile and capabilities. Direct/headless
+evidence cannot satisfy a platform requirement, and a product with no messenger
+does not need to pretend one exists.
 
 ### The platform is emulated; the bot is real
 
@@ -77,9 +96,11 @@ actions; platform-specific assertions remain available when behaviour matters.
 
 ### Strong and narrow execution modes
 
-Real HTTP webhook delivery is the strongest and preferred integration mode.
-Direct transport invocation may trade fidelity for speed in narrower tests, but
-results must clearly identify the mode used.
+For a messenger bot, real HTTP webhook delivery through a Platform Emulator is
+the strongest and preferred platform-integration mode. Direct engine, structured
+process/session and PTY modes provide different speed, observability and fidelity
+for their declared systems under test. Results identify the exact profile and do
+not rank unlike capabilities as interchangeable.
 
 ### Open local stack, optional closed services
 
@@ -106,10 +127,10 @@ integration are optional hosted conveniences, never Chatwright dependencies.
 ### AC: one-runtime-across-actor-types
 
 Scenario: A conversation changes driver
-Given the same environment, real bot, Platform Emulator, identity and chat
+Given the same environment, endpoint profile, identity and conversation
 When a scripted actor is replaced by a human or AI actor
-Then actions still traverse the same simulated platform and real bot webhook
-And transcript, trace and metrics retain the same schema
+Then actions still traverse the same declared endpoint
+And transcript, trace and metrics retain the same semantic schema
 
 ### AC: scenarios-separate-intent-from-mechanics
 
@@ -143,6 +164,15 @@ When the developer builds a bot, interacts with it, records a scenario, runs
 deterministic tests and inspects the resulting transcript
 Then every activity completes without a Chatwright Cloud or Sneat account
 And cloud-only capabilities are presented as optional enhancements
+
+### AC: execution-profile-is-not-overclaimed
+
+Scenario: A neutral behavior passes through a headless engine
+Given no messenger webhook or Platform Emulator participated
+When Chatwright publishes the result
+Then it identifies the headless endpoint and supported capabilities
+And cannot satisfy an acceptance binding which requires Telegram or WhatsApp
+evidence
 
 ## Open Questions
 

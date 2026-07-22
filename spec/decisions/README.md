@@ -14,6 +14,7 @@ format: https://specscore.md/decisions-index-specification
 | [0004](0004-hybrid-testing-and-authoring.md) | Deterministic and AI testing share one runtime; Go precedes Starlark | Approved | 2026-07-21 | actors, authoring | deterministic-testing, ai-driven-testing, scenario-authoring |
 | [0006](0006-platform-emulated-bot-real.md) | The messaging platform is emulated; the bot under test is real | Approved | 2026-07-21 | product, emulator, boundary | platform-emulators, playground |
 | [0007](0007-open-local-stack-closed-cloud.md) | Apache-2.0 local stack with optional commercial Cloud services | Approved | 2026-07-22 | open-source, studio, cloud | developer-tooling, cloud, marketplace |
+| [0008](0008-declared-endpoint-profiles.md) | Declared endpoint profiles generalise the execution boundary (amends 0006) | Approved | 2026-07-22 | product, runtime, boundary | chatwright, conversation-runtime, agent-harnesses |
 
 ## Open Questions
 
