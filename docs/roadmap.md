@@ -67,6 +67,33 @@ message reaches the bot.
 8. **Sell operated value.** Commercial differentiation comes from managed
    infrastructure, collaboration and intelligence rather than a closed Studio.
 
+## Current MVP priority: autonomous goal-driven bot testing
+
+The founder's MVP Priority #1 cuts across the phase model rather than waiting
+for Phase 2's AI-actor slot: give Chatwright a goal and tasks, let an AI actor
+discover and exercise a real bot (Listus Bot first, Sneat Bot second), verify
+application state through DTQL and return an evidence-backed campaign report.
+Full contract and campaign definition:
+[goal-driven-ai-testing](../spec/features/chatwright/goal-driven-ai-testing/README.md).
+
+Implementation order: goal/task contract with budgets → minimum
+[Observation Model](../spec/features/chatwright/observation-model/README.md)
+slice → bounded observe–plan–act–validate loop → run-scoped bindings
+(actor → application user → family space) → parameterised DTQL checks at task
+and milestone boundaries → finding classification and evidence-backed report →
+one reproducible Listus campaign, then a Sneat Bot campaign on the same
+contracts.
+
+**Gate:** from a fresh isolated Listus user with no command/callback map,
+Chatwright attempts every shopping-list task within budget, resolves the
+correct family space, verifies configured state through DTQL and produces a
+report distinguishing verified defects, AI navigation failures and coverage
+gaps. **Portability gate:** Sneat Bot reuses the same goal/actor/observation/
+binding/reporting contracts. Dependency boundary: the Telegram Platform
+Emulator and Observation Model are required enablers; state branching is a
+later accelerator that must not block the first campaign; the Phase 0/1 gates
+below remain the v0.1.0 release blockers.
+
 ## Phase 0 — Consolidate the proof into a product contract
 
 **Goal:** turn the existing seed into a small, honest and repeatable baseline.
