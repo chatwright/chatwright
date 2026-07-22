@@ -16,7 +16,8 @@ status: Implemented
 Create Chatwright's first honest branchable chat journey around Listus. Define
 the reusable product scenario in `sneat-bots`, prove it first through Listus's
 existing deterministic in-process conversation path, then make the release gate
-the same scenario executed by `sneat-go` through a real Telegram webhook against
+the same shared list fragment executed by `sneat-go` after profile-qualified
+ListusBot and SneatBot onboarding through real Telegram webhooks against
 Chatwright's fake Bot API.
 
 The pilot branches database state only. It uses `dalgo2memory`, runs sibling
@@ -123,7 +124,7 @@ checkpoint.
 | `chatwright/chatwright` | scenario composition, holder registry/coordinator, runner/environment binding, evidence and public specifications |
 | DALgo | additive provider-neutral branching primitive and conformance harness plus `adapters/dalgo2memory`; do not widen mandatory `dal.DB` |
 | `sneat-bots` | reusable Listus scenario/fragment definitions, product fixtures and assertions, conversation actions, direct integration rung and deterministic bot/framework seams |
-| `sneat-go` | execution host for those scenarios: actual ListusBot profile, fake-auth onboarding, environment/database factories and Telegram webhook adapter |
+| `sneat-go` | execution host for those scenarios: actual ListusBot and SneatBot profiles, profile-specific fake-auth onboarding, environment/database factories and Telegram webhook adapter |
 
 `sneat-bots` is the source of truth for what the Listus scenario does. It must
 export or otherwise expose the scenario definition without importing
@@ -224,7 +225,7 @@ plan and its feature acceptance criteria:
 | sneat-bots Listus actions | `TestExactTitleReaddDeduplicatesActiveItem`, `TestExactTitleReaddReactivatesDoneItem`, confirmed remove-done/remove-all confirm and cancel tests, and semantic title/status/count assertions |
 | sneat-bots Listus scenario | `TestListusReferenceScenarioDirect` with the three named siblings starting from the same four-active-item digest and one fragment invoked by new/existing parents |
 | sneat-go onboarding | a fake-auth new-user test proving bot user, app user, locale, and auth-created/assigned default family space without fixture provisioning |
-| sneat-go Telegram host | `TestListusReferenceScenarioTelegramWebhook` executing the sneat-bots definition through the actual ListusBot profile and Chatwright fake Bot API with fresh DB, bot, application and driver handles per sibling |
+| sneat-go Telegram host | `TestListusReferenceScenarioTelegramWebhook` executing profile-qualified parents and the same sneat-bots list fragment through actual ListusBot and SneatBot profiles plus Chatwright fake Bot API, with fresh DB, bot, application and driver handles per sibling |
 
 Exclusive implementation ownership is frozen by path:
 
@@ -364,14 +365,14 @@ diagnostic rung, not the final fidelity claim.
 **Depends-On:** 2, 5, 8, 9
 **Status:** complete
 
-Add a `sneat-go` test host, preferably beside the Listus profile tests, which
-executes the scenario definitions owned by `sneat-bots` against the actual
-ListusBot Telegram webhook. The host supplies fake auth, application/profile
-startup, holder/environment factories and Chatwright transport. It must not copy
-the scenario steps. The new-user path creates `onboarding-complete`; both new
-and existing paths invoke the same list fragment. Assertions use visible bot
-behaviour plus semantic database digests and never reuse pre-checkpoint message
-handles.
+Add a `sneat-go` test host beside the bot profile tests which executes the
+scenario definitions owned by `sneat-bots` against actual ListusBot and SneatBot
+Telegram webhooks. The host supplies profile-specific fake auth/onboarding,
+application/profile startup, holder/environment factories and Chatwright
+transport. It must not copy the list scenario steps. Each new-user parent creates
+its qualified `onboarding-complete`; new and existing parents for both profiles
+invoke the exact same list fragment. Assertions use visible bot behaviour plus
+semantic database digests and never reuse pre-checkpoint message handles.
 
 ### Wave 3: Integration and evidence
 
@@ -448,8 +449,8 @@ repository location.
 |---|---|---|
 | Chatwright | `d59cd13`, `398ec13`, `3a027f5`, `0728ea2`, `9ae60c9` | contract freeze, scenario composition, grouped coordinator, immutable message observations and publishable module path |
 | DALgo | `27fea2b`, `9dd0947`, `9bb4023` | optional branching contract, conformance harness and serialised `dalgo2memory` provider |
-| `sneat-bots` | `8c56977`, `7cc9037`, `cdb3b68`, `2ea811f`, `eedc0a2`, `3071a82`, `cc51035` | characterised mutations, confirmed bulk removal, reusable scenarios/direct rung, profile compatibility and dependency integration |
-| `sneat-go` | `865d4586`, `155bdcaa`, `be692df5`, `98266280` | auth-managed default spaces, valid bot identities, actual Telegram webhook host and dependency integration |
+| `sneat-bots` | `8c56977`, `7cc9037`, `cdb3b68`, `2ea811f`, `eedc0a2`, `3071a82`, `cc51035`, `98d3950` | characterised mutations, confirmed bulk removal, reusable scenarios/direct rung, profile-qualified parents, profile compatibility and dependency integration |
+| `sneat-go` | `865d4586`, `155bdcaa`, `be692df5`, `98266280`, `ce252f0`, `85f2eee` | auth-managed default spaces, valid bot identities, actual dual-profile Telegram webhook host and dependency integration |
 
 ### Release evidence
 
@@ -459,10 +460,11 @@ repository location.
   `TestListusReferenceScenarioTelegramWebhook` each passed 20 consecutive runs.
 - Affected race tests passed for Chatwright, DALgo branching and memory,
   `sneat-bots` Listus/profile packages, and the `sneat-go` host/auth packages.
-- The real Telegram rung uses the actual ListusBot webhook with fake auth and a
-  closed HTTP transport that redirects only Telegram API calls to Chatwright's
-  fake Bot API. It starts the new-user database empty and observes the auth
-  system creating and assigning the default family.
+- The real Telegram rung uses actual ListusBot and SneatBot webhooks with
+  profile-qualified onboarding, fake auth and a closed HTTP transport that
+  redirects only Telegram API calls to Chatwright's fake Bot API. Each new-user
+  database starts empty and observes auth creating and assigning the default
+  family before the exact same list fragment runs.
 - Evidence checks require the two qualified checkpoints, one shared fragment,
   the three ordered isolated siblings, fresh database/application/bot/driver
   handles, released cleanup, and explicit `database-only` exclusions.
@@ -476,8 +478,8 @@ Those revisions remain intentionally unpushed pending explicit authorization.
 
 ## Release Gate
 
-- The direct diagnostic rung and real Telegram webhook rung both pass without
-  network credentials or cloud services.
+- The direct diagnostic rung and the real ListusBot and SneatBot Telegram
+  webhook rungs pass without network credentials or cloud services.
 - The new-user path proves actual language selection and default-family-space
   auto-creation/assignment by the Sneat auth system; neither the scenario nor
   the test harness provisions it and neither calls the existing-user seeder.
