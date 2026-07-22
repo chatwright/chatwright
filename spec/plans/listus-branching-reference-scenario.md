@@ -6,7 +6,8 @@ status: Draft
 # Plan: Listus branchable reference scenario
 
 **Status:** Draft
-**Source:** chatwright/scenario-authoring/scenario-composition, chatwright/state-branching, chatwright/state-branching/database-state-holders
+**Source:** idea:chatwright
+**Features:** chatwright/scenario-authoring/scenario-composition, chatwright/deterministic-testing/data-state-assertions, chatwright/state-branching, chatwright/state-branching/database-state-holders
 **Date:** 2026-07-22
 **Owner:** alex
 **Supersedes:** —
@@ -22,7 +23,9 @@ Chatwright's fake Bot API.
 The pilot branches database state only. It uses `dalgo2memory`, runs sibling
 branches sequentially, registers one Listus database in the reference journey
 and separately proves a two-database holder group. New-user and existing-user
-journeys invoke the same reusable list-items fragment.
+journeys invoke the same reusable list-items fragment. Read-only DTQL assertions
+after messages and at checkpoints prove what Listus persisted and attach the
+queried records to run evidence.
 
 This is a process-priority investment: repeatable Listus onboarding and list
 mutation coverage directly supports the Sneat priority that `@SneatBot has no
@@ -45,8 +48,12 @@ known bugs`.
   with the default family space auto-created by the Sneat auth system and
   assigned to the user rather than hidden in a pre-seeded onboarded fixture;
 - an explicit existing-user fixture which invokes the same list fragment;
-- semantic assertions over item title, done state and count, not generated IDs
-  or timestamps;
+- message-level, checkpoint and branch-completion DTQL queries against the named
+  Listus database holder;
+- semantic record assertions over item title, done state and count, not generated
+  IDs or timestamps, with bounded result previews in evidence;
+- the smallest DTQL extension needed to address Listus's parent-scoped `lists`
+  collection and return its nested `items` field;
 - named checkpoints `onboarding-complete` and `few-items-added`;
 - database-only evidence, lineage, fixture-specific digests and cleanup status.
 
@@ -77,21 +84,23 @@ Listus reference journeys
     └── Use: list-items-modification
 
 list-items-modification
-├── Add milk, bread, eggs and apples
-├── Verify four active items and no done items
+├── Add milk
+├── DTQL: show the groceries list record and assert stored active milk
+├── Add bread, eggs and apples
+├── DTQL: assert exactly four active items and show the list record
 ├── Checkpoint: few-items-added
 ├── Branch: add-new-and-existing
 │   ├── Add bananas
 │   ├── Re-add milk
-│   └── Verify exact-title deduplication/reactivation semantics
+│   └── DTQL: verify current deduplication/reactivation semantics
 ├── Branch: mark-bought-and-remove-done
 │   ├── Mark selected items bought
 │   ├── Remove done items
-│   └── Verify only the untouched active items remain
+│   └── DTQL: show the record and verify only untouched active items remain
 └── Branch: remove-selected-then-remove-all
     ├── Remove selected items
     ├── Remove all remaining items
-    └── Verify the list is empty
+    └── DTQL: show the record and verify its items are empty
 ~~~
 
 The re-add branch preserves whatever behaviour the existing Listus tests and
@@ -109,7 +118,8 @@ provision that space itself or silently call the existing-user fixture.
 
 `few-items-added` contains exactly milk, bread, eggs and apples, all active. Each
 sibling begins with that semantic state, even after an earlier sibling mutates
-its own database.
+its own database. A DTQL assertion against the concrete list record gates
+checkpoint publication; transcript text alone cannot establish this invariant.
 
 Because the checkpoint excludes emulator state, every sibling receives a fresh
 Chatwright driver and bot/application environment. It sends a new command or
@@ -120,8 +130,10 @@ checkpoint.
 
 | Repository | Responsibility |
 |---|---|
-| `chatwright/chatwright` | scenario composition, holder registry/coordinator, runner/environment binding, evidence and public specifications |
-| DALgo | additive provider-neutral branching primitive and conformance harness plus `adapters/dalgo2memory`; do not widen mandatory `dal.DB` |
+| `chatwright/chatwright` | scenario composition, DTQL data assertions, holder registry/coordinator, runner/environment binding, evidence and public specifications |
+| DALgo | additive provider-neutral branching primitive, DTQL parent-path support and conformance harness plus `adapters/dalgo2memory`; do not widen mandatory `dal.DB` |
+| `datatug/datatug` | read-only compatibility reference for DTQL authoring/inspection; no daemon or CLI dependency in this MVP |
+| `sneat-co/listus` | source of truth for the parent-scoped list record and embedded-item schema; change only if an exposed query seam is required |
 | `sneat-bots` | reusable Listus scenario/fragment definitions, product fixtures and assertions, conversation actions, direct integration rung and deterministic bot/framework seams |
 | `sneat-go` | execution host for those scenarios: actual ListusBot profile, fake-auth onboarding, environment/database factories and Telegram webhook adapter |
 
@@ -168,7 +180,9 @@ Convert the feature acceptance criteria into contract tests and an architecture
 note. Freeze semantics, not cosmetic API names: uniquely named holders,
 immutable checkpoints, fresh replacement `dal.DB` handles, all-or-none grouped
 checkpoint/branch start, reverse-order compensation, explicit unsupported
-capabilities and database-only manifests. Do not add methods to `dal.DB`.
+capabilities and database-only manifests. Also freeze when message/checkpoint
+DTQL assertions execute, how they select a named holder and how a failed query
+gates checkpoint publication. Do not add methods to `dal.DB`.
 
 ### Wave 1: Parallel contract and product lanes
 
@@ -187,6 +201,20 @@ parent invocation path, fragment source, effective inputs and qualified
 checkpoint identity. Add semantic text/action matching only where the Listus
 journey demonstrates a real need.
 
+#### Task 2A: DTQL data-state assertion runtime
+
+**Model:** Terra
+**Repository:** `chatwright/chatwright`
+**Depends-On:** 1
+**Status:** planning
+
+Implement the smallest provider-neutral assertion layer from the data-state
+feature: attachment after settled message/action work, checkpoint gating,
+branch-completion checks, named-holder resolution, canonical DTQL evidence,
+bounded/redacted record previews and deterministic row normalisation. Use a fake
+DTQL executor for contract tests until Task 4 lands; do not invent a private
+query language or require a DataTug process.
+
 #### Task 3: Holder registry and group coordinator
 
 **Model:** Sol
@@ -199,7 +227,7 @@ Prove duplicate-name rejection, deterministic order, no partial publication,
 reverse cleanup, idempotent release and no application continuation after a
 partial branch failure.
 
-#### Task 4: DALgo additive branching contract
+#### Task 4: DALgo branching and Listus DTQL contracts
 
 **Model:** Sol
 **Repository:** DALgo
@@ -209,7 +237,11 @@ partial branch failure.
 Place an optional branching primitive beside, not inside, mandatory `dal.DB`.
 Build a provider-neutral conformance harness around application-supplied seed,
 mutation and semantic-digest callbacks so providers need not expose generic
-record enumeration.
+record enumeration. In the same DALgo-owned lane, prove the existing DTQL and
+`dalgo2memory` query behaviour against the actual Listus storage shape. Extend
+DTQL only as needed to losslessly encode a parent-scoped `CollectionRef` and
+select the intended `buy!groceries` list record with its `count` and nested
+`items`; keep joins and arbitrary collection-group work out of scope.
 
 #### Task 5: Listus mutation behaviour and direct baseline
 
@@ -252,7 +284,8 @@ Implement checkpoint/branch for the default serialised engine. Deep-copy record
 key parent chains and mutable byte values; create a fresh database per branch;
 cover empty state plus insert/update/delete/nested-key isolation; and return an
 explicit unsupported error for columnar/custom engines. Run the shared
-conformance harness and race tests.
+conformance harness and race tests. Add an end-to-end DTQL query case proving a
+parent-scoped Listus-shaped record remains queryable in every fresh branch.
 
 #### Task 8: Branch application/environment binding
 
@@ -271,7 +304,7 @@ mode is process-global.
 
 **Model:** Terra
 **Repository:** `sneat-bots`
-**Depends-On:** 2, 5, 7
+**Depends-On:** 2, 2A, 4, 5, 7
 **Status:** planning
 
 Implement the reusable new-user setup contract, existing-user setup contract
@@ -279,13 +312,15 @@ and shared list-items fragment in `sneat-bots`. Execute the definition through
 the deterministic direct path, create `few-items-added`, run all mutation
 siblings and prove semantic-digest isolation. Keep execution dependencies behind
 an adapter so `sneat-bots` does not import `sneat-go`. This is the fast
-diagnostic rung, not the final fidelity claim.
+diagnostic rung, not the final fidelity claim. After adding milk, execute and
+show the parent-scoped groceries-list DTQL result; gate `few-items-added` and
+every mutation branch with the corresponding stored-state assertion.
 
 #### Task 10: Execute the Listus scenarios against `sneat-go`
 
 **Model:** Sol
 **Repository:** `sneat-go`
-**Depends-On:** 2, 5, 8, 9
+**Depends-On:** 2, 2A, 4, 5, 8, 9
 **Status:** planning
 
 Add a `sneat-go` test host, preferably beside the Listus profile tests, which
@@ -295,20 +330,24 @@ startup, holder/environment factories and Chatwright transport. It must not copy
 the scenario steps. The new-user path creates `onboarding-complete`; both new
 and existing paths invoke the same list fragment. Assertions use visible bot
 behaviour plus semantic database digests and never reuse pre-checkpoint message
-handles.
+handles. The same DTQL assertions from `sneat-bots` must run against the database
+handle supplied by the `sneat-go` execution host; the host must not replace them
+with direct Listus facade assertions.
 
 ### Wave 3: Integration and evidence
 
 #### Task 11: Cross-repository integration gate
 
 **Model:** Sol
-**Depends-On:** 2–10
+**Depends-On:** 2, 2A, 3–10
 **Status:** planning
 
 Integrate commits in dependency order, remove temporary replacements, run
 focused and affected suites with race detection, and repeat the complete
 scenario 20 times. Verify manifests, lineage, branch/replay mechanism, excluded
-state and cleanup evidence. Record any retained experimental API as internal.
+state and cleanup evidence. Verify each concrete DTQL, selected holder, returned
+record preview and assertion outcome are correlated to the triggering message or
+checkpoint. Record any retained experimental API as internal.
 
 #### Task 12: Documentation and status reconciliation
 
@@ -326,14 +365,15 @@ separate from delivered behaviour.
 |---|---|---|---|---|
 | 0 | Lead/architecture | Sol | baselines, contract decisions, integration map | — |
 | 1 | Composition | Terra | Chatwright fragment/provenance files and tests | Task 1 |
+| 1 | DTQL assertions | Terra | Chatwright data-state assertion files and fake-executor tests | Task 1 |
 | 1 | Coordinator | Sol | Chatwright holder/coordinator files and tests | Task 1 |
-| 1 | DALgo contract | Sol | DALgo optional contract and conformance files | Task 1 |
+| 1 | DALgo contract | Sol | DALgo optional branch contract, DTQL parent path and conformance files | Task 1 |
 | 1 | Listus behaviour | Terra | `sneat-bots` Listus actions/direct tests | Task 1 |
 | 1 | Onboarding spike | Sol | `sneat-go` ListusBot harness/onboarding tests | Task 1 |
 | 2 | Memory provider | Terra | `dalgo2memory` implementation/tests | Task 4 |
 | 2 | Runtime binding | Sol | factory/binding seam only | Tasks 3, 6, 7 |
-| 2 | Scenario definition/direct run | Terra | reusable scenario definitions and direct runner in `sneat-bots` | Tasks 2, 5, 7 |
-| 2 | `sneat-go` execution host | Sol | adapter/harness files beside the actual ListusBot profile; no copied scenario definitions | Tasks 2, 5, 8, 9 |
+| 2 | Scenario definition/direct run | Terra | reusable scenario definitions, DTQL files/assertions and direct runner in `sneat-bots` | Tasks 2, 2A, 4, 5, 7 |
+| 2 | `sneat-go` execution host | Sol | adapter/harness files beside the actual ListusBot profile; no copied scenario or DTQL definitions | Tasks 2, 2A, 4, 5, 8, 9 |
 | 3 | Integration lead | Sol | dependency updates, final fixes and gate | all implementation tasks |
 | 3 | Documentation | Terra or Luna | docs/status files only | Task 11 |
 
@@ -350,9 +390,9 @@ onboarding defect boundary; it benefits from the strongest cross-repository
 reasoning.
 
 Use **Terra for bounded tasks after Task 1 freezes the contract**: scenario
-composition, Listus actions/direct tests, the serialised memory provider and
-documentation. Terra should not independently choose competing lifecycle or
-package contracts.
+composition, DTQL assertion execution/evidence, Listus actions/direct tests, the
+serialised memory provider and documentation. Terra should not independently
+choose competing lifecycle, query or package contracts.
 
 Use **Luna only for mechanical fixture expansion, link/status updates or repetitive
 table-driven cases after a Sol/Terra-owned test pattern exists**. Luna is not
@@ -368,6 +408,13 @@ practical first run should use Sol and Terra only rather than block on it.
   the test harness provisions it and neither calls the existing-user seeder.
 - Both named checkpoints carry qualified lineage and `database-only` scope.
 - New-user and existing-user journeys invoke one list-items fragment.
+- After adding milk, the run shows the parent-scoped `buy!groceries` record and a
+  DTQL assertion proves its stored `items` contains active milk with a consistent
+  count.
+- `few-items-added` and every mutation sibling are gated by DTQL stored-state
+  assertions executed against the current branch's named database holder.
+- DTQL/result evidence is canonical, bounded, redacted and correlated to its
+  triggering message, checkpoint or branch completion.
 - All three mutation siblings pass and each later sibling starts from the same
   four-active-item digest.
 - The grouped-holder conformance suite passes with two memory databases,
@@ -384,70 +431,157 @@ practical first run should use Sol and Terra only rather than block on it.
 ## Implementation-Agent Prompt
 
 ~~~text
-Implement the SpecScore plan "Listus branchable reference scenario" in the
-Chatwright/Sneat/DALgo repositories. Read these specifications first:
+Implement the SpecScore plan "Listus branchable reference scenario" using
+multiple subagents. Act as the Sol implementation and integration lead.
+
+Priority link: this reusable regression journey supports the Sneat top priority
+that @SneatBot has no known bugs by exercising Listus onboarding, persistence and
+list mutation behaviour repeatedly.
+
+Repository preparation
+======================
+
+Use these canonical checkouts:
+
+- https://github.com/chatwright/chatwright.git
+  -> ~/projects/chatwright/chatwright
+- https://github.com/dal-go/dalgo.git
+  -> ~/projects/dal-go/dalgo
+- https://github.com/datatug/datatug.git
+  -> ~/projects/datatug/datatug
+- https://github.com/sneat-co/listus.git
+  -> ~/projects/sneat-co/listus
+- https://github.com/sneat-co/sneat-bots.git
+  -> ~/projects/sneat-co/sneat-bots
+- https://github.com/sneat-co/sneat-go.git
+  -> ~/projects/sneat-co/sneat-go
+
+Before reading implementation code or editing anything, clone every missing
+repository and run `git pull --ff-only` on the default branch of every existing
+clean checkout you will read or edit. If a checkout is dirty, do not pull,
+reset, stash, clean or modify it: run `git fetch origin` and create a clean
+worktree from the updated remote default branch. Any additional repository must
+be cloned to ~/projects/<github-org>/<repo> or updated before use. Record every
+URL, default branch, exact starting commit and read/edit intent.
+
+Never implement in a canonical checkout or on its default branch. Give every
+lane a dedicated branch and exclusive worktree under:
+
+  ~/projects/<github-org>/.worktrees/<repo>-listus-branching-<lane>
+
+Use agent/listus-branching-<lane> feature branches and a separate
+agent/listus-branching-integration branch/worktree per modified repository. The
+Sol lead alone owns integration worktrees and shared dependency/version files.
+If two agents need the same file, one stops and hands the change to its owner.
+
+Read all applicable AGENTS.md files and run the Sneat priority check. After
+synchronising Chatwright, read:
 
 - spec/features/chatwright/scenario-authoring/scenario-composition/README.md
+- spec/features/chatwright/deterministic-testing/data-state-assertions/README.md
 - spec/features/chatwright/state-branching/README.md
 - spec/features/chatwright/state-branching/database-state-holders/README.md
 - spec/plans/listus-branching-reference-scenario.md
 
-Priority link: this reusable regression journey supports the Sneat top priority
-that @SneatBot has no known bugs by exercising Listus onboarding and list
-mutation behaviour repeatedly.
+Foundation and delegation
+=========================
 
-Before reading implementation code or editing anything, clone any missing repo
-and run `git pull --ff-only` on the default branch of every existing clean
-checkout you will read or edit.
-At minimum synchronise the default branches of:
+Do not start feature code until Tasks 0 and 1 have recorded baselines, resolved
+the canonical Chatwright runtime home and frozen contract tests. Do not widen
+dal.DB. Branches receive fresh DB handles; no in-place reset. The MVP is
+database-only and sequential, uses the default serialised dalgo2memory engine,
+and defers inGitDB, columnar mode and non-database state.
 
-- https://github.com/chatwright/chatwright.git
-- https://github.com/dal-go/dalgo.git
-- https://github.com/sneat-co/sneat-bots.git
-- https://github.com/sneat-co/sneat-go.git
+After Task 1, delegate the plan's independent lanes. Use Sol for holder/DALgo
+contracts, the minimal DTQL parent-path extension, onboarding/runtime binding and
+the final Telegram E2E. Use Terra for scenario composition, the Chatwright DTQL
+assertion runtime, bounded Listus behaviour/direct tests and the memory provider.
+Every subagent returns commits, files changed, checks run, assumptions and risks.
 
-If discovery requires another repository, clone it or run `git pull --ff-only`
-before using it. Never pull into a dirty checkout: preserve it, fetch, and create
-a clean worktree from the updated remote default branch instead. Record every
-repository URL, default branch and exact starting commit in the final report.
+Scenario ownership and execution
+================================
 
-Act as the Sol implementation lead. Do not start feature code until Tasks 0 and
-1 have recorded clean origin/main worktrees, current baselines, the canonical
-Chatwright runtime home and contract tests. Preserve every dirty root checkout.
-Do not widen dal.DB. Branches must receive fresh DB handles; no in-place reset.
-The MVP is database-only and sequential. Use dalgo2memory's default serialised
-engine; inGitDB and columnar mode are explicitly deferred.
+Define the reusable Listus scenarios, fragments, DTQL queries and data
+expectations in sneat-bots. Keep sneat-bots independent of sneat-go. sneat-go is
+the execution host supplying the actual ListusBot profile, fake auth,
+application/database factories, webhook and Chatwright transport. It executes,
+but never copies or replaces, the sneat-bots scenario and DTQL definitions.
 
-After Task 1, delegate independent lanes exactly as the plan permits: Sol for
-holder/DALgo contracts, onboarding/runtime binding and final Telegram E2E;
-Terra for scenario composition, bounded Listus behaviour/direct tests and the
-memory provider. Give each agent exclusive file ownership. Require each agent
-to return a commit, tests run, assumptions and risks. Do not let agents update
-shared dependency files; integrate those centrally in dependency order.
+Build the direct-conversation rung first. Completion requires the same scenario
+against the actual ListusBot Telegram webhook. New and existing users invoke one
+list-items fragment. The Sneat auth system—not the scenario or harness—must
+auto-create and assign the default family space.
 
-Define the Listus scenarios and shared list-items fragment in sneat-bots. Keep
-sneat-bots independent of sneat-go. Build the direct-conversation execution rung
-there first, but do not call the work complete until a sneat-go-owned host runs
-those same definitions against the actual ListusBot Telegram webhook with fake
-auth and normal default-space provisioning. Do not copy scenario steps into
-sneat-go. New and existing users must invoke the same fragment. Create
-onboarding-complete and few-items-added checkpoints, then run isolated
-add/re-add, mark/remove-done and selected-remove/remove-all siblings. Assert
-semantic state, not generated IDs or timestamps, and never use a pre-checkpoint
-message handle inside a branch.
+Create onboarding-complete and few-items-added checkpoints, then run isolated
+add/re-add, mark/remove-done and selected-remove/remove-all siblings. Never use a
+pre-checkpoint message handle inside a database-only branch.
 
-Treat existing Listus add/re-add/remove behaviour as product truth: first
-characterise it with tests, then preserve it. Current reconnaissance suggests
-exact-title re-add deduplicates/reactivates. Preserve current confirmation flows;
-if remove-done or remove-all is absent, implement it with explicit confirmation
-and confirm/cancel coverage. During new-user onboarding, the Sneat auth system—not
-the scenario or harness—must auto-create the default family space and assign it
-to the user.
+DTQL data assertions
+====================
 
-Run the release gate from the plan, including two-memory-DB conformance, race
-tests and 20 consecutive full runs. Report commits by repository, commands and
-results, delivered acceptance criteria, deferred items and remaining risks. Do
-not push, publish, deploy or release without explicit user authorization.
+DTQL state assertions are MVP release requirements, not optional diagnostics.
+They run against the named Listus database holder after registered application
+work settles, immediately before checkpoint publication and at branch
+completion. A failed checkpoint assertion prevents the checkpoint from being
+published.
+
+Listus stores a list as a record in a parent-scoped `lists` collection with
+items embedded in its `items` field. Current DTQL accepts root collections only.
+Extend DALgo/DTQL by the smallest lossless amount needed to encode the concrete
+parent key path and execute it through dalgo2memory. Do not broaden this into
+joins, arbitrary collection groups or a new query language.
+
+After the user adds milk, execute canonical DTQL selecting the current default
+family space's buy!groceries list. Show the bounded/redacted returned record and
+assert exactly one intended list record, an active milk item, and a consistent
+stored count. Gate few-items-added with a DTQL assertion for exactly milk,
+bread, eggs and apples as active items. Query and show the same record after
+every mutation branch. Use semantic state, not generated IDs or timestamps.
+
+Chatwright owns scheduling/assertions/evidence, DALgo owns DTQL, and DataTug is
+the compatible authoring/inspection surface. Do not require a DataTug daemon or
+shell out to its CLI in this MVP; preserve the canonical DTQL and result schema
+so a DataTug surface can open the same artifact later.
+
+Product behaviour
+=================
+
+Characterise existing Listus add/re-add/remove behaviour before changing it and
+treat it as product truth. Current reconnaissance suggests exact-title re-add
+deduplicates/reactivates. Preserve existing confirmation flows. If remove-done
+or remove-all is absent, implement it with explicit confirmation and
+deterministic confirm/cancel coverage.
+
+Milestone commit and push policy
+================================
+
+Commit and push completed milestones only after their relevant formatting,
+lint, static checks, focused tests and affected tests pass. Milestones include:
+
+1. contracts and architecture tests frozen;
+2. each independent implementation lane completed;
+3. DTQL parent-path and dalgo2memory conformance passing;
+4. direct Listus scenario with DTQL assertions passing;
+5. sneat-go Telegram execution with DTQL assertions passing;
+6. cross-repository integration and release gate passing.
+
+Subagents commit and push only their assigned feature branches. On first push
+use `git push -u origin <feature-branch>`; later use
+`git push origin <feature-branch>`. Report branch, commit, commands and results.
+The Sol lead reviews and integrates into each repository's dedicated integration
+branch, then commits and pushes that integration milestone after its checks pass.
+Include the Sneat priority justification in Sneat-related commit/PR descriptions.
+Never push directly to a default branch or another agent's branch, and do not
+push a knowingly failing milestone.
+
+Release and report
+==================
+
+Run the full release gate, including two-memory-DB conformance, DTQL query/result
+evidence, race tests and 20 consecutive full runs. Report starting revisions,
+agents/models, branches and commits by repository, integration order, commands
+and results, delivered acceptance criteria, deferred items and risks. Do not
+merge to a default branch, deploy or release without explicit user authorisation.
 ~~~
 
 ## Confirmed Product Decisions
@@ -459,6 +593,9 @@ not push, publish, deploy or release without explicit user authorization.
 - Existing confirmation behaviour is authoritative. A newly implemented
   remove-done or remove-all operation requires explicit confirmation and a
   cancellation path.
+- DTQL assertions after relevant messages and at checkpoints are part of the
+  Listus branching MVP. They query and show the stored list record, and a failed
+  checkpoint assertion prevents branching.
 
 ## Open Question
 
