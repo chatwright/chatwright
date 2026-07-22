@@ -9,6 +9,7 @@ format: https://specscore.md/plans-index-specification
 | Plan | Status | Source | Date | Owner |
 |---|---|---|---|---|
 | [goal-driven-mvp-slice-1](goal-driven-mvp-slice-1.md) | Executing | idea:goal-driven-ai-bot-testing | 2026-07-22 | alex |
+| [goal-driven-mvp-slice-2](goal-driven-mvp-slice-2.md) | Draft | idea:goal-driven-ai-bot-testing | 2026-07-22 | alex |
 | [listus-branching-reference-scenario](listus-branching-reference-scenario.md) | Draft | idea:chatwright | 2026-07-22 | alex |
 | [deterministic-telegram-quick-start](deterministic-telegram-quick-start.md) | Draft | idea:chatwright | 2026-07-21 | alex |
 
