@@ -157,6 +157,7 @@ consumer.
 | [`AGENTS.md`](AGENTS.md) | Development principles and working conventions — for humans and AI agents alike |
 | [`docs/comparison.md`](docs/comparison.md) | Handler unit test vs Chatwright boundary test vs live-account smoke test |
 | [`docs/glossary.md`](docs/glossary.md) | Canonical vocabulary for every Chatwright surface |
+| [`docs/frameworks/`](docs/frameworks/README.md) | Per-framework quickstarts for pointing a bot's Telegram client at Chatwright's emulator (go-telegram-bot-api, telebot, grammY, aiogram, python-telegram-bot) |
 | [`docs/compatibility/telegram.md`](docs/compatibility/telegram.md) | The honest, code-verified Telegram compatibility profile: which Bot API methods, update types and capabilities are supported, partial or unsupported today |
 
 The Go runtime previously lived in a `chatwrite/` subdirectory (module
