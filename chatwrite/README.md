@@ -111,10 +111,10 @@ roadmap) in the [Sneat backstage idea doc][idea].
 
 | Package | Purpose |
 |---------|---------|
-| `chatwright` | The neutral scenario API you write tests against |
-| `chatwright/platform` | Neutral contracts (`Platform`, `Emulator`, `Message`, `Action`) |
-| `chatwright/telegram` | Telegram platform + emulated Bot API server |
-| `chatwright/whatsapp` | WhatsApp platform + emulated Cloud API server |
+| `github.com/chatwright/chatwright/chatwrite` | The neutral scenario API you write tests against |
+| `github.com/chatwright/chatwright/chatwrite/platform` | Neutral contracts (`Platform`, `Emulator`, `Message`, `Action`) |
+| `github.com/chatwright/chatwright/chatwrite/telegram` | Telegram platform + emulated Bot API server |
+| `github.com/chatwright/chatwright/chatwrite/whatsapp` | WhatsApp platform + emulated Cloud API server |
 
 ## License
 

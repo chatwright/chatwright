@@ -1,11 +1,11 @@
 ---
 format: https://specscore.md/plan-specification
-status: Draft
+status: Executing
 ---
 
 # Plan: Listus branchable reference scenario
 
-**Status:** Draft
+**Status:** Executing
 **Source:** idea:chatwright
 **Features:** chatwright/scenario-authoring/scenario-composition, chatwright/deterministic-testing/data-state-assertions, chatwright/state-branching, chatwright/state-branching/database-state-holders
 **Date:** 2026-07-22
@@ -17,7 +17,8 @@ status: Draft
 Create Chatwright's first honest branchable chat journey around Listus. Define
 the reusable product scenario in `sneat-bots`, prove it first through Listus's
 existing deterministic in-process conversation path, then make the release gate
-the same scenario executed by `sneat-go` through a real Telegram webhook against
+the same shared list fragment executed by `sneat-go` after profile-qualified
+ListusBot and SneatBot onboarding through real Telegram webhooks against
 Chatwright's fake Bot API.
 
 The pilot branches database state only. It uses `dalgo2memory`, runs sibling
@@ -135,7 +136,7 @@ checkpoint.
 | `datatug/datatug` | read-only compatibility reference for DTQL authoring/inspection; no daemon or CLI dependency in this MVP |
 | `sneat-co/listus` | source of truth for the parent-scoped list record and embedded-item schema; change only if an exposed query seam is required |
 | `sneat-bots` | reusable Listus scenario/fragment definitions, product fixtures and assertions, conversation actions, direct integration rung and deterministic bot/framework seams |
-| `sneat-go` | execution host for those scenarios: actual ListusBot profile, fake-auth onboarding, environment/database factories and Telegram webhook adapter |
+| `sneat-go` | execution host for those scenarios: actual ListusBot and SneatBot profiles, profile-specific fake-auth onboarding, environment/database factories and Telegram webhook adapter |
 
 `sneat-bots` is the source of truth for what the Listus scenario does. It must
 export or otherwise expose the scenario definition without importing
@@ -162,7 +163,7 @@ are read-only inputs, never integration targets.
 
 **Model:** Sol
 **Depends-On:** —
-**Status:** planning
+**Status:** complete
 
 Clone or fast-forward every repository that will be read or edited, record its
 remote/default branch/revision and current focused test results, create one clean
@@ -174,7 +175,7 @@ integration order before editing runtime code.
 
 **Model:** Sol
 **Depends-On:** 0
-**Status:** planning
+**Status:** complete
 
 Convert the feature acceptance criteria into contract tests and an architecture
 note. Freeze semantics, not cosmetic API names: uniquely named holders,
@@ -183,6 +184,82 @@ checkpoint/branch start, reverse-order compensation, explicit unsupported
 capabilities and database-only manifests. Also freeze when message/checkpoint
 DTQL assertions execute, how they select a named holder and how a failed query
 gates checkpoint publication. Do not add methods to `dal.DB`.
+
+### Wave 0 contract freeze
+
+The committed Chatwright runtime for this plan is the Go module rooted at
+`chatwrite/` (`github.com/chatwright/chatwright/chatwrite`). The fresh checkout contains
+no `cli/` runtime, and no second implementation may be introduced beside
+`chatwrite/`.
+
+Wave 0 recorded these clean synchronized bases:
+
+| Repository | URL | Default branch | Starting commit | Use |
+|---|---|---|---|---|
+| Chatwright | `https://github.com/chatwright/chatwright.git` | `main` | `aa42ec0f6deb7f735117cd2a7f01736d617e6d9e` | modified |
+| DALgo | `https://github.com/dal-go/dalgo.git` | `main` | `c979840261d55af0598aea3cdb905c9fffa28e09` | modified |
+| sneat-bots | `https://github.com/sneat-co/sneat-bots.git` | `main` | `1009a685b47891d8bae1168d2d2eee0dafde9711` | modified |
+| sneat-go | `https://github.com/sneat-co/sneat-go.git` | `main` | `21a293129e83162bb8dc30066f286622e3c5ccf6` | modified |
+| Listus backend | `https://github.com/sneat-co/listus.git` | `main` | `ea91d7b8ef82f2df926f153318ac384573b05be5` | read-only |
+| Sneat core modules | `https://github.com/sneat-co/sneat-core-modules.git` | `main` | `712ce897548e7b7ac9a1b3f010d62bab59350433` | read-only |
+
+The lifecycle contract is frozen as follows:
+
+- holder registration rejects empty and duplicate application names before
+  invoking a holder;
+- capture and branch start visit holders in registration order and publish a
+  group result only after every holder succeeds;
+- partial capture and partial branch start compensate completed work in reverse
+  registration order, retain the primary failure, and report cleanup failures
+  as quarantined resources;
+- checkpoints are immutable until idempotent release, and every branch owns a
+  fresh replacement handle with idempotent finish;
+- application continuation starts only after the complete replacement group is
+  available and the application factory has bound it;
+- checkpoint identity is qualified by scenario and fragment invocation path;
+- evidence scope is exactly `database-only`, includes holder generations,
+  mechanism and cleanup, and explicitly excludes emulator/messages/cursors,
+  clocks, queues, process globals, caches and files;
+- sibling branches execute sequentially and never reset a live database;
+- DALgo exposes branching as an optional sibling-package capability and does
+  not add a method to `dal.DB`;
+- the first memory provider accepts only the default serialised engine and
+  returns an explicit unsupported-capability error for columnar/custom engines.
+
+The following contract-test identities are fixed. Implementations may add
+cases, but must not weaken or rename these behaviours without updating this
+plan and its feature acceptance criteria:
+
+| Repository/package | Frozen contract tests |
+|---|---|
+| Chatwright `branching` | `TestRegistryRejectsEmptyAndDuplicateNames`, `TestCapturePublishesOnlyCompleteGroups`, `TestCaptureFailureCompensatesInReverseOrder`, `TestBranchFailureDoesNotInvokeApplicationFactory`, `TestBranchFailureCompensatesInReverseOrder`, `TestCleanupFailuresAreQuarantined`, `TestReleaseAndFinishAreIdempotent`, `TestEvidenceIsExplicitlyDatabaseOnly`, `TestBranchFactoryReceivesOnlyFreshReplacementHandles` |
+| Chatwright scenario composition | `TestFragmentInvocationRecordsParentPathSourceAndInputs`, `TestFragmentInputsAreIsolated`, `TestCheckpointIdentityIsQualifiedByInvocationPath`, `TestCheckpointLineageCrossesParentAndFragment` |
+| DALgo optional contract | `TestDBInterfaceIsNotWidened`, plus a provider-neutral `branchingtest.RunConformance` covering empty, seed, mutate, semantic digest, source isolation, sibling isolation, fresh handles and idempotent cleanup |
+| `dalgo2memory` | `TestBranchingConformanceSerialized`, `TestBranchingPreservesNestedKeyChains`, `TestBranchingRejectsColumnarEngine`, `TestTwoMemoryDatabasesConformAsOneGroup` |
+| sneat-bots Listus actions | `TestExactTitleReaddDeduplicatesActiveItem`, `TestExactTitleReaddReactivatesDoneItem`, confirmed remove-done/remove-all confirm and cancel tests, and semantic title/status/count assertions |
+| sneat-bots Listus scenario | `TestListusReferenceScenarioDirect` with the three named siblings starting from the same four-active-item digest and one fragment invoked by new/existing parents |
+| sneat-go onboarding | a fake-auth new-user test proving bot user, app user, locale, and auth-created/assigned default family space without fixture provisioning |
+| sneat-go Telegram host | `TestListusReferenceScenarioTelegramWebhook` executing profile-qualified parents and the same sneat-bots list fragment through actual ListusBot and SneatBot profiles plus Chatwright fake Bot API, with fresh DB, bot, application and driver handles per sibling |
+
+Exclusive implementation ownership is frozen by path:
+
+| Lane | Exclusive paths |
+|---|---|
+| Chatwright composition | new `chatwrite/scenario*.go` files and their tests only |
+| Chatwright coordinator | new `chatwrite/branching/**` files only |
+| DALgo contract | new top-level `branching/**` and `branchingtest/**` files only |
+| DALgo memory | `adapters/dalgo2memory/branching*.go` and tests; request any shared engine edit from the integration lead |
+| sneat-bots actions | existing `extensions/listus/convoactions/**` and `extensions/listus/listusbot/cmds4listusbot/**` action/test files only |
+| sneat-bots scenario | new `extensions/listus/scenarios/**` files only |
+| sneat-go onboarding | `pkg/bots/botauth/facade4botauth/**` onboarding files/tests only |
+| sneat-go host | new Listus execution-host test/support files under `pkg/bots/botinit/` only |
+
+Only the integration lead owns `go.mod`, `go.sum`, specification status/links,
+and edits outside the path table. Cross-repository integration order is DALgo
+contract, DALgo memory, Chatwright composition/coordinator, sneat-bots actions,
+sneat-bots scenario, sneat-go onboarding, then sneat-go Telegram host. Local
+`replace` directives used while integrating must be removed before the release
+gate.
 
 ### Wave 1: Parallel contract and product lanes
 
@@ -194,7 +271,7 @@ overlap.
 **Model:** Terra
 **Repository:** `chatwright/chatwright`
 **Depends-On:** 1
-**Status:** planning
+**Status:** complete
 
 Implement the smallest typed fragment/execution-context layer that preserves
 parent invocation path, fragment source, effective inputs and qualified
@@ -220,7 +297,7 @@ query language or require a DataTug process.
 **Model:** Sol
 **Repository:** `chatwright/chatwright`
 **Depends-On:** 1
-**Status:** planning
+**Status:** complete
 
 Implement the generic named-holder/composite boundary with fake-holder tests.
 Prove duplicate-name rejection, deterministic order, no partial publication,
@@ -232,7 +309,7 @@ partial branch failure.
 **Model:** Sol
 **Repository:** DALgo
 **Depends-On:** 1
-**Status:** planning
+**Status:** complete
 
 Place an optional branching primitive beside, not inside, mandatory `dal.DB`.
 Build a provider-neutral conformance harness around application-supplied seed,
@@ -248,7 +325,7 @@ select the intended `buy!groceries` list record with its `count` and nested
 **Model:** Terra
 **Repository:** `sneat-bots`
 **Depends-On:** 1
-**Status:** planning
+**Status:** complete
 
 Characterise and freeze current add/re-add, mark-bought and selected-item removal
 behaviour through the existing direct conversation test path; existing behaviour
@@ -262,7 +339,7 @@ facade rather than teaching action catalogs about DALgo.
 **Model:** Sol
 **Repository:** `sneat-go` with narrowly scoped test seams in `sneat-bots`
 **Depends-On:** 1
-**Status:** planning
+**Status:** complete
 
 Prove a new ListusBot user can complete `/start` and language selection with fake
 auth while the Sneat auth system auto-creates and assigns the default family
@@ -278,7 +355,7 @@ harness to pre-seed it.
 **Model:** Terra
 **Repository:** DALgo (`adapters/dalgo2memory`)
 **Depends-On:** 4
-**Status:** planning
+**Status:** complete
 
 Implement checkpoint/branch for the default serialised engine. Deep-copy record
 key parent chains and mutable byte values; create a fresh database per branch;
@@ -292,7 +369,7 @@ parent-scoped Listus-shaped record remains queryable in every fresh branch.
 **Model:** Sol
 **Repository:** `chatwright/chatwright`, then the narrow Listus harness seam
 **Depends-On:** 3, 6, 7
-**Status:** planning
+**Status:** complete
 
 Bind a complete holder group into a fresh application/environment factory
 before the branch continues. For the Telegram harness create a fresh bot,
@@ -305,7 +382,7 @@ mode is process-global.
 **Model:** Terra
 **Repository:** `sneat-bots`
 **Depends-On:** 2, 2A, 4, 5, 7
-**Status:** planning
+**Status:** in_progress
 
 Implement the reusable new-user setup contract, existing-user setup contract
 and shared list-items fragment in `sneat-bots`. Execute the definition through
@@ -321,16 +398,17 @@ every mutation branch with the corresponding stored-state assertion.
 **Model:** Sol
 **Repository:** `sneat-go`
 **Depends-On:** 2, 2A, 4, 5, 8, 9
-**Status:** planning
+**Status:** in_progress
 
-Add a `sneat-go` test host, preferably beside the Listus profile tests, which
-executes the scenario definitions owned by `sneat-bots` against the actual
-ListusBot Telegram webhook. The host supplies fake auth, application/profile
-startup, holder/environment factories and Chatwright transport. It must not copy
-the scenario steps. The new-user path creates `onboarding-complete`; both new
-and existing paths invoke the same list fragment. Assertions use visible bot
-behaviour plus semantic database digests and never reuse pre-checkpoint message
-handles. The same DTQL assertions from `sneat-bots` must run against the database
+Add a `sneat-go` test host beside the bot profile tests which executes the
+scenario definitions owned by `sneat-bots` against actual ListusBot and SneatBot
+Telegram webhooks. The host supplies profile-specific fake auth/onboarding,
+application/profile startup, holder/environment factories and Chatwright
+transport. It must not copy the list scenario steps. Each new-user parent creates
+its qualified `onboarding-complete`; new and existing parents for both profiles
+invoke the exact same list fragment. Assertions use visible bot behaviour plus
+semantic database digests and never reuse pre-checkpoint message handles.
+The same DTQL assertions from `sneat-bots` must run against the database
 handle supplied by the `sneat-go` execution host; the host must not replace them
 with direct Listus facade assertions.
 
@@ -340,7 +418,7 @@ with direct Listus facade assertions.
 
 **Model:** Sol
 **Depends-On:** 2, 2A, 3–10
-**Status:** planning
+**Status:** in_progress
 
 Integrate commits in dependency order, remove temporary replacements, run
 focused and affected suites with race detection, and repeat the complete
@@ -353,7 +431,7 @@ checkpoint. Record any retained experimental API as internal.
 
 **Model:** Terra; Luna is acceptable for purely mechanical link/status updates
 **Depends-On:** 11
-**Status:** planning
+**Status:** in_progress
 
 Update package docs, runnable commands, SpecScore status and implementation
 links. Keep deferred inGitDB, parallel execution and non-database holders clearly
@@ -399,10 +477,51 @@ table-driven cases after a Sol/Terra-owned test pattern exists**. Luna is not
 currently exposed as a selectable subagent model in this workspace, so the
 practical first run should use Sol and Terra only rather than block on it.
 
+## Implementation Result
+
+The database-branching foundation and non-DTQL reference journey are implemented
+on the four integration branches. The DTQL assertion gate added to this plan on
+`main` remains pending, so the expanded plan is still `Executing`.
+The canonical Chatwright runtime remains under `chatwrite/`; its publishable Go
+module path is `github.com/chatwright/chatwright/chatwrite`, matching that nested
+repository location.
+
+### Integrated milestones
+
+| Repository | Integration commits | Result |
+|---|---|---|
+| Chatwright | `d59cd13`, `398ec13`, `3a027f5`, `0728ea2`, `9ae60c9` | contract freeze, scenario composition, grouped coordinator, immutable message observations and publishable module path |
+| DALgo | `27fea2b`, `9dd0947`, `9bb4023` | optional branching contract, conformance harness and serialised `dalgo2memory` provider |
+| `sneat-bots` | `8c56977`, `7cc9037`, `cdb3b68`, `2ea811f`, `eedc0a2`, `3071a82`, `cc51035`, `98d3950` | characterised mutations, confirmed bulk removal, reusable scenarios/direct rung, profile-qualified parents, profile compatibility and dependency integration |
+| `sneat-go` | `865d4586`, `155bdcaa`, `be692df5`, `98266280`, `ce252f0`, `85f2eee` | auth-managed default spaces, valid bot identities, actual dual-profile Telegram webhook host and dependency integration |
+
+### Release evidence
+
+- `GOWORK=off GOPROXY=off go test -p=1 ./...` passed in every modified Go
+  module, including the complete `sneat-go` repository.
+- `TestListusReferenceScenarioDirect` and
+  `TestListusReferenceScenarioTelegramWebhook` each passed 20 consecutive runs.
+- Affected race tests passed for Chatwright, DALgo branching and memory,
+  `sneat-bots` Listus/profile packages, and the `sneat-go` host/auth packages.
+- The real Telegram rung uses actual ListusBot and SneatBot webhooks with
+  profile-qualified onboarding, fake auth and a closed HTTP transport that
+  redirects only Telegram API calls to Chatwright's fake Bot API. Each new-user
+  database starts empty and observes auth creating and assigning the default
+  family before the exact same list fragment runs.
+- Evidence checks require the two qualified checkpoints, one shared fragment,
+  the three ordered isolated siblings, fresh database/application/bot/driver
+  handles, released cleanup, and explicit `database-only` exclusions.
+- DALgo separately passes the two-memory-database group and partial capture and
+  branch failure cleanup coverage. Columnar/custom memory engines are rejected;
+  inGitDB and non-database holders remain absent.
+
+No cross-repository `replace` directive is committed. `sneat-bots` and
+`sneat-go` use checksummed pseudo-versions for pushed integration milestones.
+
 ## Release Gate
 
-- The direct diagnostic rung and real Telegram webhook rung both pass without
-  network credentials or cloud services.
+- The direct diagnostic rung and the real ListusBot and SneatBot Telegram
+  webhook rungs pass without network credentials or cloud services.
 - The new-user path proves actual language selection and default-family-space
   auto-creation/assignment by the Sneat auth system; neither the scenario nor
   the test harness provisions it and neither calls the existing-user seeder.
@@ -597,11 +716,10 @@ merge to a default branch, deploy or release without explicit user authorisation
   Listus branching MVP. They query and show the stored list record, and a failed
   checkpoint assertion prevents branching.
 
-## Open Question
+## Open Questions
 
-- Which committed Chatwright runtime path should replace the current ambiguous
-  `chatwrite/` versus unversioned `cli/` split? Task 0 must resolve and record
-  this before parallel implementation begins.
+- None for the database-only MVP. Task 0 resolved the runtime location as the
+  committed `chatwrite/` module and aligned its module path with that directory.
 
 ---
 *This document follows the https://specscore.md/plan-specification*
