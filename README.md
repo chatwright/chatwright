@@ -61,6 +61,18 @@ on inline actions (Telegram today) and `ExpectEdited()` for in-place message
 edits. See [`examples/greetbot`](examples/greetbot/) for a complete real-bot
 example and [`example_test.go`](example_test.go) for a framework-free HTTP bot.
 
+The bot-under-test doesn't have to be Go at all: since Chatwright only speaks
+HTTP, [`examples/pybot`](examples/pybot/) is the same greet-button-click shape
+implemented with nothing but the Python standard library — no `pip install`,
+so it runs anywhere Python 3 is available. Its
+[end-to-end test](examples/pybot/pybot_e2e_test.go) starts it as a real
+subprocess, configured entirely through two environment variables — `PORT`
+(its own webhook port) and `TELEGRAM_API_ROOT` (the emulator's Bot API base
+URL) — and drives it with `WebhookAt` exactly like any other bot. Deciding
+that base URL before the process starts, rather than reading it back
+afterwards, is what `chatwright.WithListenAddr` is for: it binds the emulator
+to a caller-chosen address instead of a random port.
+
 The small CLI installs with:
 
 ```bash
