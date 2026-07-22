@@ -41,9 +41,9 @@ known bugs`.
   conformance scenario;
 - a deterministic direct-conversation integration rung before the Telegram
   end-to-end gate;
-- a genuine new Telegram user using fake authentication, language selection and
-  normal default/family-space provisioning rather than a hidden pre-seeded
-  onboarded user;
+- a genuine new Telegram user using fake authentication and language selection,
+  with the default family space auto-created by the Sneat auth system and
+  assigned to the user rather than hidden in a pre-seeded onboarded fixture;
 - an explicit existing-user fixture which invokes the same list fragment;
 - semantic assertions over item title, done state and count, not generated IDs
   or timestamps;
@@ -94,16 +94,18 @@ list-items-modification
     └── Verify the list is empty
 ~~~
 
-The re-add branch assumes the established Listus behaviour: an exact-title item
-is not duplicated and a matching done item is reactivated. If product intent is
-instead "add more items to an already non-empty list", rename the branch and
-drop the duplicate assertion without changing the branching architecture.
+The re-add branch preserves whatever behaviour the existing Listus tests and
+implementation establish. Current reconnaissance indicates that an exact-title
+item is not duplicated and a matching done item is reactivated; the implementer
+must characterise that behaviour before changing actions and then lock the
+observed result into the reusable scenario.
 
 ### Checkpoint invariants
 
-`onboarding-complete` contains a bot user, app user, selected locale and a usable
-default Listus space. It must result from the onboarding behaviour under test;
-the new-user scenario cannot silently call the existing-user fixture.
+`onboarding-complete` contains a bot user, app user, selected locale and the
+default family space auto-created and assigned by the Sneat auth system. It must
+result from the onboarding behaviour under test; the new-user scenario cannot
+provision that space itself or silently call the existing-user fixture.
 
 `few-items-added` contains exactly milk, bread, eggs and apples, all active. Each
 sibling begins with that semantic state, even after an earlier sibling mutates
@@ -119,8 +121,7 @@ checkpoint.
 | Repository | Responsibility |
 |---|---|
 | `chatwright/chatwright` | scenario composition, holder registry/coordinator, runner/environment binding, evidence and public specifications |
-| DALgo | additive provider-neutral branching primitive and conformance harness; do not widen mandatory `dal.DB` |
-| `dalgo2memory` | deep-copy checkpoint and fresh-DB branch support for the serialised engine |
+| DALgo | additive provider-neutral branching primitive and conformance harness plus `adapters/dalgo2memory`; do not widen mandatory `dal.DB` |
 | `sneat-bots` | reusable Listus scenario/fragment definitions, product fixtures and assertions, conversation actions, direct integration rung and deterministic bot/framework seams |
 | `sneat-go` | execution host for those scenarios: actual ListusBot profile, fake-auth onboarding, environment/database factories and Telegram webhook adapter |
 
@@ -135,9 +136,11 @@ runtime location. The current `chatwright/cli` checkout has no commit history;
 agents must not create a second implementation there while the committed
 `chatwright/chatwright/chatwrite` tree exists.
 
-All work starts in clean worktrees from recorded `origin/main` revisions. Dirty
-root checkouts and unrelated changes are read-only inputs, never integration
-targets.
+All work starts by cloning missing repositories or fetching and fast-forwarding
+existing clean checkouts from their default branches. The lead records the
+resulting revision of every repository it reads or edits. Feature work then uses
+clean worktrees from those revisions. Dirty root checkouts and unrelated changes
+are read-only inputs, never integration targets.
 
 ## Work Plan
 
@@ -149,7 +152,8 @@ targets.
 **Depends-On:** —
 **Status:** planning
 
-Record repository revisions and current focused test results, create one clean
+Clone or fast-forward every repository that will be read or edited, record its
+remote/default branch/revision and current focused test results, create one clean
 worktree per implementation lane, and decide the one Chatwright runtime package
 that all agents extend. Record cross-repository dependency replacement and
 integration order before editing runtime code.
@@ -214,11 +218,12 @@ record enumeration.
 **Depends-On:** 1
 **Status:** planning
 
-Freeze current add, exact-title re-add/reactivate, mark-bought and selected-item
-removal behaviour through the existing direct conversation test path. Add the
-missing remove-done and remove-all conversational operations with explicit
-confirmation behaviour and deterministic tests. Keep storage access behind the
-Listus facade rather than teaching action catalogs about DALgo.
+Characterise and freeze current add/re-add, mark-bought and selected-item removal
+behaviour through the existing direct conversation test path; existing behaviour
+is treated as correct. Preserve the current confirmation behaviour. If
+remove-done or remove-all is missing, implement it with explicit confirmation
+and deterministic confirm/cancel tests. Keep storage access behind the Listus
+facade rather than teaching action catalogs about DALgo.
 
 #### Task 6: Genuine onboarding and Telegram harness spike
 
@@ -228,17 +233,18 @@ Listus facade rather than teaching action catalogs about DALgo.
 **Status:** planning
 
 Prove a new ListusBot user can complete `/start` and language selection with fake
-auth and receive a usable default/family space. Mount the actual profile on a
-test webhook, rewrite Telegram API traffic to Chatwright's fake Bot API and use
-HTTP response mode. Treat failure to provision the space as a product defect,
-not permission to pre-seed the new-user fixture.
+auth while the Sneat auth system auto-creates and assigns the default family
+space. Mount the actual profile on a test webhook, rewrite Telegram API traffic
+to Chatwright's fake Bot API and use HTTP response mode. Treat failure to
+provision the space as a product defect, not permission for the scenario or test
+harness to pre-seed it.
 
 ### Wave 2: Providers and reference journeys
 
 #### Task 7: `dalgo2memory` provider
 
 **Model:** Terra
-**Repository:** `dalgo2memory`
+**Repository:** DALgo (`adapters/dalgo2memory`)
 **Depends-On:** 4
 **Status:** planning
 
@@ -357,8 +363,9 @@ practical first run should use Sol and Terra only rather than block on it.
 
 - The direct diagnostic rung and real Telegram webhook rung both pass without
   network credentials or cloud services.
-- The new-user path proves actual language selection and default Listus-space
-  provisioning; it does not call the existing-user seeder.
+- The new-user path proves actual language selection and default-family-space
+  auto-creation/assignment by the Sneat auth system; neither the scenario nor
+  the test harness provisions it and neither calls the existing-user seeder.
 - Both named checkpoints carry qualified lineage and `database-only` scope.
 - New-user and existing-user journeys invoke one list-items fragment.
 - All three mutation siblings pass and each later sibling starts from the same
@@ -389,6 +396,21 @@ Priority link: this reusable regression journey supports the Sneat top priority
 that @SneatBot has no known bugs by exercising Listus onboarding and list
 mutation behaviour repeatedly.
 
+Before reading implementation code or editing anything, clone any missing repo
+and run `git pull --ff-only` on the default branch of every existing clean
+checkout you will read or edit.
+At minimum synchronise the default branches of:
+
+- https://github.com/chatwright/chatwright.git
+- https://github.com/dal-go/dalgo.git
+- https://github.com/sneat-co/sneat-bots.git
+- https://github.com/sneat-co/sneat-go.git
+
+If discovery requires another repository, clone it or run `git pull --ff-only`
+before using it. Never pull into a dirty checkout: preserve it, fetch, and create
+a clean worktree from the updated remote default branch instead. Record every
+repository URL, default branch and exact starting commit in the final report.
+
 Act as the Sol implementation lead. Do not start feature code until Tasks 0 and
 1 have recorded clean origin/main worktrees, current baselines, the canonical
 Chatwright runtime home and contract tests. Preserve every dirty root checkout.
@@ -414,23 +436,35 @@ add/re-add, mark/remove-done and selected-remove/remove-all siblings. Assert
 semantic state, not generated IDs or timestamps, and never use a pre-checkpoint
 message handle inside a branch.
 
+Treat existing Listus add/re-add/remove behaviour as product truth: first
+characterise it with tests, then preserve it. Current reconnaissance suggests
+exact-title re-add deduplicates/reactivates. Preserve current confirmation flows;
+if remove-done or remove-all is absent, implement it with explicit confirmation
+and confirm/cancel coverage. During new-user onboarding, the Sneat auth system—not
+the scenario or harness—must auto-create the default family space and assign it
+to the user.
+
 Run the release gate from the plan, including two-memory-DB conformance, race
 tests and 20 consecutive full runs. Report commits by repository, commands and
 results, delivered acceptance criteria, deferred items and remaining risks. Do
 not push, publish, deploy or release without explicit user authorization.
 ~~~
 
-## Open Questions
+## Confirmed Product Decisions
 
-- Confirm that "add items already on list" means exact-title
-  deduplication/reactivation; otherwise treat it as adding only new items to a
-  non-empty list.
-- Which exact default/family space should the production new-user onboarding
-  path provision for Listus?
-- Should remove-done and remove-all each require an explicit confirmation, and
-  what visible cancellation behaviour is required?
+- Existing Listus add/re-add semantics are correct and must be characterised and
+  preserved rather than redesigned by this work.
+- The Sneat auth system auto-creates the default family space and assigns it to
+  the new user; the scenario and test harness only observe and verify it.
+- Existing confirmation behaviour is authoritative. A newly implemented
+  remove-done or remove-all operation requires explicit confirmation and a
+  cancellation path.
+
+## Open Question
+
 - Which committed Chatwright runtime path should replace the current ambiguous
-  `chatwrite/` versus unversioned `cli/` split?
+  `chatwrite/` versus unversioned `cli/` split? Task 0 must resolve and record
+  this before parallel implementation begins.
 
 ---
 *This document follows the https://specscore.md/plan-specification*
