@@ -15,6 +15,7 @@ format: https://specscore.md/ideas-index-specification
 | [goal-driven-ai-bot-testing](goal-driven-ai-bot-testing.md) | Specifying | 2026-07-22 | alex | chatwright/goal-driven-ai-testing, chatwright/goal-driven-ai-testing/goal-and-task-contract, chatwright/goal-driven-ai-testing/autonomous-exploration, chatwright/goal-driven-ai-testing/dtql-state-verification, chatwright/goal-driven-ai-testing/campaign-reporting |
 | [headless-conversational-engine-testing](headless-conversational-engine-testing.md) | Specifying | 2026-07-22 | alex | chatwright/conversation-runtime/headless-engine-harness |
 | [hybrid-runs](hybrid-runs.md) | Approved | 2026-07-22 | alex | — |
+| [live-recording-sdk](live-recording-sdk.md) | Draft | 2026-07-22 | alex | — |
 | [local-studio-continuity](local-studio-continuity.md) | Draft | 2026-07-22 | alex | — |
 | [observation-model](observation-model.md) | Specifying | 2026-07-22 | alex | chatwright/observation-model, chatwright/observation-model/visible-conversation, chatwright/observation-model/actor-actions, chatwright/observation-model/observation-lineage, chatwright/observation-model/observation-context |
 | [openvaultdb-artifact-storage](openvaultdb-artifact-storage.md) | Specifying | 2026-07-22 | alex | chatwright/developer-tooling/openvaultdb-artifact-storage |
