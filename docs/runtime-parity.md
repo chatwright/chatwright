@@ -11,21 +11,30 @@ expected to behave identically in both runtimes.
 
 Updated: 2026-07-23 (runtime-ts first slice in flight).
 
+## Status legend
+
+- ✅ **Works** — implemented and proven
+- 🚧 **In progress** — being built now
+- 📅 **Planned** — parity debt with a tracking pointer; never silently permanent
+- ⛔ **Blocked** — technical limitation; the note carries explanation and proof
+- ➖ **N/A by design** — does not apply to this runtime's environment (explained)
+
 ## Register
 
-| Feature | runtime-go | runtime-ts | Classification |
+| Feature | Go runtime | TS runtime | Note |
 |---|---|---|---|
-| Telegram: text messages, inline keyboards, message edits (versioned journal) | ✅ | 🚧 first slice in flight | Catch-up (tracked: runtime-ts first-slice work, 2026-07-23) |
-| Telegram: webhook delivery to remote HTTPS bots | ✅ | ❌ | **Technical limitation**: a browser page cannot accept inbound HTTP connections, so the browser runtime cannot deliver webhooks to a remote bot directly. Remote-bot support in the browser requires a relay/tunnel design — deferred to research item I-68. Proof: browsers expose no server socket API (no listener primitive in the web platform). |
-| Telegram: `getUpdates` long-polling for remote bots | ✅ | ❌ | Same technical limitation as webhook delivery (no inbound server surface); a browser-hosted poll *endpoint* is impossible, though a relay could poll on the page's behalf — same I-68 design. |
-| Iframe postMessage transport (bot protocol v1) | ❌ | 🚧 first slice in flight | **Technical limitation (inverse)**: iframes and `postMessage` do not exist in the Go runtime's execution environment; the iframe transport is browser-native by design (decision 0012). Not planned for Go. |
-| WhatsApp surface (text, webhook-only) | ✅ (preview) | ❌ | Catch-up (tracked: follows the Telegram slice; capability data in chatwright/recipes marks chatwright-ts unsupported). |
-| Deterministic scenario verbs (send/click/expect/edited/within) | ✅ (`cw` package) | ❌ | Catch-up (tracked: the expect layer is the planned slice after runtime-ts core; portable format is I-71). |
-| Run-bundle v1 recording | ✅ | 🚧 first slice in flight | Catch-up (tracked: `toBundle()` in the first slice must validate against the schema). |
-| Replay (bundle playback) | ❌ (records only) | ✅ (Studio player) | **Technical limitation (inverse-ish)**: playback is a rendering concern; the Go runtime has no UI surface. The player is the shared replay surface for bundles from both runtimes — parity holds at the format level. |
-| AI actor loop, campaigns, arena | ✅ | ❌ | Catch-up (tracked: browser-side AI actors deferred until after the Playground slice; design in research items I-66/I-70). |
-| Data-state assertions (DTQL), checkpoint/branching | ✅ | ❌ | Catch-up (tracked: requires a browser story for reaching app databases — expected to route through a local CLI bridge, see idea local-studio-continuity). |
-| Cassette record/replay for AI providers | ✅ | ❌ | Catch-up (tracked: ports as a concept with the AI actor loop). |
+| Telegram emulation: text, inline keyboards, versioned edits | ✅ Works | 🚧 In progress | First TS slice in flight (2026-07-23), semantics mirrored from the Go emulator |
+| WhatsApp surface (text, webhook-only) | ✅ Works (preview) | 📅 Planned | Follows the Telegram slice; capability data in chatwright/recipes marks chatwright-ts unsupported meanwhile |
+| Remote bots: webhook delivery over HTTPS | ✅ Works | ⛔ Blocked | Browsers cannot accept inbound HTTP (no server/listener primitive in the web platform); needs a relay/tunnel design — research item I-68 |
+| Remote bots: `getUpdates` long-polling | ✅ Works | ⛔ Blocked | Same limitation — no inbound server surface in a page; a relay could poll on the page's behalf (I-68) |
+| Iframe bots (postMessage, bot protocol v1) | ➖ N/A by design | 🚧 In progress | iframes/`postMessage` do not exist in Go's environment (decision 0012); protocol proven live against greetbot 2026-07-23 |
+| Deterministic scenario verbs (send/click/expect/edited/within) | ✅ Works (`cw`) | 📅 Planned | The expect layer is the next TS slice after core; portable scenario format = I-71 ("one file, two runtimes, same verdict") |
+| Run-bundle v1 recording | ✅ Works | 🚧 In progress | `toBundle()` in the first slice must validate against the published schema |
+| Replay (bundle playback) | ➖ N/A by design | ✅ Works | Playback is a rendering concern; the Studio player is the shared replay surface for bundles from BOTH runtimes — parity holds at the format level |
+| AI actors (goal-driven campaigns) | ✅ Works | 📅 Planned | Needs a design for AI API-key security in the browser (keys must not leak into page context); research items I-66/I-70 |
+| Arena (model comparison) | ✅ Works | 📅 Planned | Follows browser AI actors |
+| Data-state assertions (DTQL) + checkpoint/branching | ✅ Works | 📅 Planned | Browser needs a bridge to app databases — expected via a local CLI bridge (idea: local-studio-continuity) |
+| AI cassette record/replay | ✅ Works | 📅 Planned | Ports as a concept together with browser AI actors |
 
 ## How to change this file
 
