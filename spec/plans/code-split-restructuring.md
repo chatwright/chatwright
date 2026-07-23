@@ -168,6 +168,21 @@ end-to-end (download, SHA-256 verify, install, version) and
 sum.golang.org lookup 500 then success, as Task 0 predicted)
 (cli f1d9139, studio 4c9bff4).
 
+Task 6 COMPLETE (2026-07-23): consumer sweep done. Studio: player TS
+types and samples already carried the camelCase wire pre-split (studio
+PR #2); the landing's `go get` now shows `chatwright.dev/runtime`, its
+CLI section the canonical install one-liner, the schema page README
+names sdk-go as the canonical schema source, and the README's
+repo-boundary paragraph maps the four-repo split (studio 228c791,
+deployed green, all existing routes verified). Backstage: repository-
+boundaries map updated to the executed split, the launch article's
+write-a-test bullet moved to `chatwright.dev/runtime` per its own
+publish-time checklist, and a founder TODO added for the tap PAT
+(backstage 541c2fd). Migration notes for pinned consumers filed as
+sneat-co/sneat-bots#36 and sneat-co/sneat-go#847 — no urgency, the
+pinned pseudo-version resolves forever; the notes carry the import map
+including the root-package rename to `cw`.
+
 ## Out of scope
 
 The TypeScript runtime and `@chatwright/sdk` extraction; the recorder
