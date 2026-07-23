@@ -80,8 +80,14 @@ a bundle a human can replay in the player to see *why* a model failed.
   patterns people actually test. A third board ranks **contributors by
   adoption** (founder direction): the summed adoption of a contributor's
   scenarios — recognition that turns scenario authorship into standing in
-  the community. Every published comparison links back —
-  the negative-CAC loop applied to benchmarks.
+  the community. Every scenario page carries a GitHub-style **clone button**
+  (founder direction): a copyable one-liner fetching the pinned canonical
+  `scenario-id@version` (future CLI, e.g. `chatwright arena run --scenario
+  <id>@<version>`), plus a raw file link and open-in-Studio. The button IS
+  the comparability mechanism — the easy path runs the pinned reference, so
+  entries stay canonical by construction rather than by policing. Every
+  published comparison links back — the negative-CAC loop applied to
+  benchmarks.
 
 ## Alternatives Considered
 
