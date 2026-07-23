@@ -52,11 +52,12 @@ the chatwright.dev worker (`go-import` meta; npm scope):**
   Name confirmed by founder (2026-07-23): `runtime-<lang>` — decision
   0004's "one runtime" is exactly what this repo holds, and the glossary's
   Platform Emulator is a component inside it.
-- The CLI: thin, importing sdk + runtime, in repo `chatwright/cli`. Module
-  path `chatwright.dev/chatwright` (root main package) so the install
-  one-liner is `go install chatwright.dev/chatwright@latest` and the binary
-  is named `chatwright` — Go names binaries after the last path element, so
-  a `chatwright.dev/cli` module would install a binary called `cli`.
+- The CLI: thin, importing sdk + runtime, in repo `chatwright/cli`, module
+  `chatwright.dev/cli` with the binary at `cmd/chatwright`. Canonical
+  install (founder, 2026-07-23) is `curl | sh` from chatwright.dev (plus a
+  Windows PowerShell analogue), with the Homebrew cask per the ecosystem
+  standard; `go install chatwright.dev/cli/cmd/chatwright@latest` remains
+  the Go-native path and names the binary `chatwright`.
 - `chatwright/chatwright` becomes **the standard**: specs, docs, glossary,
   `formats/`, and — once a second engine exists — a conformance suite
   (golden scenarios + expected evidence + schema validation) every engine's

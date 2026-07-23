@@ -51,13 +51,18 @@ consumers). Founder approves or declines this explicitly before Task 2; the
 plan works either way (declining means sdk wire types replicate today's
 casing exactly).
 
-### CLI module path
+### CLI module path and canonical install
 
-Repo `chatwright/cli`, module `chatwright.dev/chatwright`, root `package
-main`: `go install chatwright.dev/chatwright@latest` yields a binary named
-`chatwright` (Go names binaries after the last path element — a
-`chatwright.dev/cli` module would install a binary called `cli`). Homebrew
-cask remains the primary distribution per the ecosystem standard.
+Repo `chatwright/cli`, module `chatwright.dev/cli`, binary at
+`cmd/chatwright`. Canonical install (founder decision) is an install script
+served by the chatwright.dev worker — `curl -fsSL
+https://chatwright.dev/install.sh | sh` and a Windows analogue (`irm
+https://chatwright.dev/install.ps1 | iex`) — downloading GoReleaser release
+artifacts; the Homebrew cask stays per the ecosystem standard; `go install
+chatwright.dev/cli/cmd/chatwright@latest` is the Go-native tertiary path
+(the last path element names the binary `chatwright`). Task 4 includes the
+two install scripts + a clean-machine proof of each on macOS/Linux (sh) and
+Windows (PowerShell) alongside the cask.
 
 ### Vanity import paths
 
