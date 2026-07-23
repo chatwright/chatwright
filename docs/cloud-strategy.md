@@ -86,3 +86,19 @@ Track repeat local users who voluntarily connect Cloud, time saved per hosted
 run, report revisit/share rate, approved-regression yield from AI exploration,
 cost per useful finding and export/replay success. Sign-up count alone does not
 prove Cloud value.
+
+## Recordings and spaces (founder direction, 2026-07-23)
+
+Saved recordings follow the Sneat ecosystem's space model: an authenticated
+user saves run bundles into their **personal space** first; later they can
+create a **team space** (the Sneat.work/Sneat.team pillar) and share
+recordings with team members. Boundaries that hold regardless:
+
+- Downloading a recording never requires an account (decision 0012); saving
+  is the Cloud layer (decision 0007).
+- The run-bundle format stays Sneat-free — spaces are a storage/sharing
+  concern of the operated service, never of the open formats or runtimes.
+- Chatwright must remain usable standalone (research item I-34); Sneat
+  accounts are the Cloud's first identity and storage provider, not a
+  coupling of the open stack. How Sneat identity relates to the community's
+  GitHub identity (decision 0014) is an open question for the I-33 session.
