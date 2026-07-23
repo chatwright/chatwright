@@ -85,9 +85,14 @@ a bundle a human can replay in the player to see *why* a model failed.
   `scenario-id@version` (future CLI, e.g. `chatwright arena run --scenario
   <id>@<version>`), plus a raw file link and open-in-Studio. The button IS
   the comparability mechanism — the easy path runs the pinned reference, so
-  entries stay canonical by construction rather than by policing. Every
-  published comparison links back — the negative-CAC loop applied to
-  benchmarks.
+  entries stay canonical by construction rather than by policing. Scenarios also carry **stars**
+  (founder direction) — strictly a bookmark/interest signal, never the
+  ranking: boards rank by earned, evidence-attached adoption; stars serve
+  bookmarking and cold-start discovery (trending new scenarios with no
+  published runs yet). Stars imply lightweight identity — GitHub OAuth is
+  the natural fit and doubles as contributor identity for the contributor
+  board, answering the moderation/identity open question. Every published
+  comparison links back — the negative-CAC loop applied to benchmarks.
 
 ## Alternatives Considered
 
@@ -131,8 +136,6 @@ a bundle a human can replay in the player to see *why* a model failed.
 
 - Should repeats vary the persona/system prompt to probe robustness, or
   stay identical for variance measurement first?
-- Leaderboard moderation/identity: anonymous submissions with evidence, or
-  lightweight accounts first?
 
 ---
 *This document follows the https://specscore.md/idea-specification*
