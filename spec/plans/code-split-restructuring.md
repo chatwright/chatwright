@@ -183,6 +183,23 @@ sneat-co/sneat-bots#36 and sneat-co/sneat-go#847 — no urgency, the
 pinned pseudo-version resolves forever; the notes carry the import map
 including the root-package rename to `cw`.
 
+Task 5 EXECUTED, PR AWAITING FOUNDER REVIEW (2026-07-23): PR #6
+(`code-split/prune-to-standard`, a136047 + 6c81e78) removes every Go
+file plus go.mod/go.sum (93 files, ~18.9k deletions), replaces the Go
+CI with a Format drift workflow (diffs the committed schema against
+sdk-go's canonical copy AND the copy served at chatwright.dev; on
+push/PR/dispatch + weekly cron — the check already ran green on the PR
+itself), rewrites the README as the standard's front door (install
+one-liners, fleet repo map, `cw` snippet, old-tags-forever note),
+rewrites docs/release-process.md per-repo, and sweeps
+glossary/roadmap/compatibility/quickstarts/CONTRIBUTING pointers.
+`specscore spec lint` 0 violations on the branch; no tags touched; no
+force-pushes anywhere in the whole execution. Gate status: every
+plan-Gate criterion is proven (sdk-purity consumer, install script +
+go install from a clean environment, all pre-split e2e gates green in
+runtime-go, drift checks live in CI on both sides, spec lint clean) —
+the split completes when the founder merges PR #6.
+
 ## Out of scope
 
 The TypeScript runtime and `@chatwright/sdk` extraction; the recorder
