@@ -9,7 +9,7 @@ Catch-up rows are debt with a tracking link; deviation rows carry an
 explanation and proof. If a feature is missing from this register, it is
 expected to behave identically in both runtimes.
 
-Updated: 2026-07-23 (runtime-ts first slice in flight).
+Updated: 2026-07-23 (WhatsApp text-only codec landed in runtime-ts).
 
 ## Status legend
 
@@ -24,7 +24,7 @@ Updated: 2026-07-23 (runtime-ts first slice in flight).
 | Feature | Go runtime | TS runtime | Note |
 |---|---|---|---|
 | Telegram emulation: text, inline keyboards, versioned edits | ✅ Works | ✅ Works | TS first slice landed 2026-07-23: sendMessage/editMessageText/answerCallbackQuery/getMe, 501+uncaptured for the rest; 20 tests, CI green |
-| WhatsApp surface (text, webhook-only) | ✅ Works (preview) | 📅 Planned | Follows the Telegram slice; capability data in chatwright/recipes marks chatwright-ts unsupported meanwhile |
+| WhatsApp surface (text, webhook-only) | ✅ Works (preview) | ✅ Works | text-only codec landed 2026-07-23, mirrors the Go emulator's slice (sendMessage/type:"text" → success; anything else → the Cloud API's own error envelope + uncaptured; 12 tests, CI green); interactive buttons = 📅 both runtimes |
 | Remote bots: webhook delivery over HTTPS | ✅ Works | ⛔ Blocked | Browsers cannot accept inbound HTTP (no server/listener primitive in the web platform); needs a relay/tunnel design — research item I-68 |
 | Remote bots: `getUpdates` long-polling | ✅ Works | ⛔ Blocked | Same limitation — no inbound server surface in a page; a relay could poll on the page's behalf (I-68) |
 | Iframe bots (postMessage, bot protocol v1) | ➖ N/A by design | ✅ Works | IframeHost landed (handshake, port handoff, correlation, queueing); protocol proven live against greetbot 2026-07-23 |
