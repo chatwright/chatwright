@@ -29,3 +29,22 @@ versions, and every release is honest about what it supports.
   pre-1.0 API breaks, which the CHANGELOG names explicitly (plain prose — no
   `!`/`BREAKING CHANGE:` markers pre-1.0).
 - v1.0.0 waits until the Phase 1 exit gate in [`roadmap.md`](roadmap.md) holds.
+
+## Version policy
+
+Chatwright stays on `v0.x` until the Phase 1 exit gate holds. A `feat!:` or
+`BREAKING CHANGE:` marker in a commit message never triggers an automatic
+major-version bump. Today that is doubly true: version bumping is disabled
+entirely for this repository (`disable-version-bumping: true` in
+[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)), so every tag
+above is cut by hand, per the checklist. Should this repository — or a
+future split-out repo (`sdk-go`, `runtime-go`, `cli`) — ever adopt the
+shared workflow's continuous-delivery auto-tag path instead,
+`.github/workflows/ci.yml` also sets `allow_major_version_bump: false`
+explicitly (matching the `strongo/cicd` default): the shared workflow caps
+any commit that would otherwise bump the major version to a minor bump
+instead, with a warning in the run log, rather than failing the run or
+cutting `v1.0.0` unattended. `v1.0.0` is cut only by a deliberate, explicit
+action: the founder (or an authorised maintainer) pushes an annotated
+`v1.0.0` tag by hand, exactly as any other release in the checklist above —
+no automated path in `strongo/cicd` can produce it on its own.
