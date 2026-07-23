@@ -21,6 +21,7 @@ format: https://specscore.md/decisions-index-specification
 | [0012](0012-black-box-bot-protocol.md) | Black-box bots over platform-native payloads; a browser runtime | Approved | 2026-07-23 | runtime, protocol, browser, transport, architecture | conversation-runtime, platform-emulators, playground |
 | [0013](0013-chatwright-md-federation.md) | CHATWRIGHT.md manifests and a federated central index | Approved | 2026-07-23 | federation, community, formats, repositories, discovery | marketplace, developer-tooling |
 | [0014](0014-community-metrics.md) | Community appreciation through independent metrics | Approved | 2026-07-23 | community, metrics, anti-gaming, product | marketplace, cloud |
+| [0015](0015-runtime-parity.md) | Runtime parity — every runtime feature ships in both runtimes | Approved | 2026-07-23 | runtime, parity, conformance, architecture | conversation-runtime, platform-emulators, playground |
 
 ## Open Questions
 

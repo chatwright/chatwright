@@ -26,9 +26,15 @@ Read this before working in any Chatwright repository.
    with a working proof — an executable scenario, gate test or dogfooded run
    that demonstrates it. Specs without proofs stay ideas; code without proofs
    stays unmerged; features whose proofs disappear get retired.
+7. **Runtimes ship in lockstep.** Every runtime feature ships in both the Go
+   and TypeScript runtimes with identical semantics — one scenario file, two
+   runtimes, same verdict; never in only one. Deviations exist only under
+   technical limitation, each recorded in
+   [docs/runtime-parity.md](docs/runtime-parity.md) with explanation and
+   proof link (decision 0015; founder-directed 2026-07-23).
 
-(Deliberately short — max 7; six taken. Propose additions to the founder;
-don't append unilaterally.)
+(Deliberately short — max 7; all seven taken. Propose changes to the founder;
+don't edit unilaterally.)
 
 ## Working conventions
 
