@@ -47,6 +47,19 @@ The analogy is MDN: prose that teaches, reference data that is
 machine-readable, examples that execute in the page, and compatibility
 tables generated from data rather than maintained by hand.
 
+### Aspiration ladder (founder, 2026-07-23)
+
+Three rungs, each a measurable success criterion for the rung below it:
+
+1. **Better documentation than the platforms' own** — every capability
+   documented with a live demo running beside the prose, not screenshots.
+2. **The reference of habit** — developers reach for Chatwright to learn
+   and verify platform behaviour before they reach for the official docs.
+3. **The embed** — platform vendors themselves (Telegram, WhatsApp) embed
+   Chatwright widgets in their official documentation. Explicitly
+   aspirational — it may never happen — but it defines what "best" means
+   and gives rung 2 its measuring stick.
+
 ## Product Philosophy
 
 Developers enter from many directions — a problem to solve, a capability
