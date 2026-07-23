@@ -38,8 +38,12 @@ a bundle a human can replay in the player to see *why* a model failed.
   identical budgets; emit one bundle per run.
 - **Comparator/report**: read the bundles, emit a markdown (later HTML)
   table per model: proposal latency p50/p95 + total wall time; tokens
-  in/out; cost; structured-output mode used; invalid-proposal and re-prompt
-  rate; outcome (completed / gave up / stopped + reason); steps-to-goal;
+  in/out; cost; structured-output mode used; a **retry breakdown**
+  (founder-required metric): re-prompts by cause — invalid/stale action,
+  malformed output, no-effect — plus schema-mode downgrades, transport
+  retries, and non-progress stops (all already recorded per loop event;
+  bounds: NonProgressLimit default 3, budgets maxSteps/maxRepeatedFailures);
+  outcome (completed / gave up / stopped + reason); steps-to-goal;
   repeat consistency. Every cell links its bundle.
 - **Quality stays objective** (evidence over claims): completion measured
   against deterministic/DTQL-verified success criteria only. AI-judge
