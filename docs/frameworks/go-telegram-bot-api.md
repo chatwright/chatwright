@@ -3,8 +3,8 @@
 An in-process Go bot built on
 [`go-telegram-bot-api/telegram-bot-api`](https://github.com/go-telegram-bot-api/telegram-bot-api)
 runs inside the same test binary as Chatwright, so it is wired the way
-[`examples/greetbot`](../../examples/greetbot/) is wired — no separate
-process, no environment variables.
+[`examples/greetbot`](https://github.com/chatwright/runtime-go/tree/main/examples/greetbot)
+is wired — no separate process, no environment variables.
 
 **Verified against:** `github.com/go-telegram-bot-api/telegram-bot-api/v5`
 v5.5.1 (its latest tagged release), source read directly from `bot.go`.
@@ -12,7 +12,9 @@ v5.5.1 (its latest tagged release), source read directly from `bot.go`.
 ## What you need
 
 - `go get github.com/go-telegram-bot-api/telegram-bot-api/v5`
-- A `chatwright.Chatwright` from `cw := chatwright.New(t)`
+- `go get chatwright.dev/runtime`, then a `cw.Chatwright` from `w := cw.New(t)`
+  (import `chatwright.dev/runtime/cw`; `w`, not `cw`, is the conventional
+  variable name — `cw` is the package)
 
 ## Point the client at the emulator
 
@@ -25,13 +27,14 @@ with **two** `%s` verbs (token, method) — the same shape as the package's own
 ```go
 import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 
-endpoint := cw.BotAPIURL() + "/bot%s/%s" // %s, %s = token, method
+endpoint := w.BotAPIURL() + "/bot%s/%s" // %s, %s = token, method
 bot, err := tgbotapi.NewBotAPIWithAPIEndpoint("TEST:TOKEN", endpoint)
 ```
 
 **Fallback — the RoundTripper redirect trick.** Not every tgbotapi-shaped
-client exposes an endpoint constructor — this repository's own
-[`examples/greetbot`](../../examples/greetbot/greetbot.go) is built on an
+client exposes an endpoint constructor — the runtime repository's own
+[`examples/greetbot`](https://github.com/chatwright/runtime-go/blob/main/examples/greetbot/greetbot.go)
+is built on an
 in-house fork that only exposes `NewBotAPIWithClient(token, client)`, so it
 redirects scheme+host at the transport layer instead. The same trick works
 against any client whose endpoint is a compile-time constant:
@@ -49,21 +52,21 @@ func redirect(base *url.URL) http.RoundTripper {
 ## Wire it into a Chatwright test
 
 ```go
-cw := chatwright.New(t) // Telegram is the default platform
-bot, err := tgbotapi.NewBotAPIWithAPIEndpoint("TEST:TOKEN", cw.BotAPIURL()+"/bot%s/%s")
+w := cw.New(t) // Telegram is the default platform
+bot, err := tgbotapi.NewBotAPIWithAPIEndpoint("TEST:TOKEN", w.BotAPIURL()+"/bot%s/%s")
 if err != nil {
 	t.Fatal(err)
 }
-cw.ServeWebhook(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+w.ServeWebhook(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 	var update tgbotapi.Update
 	_ = json.NewDecoder(r.Body).Decode(&update)
 	if update.Message != nil {
 		_, _ = bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "Howdy stranger"))
 	}
-	w.WriteHeader(http.StatusOK)
+	rw.WriteHeader(http.StatusOK)
 }))
 
-chat := cw.PrivateChat(chatwright.User{ID: "alice", FirstName: "Alice"})
+chat := w.PrivateChat(cw.User{ID: "alice", FirstName: "Alice"})
 chat.SendText("Hi")
 chat.ExpectBotMessage().Within(time.Second).Text("Howdy stranger")
 ```
@@ -76,8 +79,10 @@ listener rather than attaching to one you started yourself.
 
 Not applicable — this is an in-process bot. There is no separate process to
 configure, so the `TELEGRAM_API_ROOT`/`PORT` contract used by external
-processes (see [`examples/pybot`](../../examples/pybot/)) does not apply;
-the endpoint is set directly at construction time, in Go, as above.
+processes (see
+[`examples/pybot`](https://github.com/chatwright/runtime-go/tree/main/examples/pybot))
+does not apply; the endpoint is set directly at construction time, in Go, as
+above.
 
 ## What the emulator supports
 

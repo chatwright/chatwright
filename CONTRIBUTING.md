@@ -7,31 +7,34 @@ Thank you for considering a contribution. Chatwright is an Apache-2.0 project:
 the Go runtime, CLI, Platform Emulators, Playground and Studio are open source
 permanently (see [decision 0007](spec/decisions/0007-open-local-stack-closed-cloud.md)
 and the [README](README.md#open-source-and-what-stays-open)). This document
-covers how to build and test the runtime, where the product specification
-lives, what kind of contributions are most useful right now, and the
-conventions pull requests are expected to follow.
+covers where the code and the product specification live, what kind of
+contributions are most useful right now, and the conventions pull requests
+are expected to follow.
 
-## Build and test
+## Where the code lives, and this repository's checks
 
-Chatwright targets the Go version pinned in [`go.mod`](go.mod). From the
-repository root:
+This repository is the Chatwright standard — specs, the run-bundle format
+and docs. The Go code lives in its own repositories:
+[chatwright/sdk-go](https://github.com/chatwright/sdk-go) (module
+`chatwright.dev/sdk`), [chatwright/runtime-go](https://github.com/chatwright/runtime-go)
+(module `chatwright.dev/runtime`) and
+[chatwright/cli](https://github.com/chatwright/cli) (module
+`chatwright.dev/cli`). Code contributions go there; the Go gates
+(`gofmt -l .` empty, `go vet ./...`, `go test -race ./...`) apply in each,
+per [AGENTS.md](AGENTS.md).
 
-```bash
-go build ./...
-go vet ./...
-gofmt -l .          # must print nothing; use `gofmt -w .` to fix
-go test -race ./...
-```
+This repository's own CI is the
+[Format drift workflow](.github/workflows/format-drift.yml), which fails when
+the published run-bundle schema copies drift from the canonical one in
+sdk-go — see [docs/release-process.md](docs/release-process.md).
 
-These are the same checks [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
-runs on every push and pull request to `main`. A change that fails any of them
-will fail CI.
-
-Runnable, framework-agnostic example bots live in [`examples/`](examples/) —
-[`examples/greetbot`](examples/greetbot/) is a real `bots-go-framework`
-Telegram bot driven end-to-end through the emulator, and
-[`example_test.go`](example_test.go) shows a bot written with nothing but
-`net/http`. Both are good starting points for exercising a change.
+Runnable, framework-agnostic example bots live in the runtime repository's
+[`examples/`](https://github.com/chatwright/runtime-go/tree/main/examples) —
+[`examples/greetbot`](https://github.com/chatwright/runtime-go/tree/main/examples/greetbot)
+is a real Telegram bot driven end-to-end through the emulator, and
+[`examples/pybot`](https://github.com/chatwright/runtime-go/tree/main/examples/pybot)
+is a stdlib-only Python bot driven as a real subprocess. Both are good
+starting points for exercising a change.
 
 ## Where the specification lives
 
@@ -76,11 +79,9 @@ hardening the Telegram Platform Emulator's declared supported profile so its
 behaviour is fully honest and its exit gate can be met. Especially valuable
 right now:
 
-- **Telegram emulator fidelity.** Closing gaps between what
-  [`telegram/emulator.go`](telegram/emulator.go) claims to support and what it
-  actually validates — for example, `sendMessage` currently accepts any
-  request without validation, and unrecognised Bot API methods are
-  blanket-acknowledged (`{"ok":true}`) instead of failing explicitly. See
+- **Telegram emulator fidelity.** Closing gaps between what the emulator
+  ([`telegram/emulator.go`](https://github.com/chatwright/runtime-go/blob/main/telegram/emulator.go)
+  in runtime-go) claims to support and what it actually validates. See
   [`docs/compatibility/telegram.md`](docs/compatibility/telegram.md) for the
   current, code-verified profile and its known gaps.
 - **Non-Go example bots.** A bot written in Python (e.g. aiogram) or Node
@@ -128,7 +129,8 @@ merge.
 
 - Keep changes focused; large, unrelated changes are hard to review and slow
   everyone down.
-- Make sure `gofmt`, `go vet`, `go build` and `go test -race` all pass locally
-  before opening the pull request.
+- Make sure the target repository's gates pass locally before opening the
+  pull request — `gofmt`, `go vet`, `go build` and `go test -race` in the
+  code repositories; `specscore spec lint` for spec changes here.
 - Describe what changed and why, and link the acceptance criterion or issue it
   addresses where one exists.

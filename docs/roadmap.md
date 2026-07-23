@@ -30,8 +30,12 @@ Three corrections improve it:
    offline and understand a failure in one screenful.
 
 The former repository concern about runtime files living under `chatwrite/` is
-resolved (I-30, 2026-07-22): the Go runtime, `.github` CI and `cmd/chatwright`
-now live at the repository root as module `github.com/chatwright/chatwright`.
+resolved (I-30, 2026-07-22) and superseded by the 2026-07-23 code split: the
+Go engine now lives in module `chatwright.dev/runtime`
+([chatwright/runtime-go](https://github.com/chatwright/runtime-go)), with the
+run-bundle wire model in `chatwright.dev/sdk` and the CLI in
+`chatwright.dev/cli`; this repository holds the standard — specs, formats and
+docs.
 
 ## North star
 
@@ -106,8 +110,9 @@ below remain the v0.1.0 release blockers.
 - Record what the current seed actually supports and mark everything else
   experimental/unsupported.
 - Make repository structure, root orientation, package entry point and CI working
-  directory unambiguous (done 2026-07-22: runtime at root, module
-  `github.com/chatwright/chatwright`).
+  directory unambiguous (done 2026-07-22: runtime at the repository root;
+  since the 2026-07-23 code split the runtime is module
+  `chatwright.dev/runtime` in its own repository).
 - Capture a representative passing result and three failures: wrong text, missed
   deadline and invalid outbound request.
 - Measure baseline suite duration and repeat runs enough to expose ordering/flaky

@@ -3,7 +3,8 @@
 A [grammY](https://grammy.dev) bot runs as a separate Node/TypeScript
 process, configured entirely through environment variables before it starts
 — the same external-process shape as
-[`examples/pybot`](../../examples/pybot/), just in a different language.
+[`examples/pybot`](https://github.com/chatwright/runtime-go/tree/main/examples/pybot),
+just in a different language.
 Chatwright never imports or spawns it; your test starts the process itself
 and attaches to its webhook over real HTTP.
 
@@ -15,8 +16,9 @@ and confirmed against `src/convenience/frameworks.ts` in the grammY source
 ## What you need
 
 - `npm install grammy` (Node ≥ 14.13.1, per grammY's `engines` field)
-- A Go test that starts the bot as a subprocess — mirror
-  [`pybot_e2e_test.go`](../../examples/pybot/pybot_e2e_test.go)'s
+- A Go test (`go get chatwright.dev/runtime`, import
+  `chatwright.dev/runtime/cw`) that starts the bot as a subprocess — mirror
+  [`pybot_e2e_test.go`](https://github.com/chatwright/runtime-go/blob/main/examples/pybot/pybot_e2e_test.go)'s
   `startPybot` helper (reserve addresses, set env, wait for the listener)
 
 ## Bot-side: read the env-var contract, set `client.apiRoot`
@@ -48,23 +50,24 @@ apiAddr := freeAddr(t) // reserve like pybot_e2e_test.go's freeAddr helper
 botAddr := freeAddr(t)
 startGrammyBot(t, "http://"+apiAddr, botAddr) // sets TELEGRAM_API_ROOT, PORT
 
-cw := chatwright.New(t, chatwright.WithListenAddr(apiAddr))
-cw.WebhookAt("http://" + botAddr)
+w := cw.New(t, cw.WithListenAddr(apiAddr))
+w.WebhookAt("http://" + botAddr)
 
-chat := cw.PrivateChat(chatwright.User{ID: "alice", FirstName: "Alice"})
+chat := w.PrivateChat(cw.User{ID: "alice", FirstName: "Alice"})
 chat.SendText("Hi")
 chat.ExpectBotMessage().Within(2 * time.Second).Text("Howdy stranger")
 ```
 
-`WithListenAddr` decides the emulator's address before either process
+`cw.WithListenAddr` decides the emulator's address before either process
 starts, so it can go straight into the bot's environment — the same reason
-[`pybot_e2e_test.go`](../../examples/pybot/pybot_e2e_test.go) needs it.
+[`pybot_e2e_test.go`](https://github.com/chatwright/runtime-go/blob/main/examples/pybot/pybot_e2e_test.go)
+needs it.
 
 ## Environment-variable contract
 
 | Variable | Set by | Meaning |
 |---|---|---|
-| `TELEGRAM_API_ROOT` | test | Emulator's Bot API base URL (`cw.BotAPIURL()`) — passed to `client.apiRoot` |
+| `TELEGRAM_API_ROOT` | test | Emulator's Bot API base URL (`w.BotAPIURL()`) — passed to `client.apiRoot` |
 | `PORT` | test | Local TCP port the bot's webhook listens on |
 
 ## What the emulator supports

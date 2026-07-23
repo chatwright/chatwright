@@ -1,0 +1,49 @@
+name: Format drift
+
+# This repository publishes the run-bundle format at
+# formats/run-bundle/v1/schema.json, but the canonical schema is generated
+# in chatwright/sdk-go from the sdk wire types. This workflow fails when the
+# published copies drift from the canonical one — see the format-release
+# checklist in docs/release-process.md.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+jobs:
+  schema-drift:
+    name: run-bundle schema drift
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch the canonical schema from chatwright/sdk-go
+        run: |
+          curl -fsSL \
+            https://raw.githubusercontent.com/chatwright/sdk-go/main/formats/run-bundle/v1/schema.json \
+            -o /tmp/sdk-schema.json
+
+      - name: Diff this repository's copy against the canonical schema
+        run: |
+          if ! diff -u formats/run-bundle/v1/schema.json /tmp/sdk-schema.json; then
+            echo "::error file=formats/run-bundle/v1/schema.json::formats/run-bundle/v1/schema.json has drifted from the canonical schema in chatwright/sdk-go (generated there by 'go run ./internal/schemagen/gen'). Update this repository's copy per the format-release checklist in docs/release-process.md."
+            exit 1
+          fi
+
+      - name: Fetch the schema served at chatwright.dev
+        run: |
+          curl -fsSL \
+            https://chatwright.dev/formats/run-bundle/v1/schema.json \
+            -o /tmp/site-schema.json
+
+      - name: Diff this repository's copy against the chatwright.dev copy
+        run: |
+          if ! diff -u formats/run-bundle/v1/schema.json /tmp/site-schema.json; then
+            echo "::error file=formats/run-bundle/v1/schema.json::The schema served at https://chatwright.dev/formats/run-bundle/v1/schema.json (the studio worker's copy: worker/formats/run-bundle/v1/schema.json in chatwright/studio) has drifted from this repository's committed copy. Update the worker's copy per the format-release checklist in docs/release-process.md."
+            exit 1
+          fi

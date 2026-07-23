@@ -12,9 +12,12 @@ unsupported labels must be visible rather than implied (see
 every capability — it claims exactly what is listed below, and nothing more.
 
 Every claim in this document was checked directly against the emulator's
-source — [`telegram/emulator.go`](../../telegram/emulator.go),
-[`chat.go`](../../chat.go) and [`expect.go`](../../expect.go) — on the `main`
-branch, not against the aspirational behaviour described in `spec/features/`.
+source in [runtime-go](https://github.com/chatwright/runtime-go) —
+[`telegram/emulator.go`](https://github.com/chatwright/runtime-go/blob/main/telegram/emulator.go),
+[`cw/chat.go`](https://github.com/chatwright/runtime-go/blob/main/cw/chat.go)
+and [`cw/expect.go`](https://github.com/chatwright/runtime-go/blob/main/cw/expect.go)
+— on its `main` branch, not against the aspirational behaviour described in
+`spec/features/`.
 Where the specification describes a target the code does not yet reach, that
 gap is called out explicitly rather than silently assumed. This is v1 of the
 profile: it will change, in both directions, as the emulator's declared
@@ -36,7 +39,7 @@ methods table below.
 
 ## Scope
 
-- Module: `github.com/chatwright/chatwright`, package `telegram`.
+- Module: `chatwright.dev/runtime`, package `telegram`.
 - Chat shape: private 1:1 chats only (`Chatwright.PrivateChat`). No group or
   channel modelling exists in this code.
 - One emulated bot identity per running emulator, always `ChatwrightBot` /
