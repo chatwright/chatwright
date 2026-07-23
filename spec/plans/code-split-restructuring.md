@@ -126,6 +126,25 @@ gate proven: a scratch consumer importing only `chatwright.dev/sdk`
 builds and runs with go.sum containing exactly one module —
 `chatwright.dev/sdk` (sdk-go 27d8d39).
 
+Task 3 COMPLETE (2026-07-23): `chatwright/runtime-go` cut with history
+(33 commits, including the chatwrite-era provenance of
+branching/platform/telegram/whatsapp/examples and the scenario root),
+module `chatwright.dev/runtime`. The scenario API lives at
+`chatwright.dev/runtime/cw` (package `cw`, founder decision). Bundle
+assembly moved runtime-side: `run.SingleAIGoalRun` (absorbing the old
+`bundle.SortObservations`) and `run.AssembleBundleRun` convert runtime
+internals to sdk wire types via the new `run/wire.go` conversion layer;
+`run.WireJournal` bridges emulator journals to wire chats. All four
+pre-split e2e gates pass unchanged — greetbot scripted campaign, bundle
+e2e (now `run/bundle_e2e_test.go`), two-part hybrid proof, pybot (real
+Python subprocess) — including schema validation of produced bundles,
+read offline from the resolved sdk module's own schema copy via
+`go list -m`. Note: v0.1.0 was tagged before its CI lint pass surfaced
+pre-existing hygiene issues (tests/vet were green; the tag stays — a
+pushed tag is never moved); v0.1.1 is the first fully CI-green release
+and the version consumers should pin. `go get chatwright.dev/runtime@
+v0.1.1` proven via the vanity path (runtime-go 8651365).
+
 ## Out of scope
 
 The TypeScript runtime and `@chatwright/sdk` extraction; the recorder
