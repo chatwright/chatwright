@@ -108,6 +108,8 @@ Since 2026-07-23 the code lives in dedicated repositories under
 | [chatwright/runtime-go](https://github.com/chatwright/runtime-go) | `chatwright.dev/runtime` — platform emulation + the testing runtime; scenario API at `chatwright.dev/runtime/cw` |
 | [chatwright/cli](https://github.com/chatwright/cli) | `chatwright.dev/cli` — the `chatwright` binary |
 | [chatwright/studio](https://github.com/chatwright/studio) | Chatwright Studio + the [chatwright.dev](https://chatwright.dev) site |
+| [chatwright/runtime-ts](https://github.com/chatwright/runtime-ts) | `@chatwright/runtime` — the browser runtime scaffold (decision 0012): the orchestrator behind the Playground |
+| [chatwright/recipes](https://github.com/chatwright/recipes) | The central index (decision 0013): Jobs, Recipes, Capabilities and the federated registry of `CHATWRIGHT.md` repositories |
 | [chatwright/homebrew-tap](https://github.com/chatwright/homebrew-tap) | Homebrew cask manifests, populated on release |
 
 Pre-split versions remain importable as
@@ -137,14 +139,26 @@ conversation aid, not the managed Chatwright Cloud service.
 
 ## Product direction
 
+North star (idea:
+[executable-knowledge-platform](spec/ideas/executable-knowledge-platform.md)):
+**the best place to learn, design, test and compare conversational UX across
+messaging platforms** — an executable knowledge platform where Jobs, Recipes
+and Capabilities connect to demos, tests and recordings that actually run.
+Testing is the launch wedge and the proof of the substrate.
+
 - **Now:** harden the Telegram Platform Emulator MVP—Client Emulator plus
   Server/API Emulator—for private text, actions, edits, real HTTP webhook
-  delivery, fake Bot API capture and CI-ready failure reports.
-- **Next:** make the Playground a first-class consumer for manual offline testing, then add a
-  portable structured scenario model and Starlark.
-- **Later:** AI actors, fuzz testing and evidence-linked UX evaluation, followed
-  by optional Cloud Run infrastructure, flagship Cloud Intelligence and a
-  Marketplace for reusable assets.
+  delivery, fake Bot API capture and CI-ready failure reports; grow the
+  first Recipes and capability data in
+  [chatwright/recipes](https://github.com/chatwright/recipes).
+- **Next:** the browser runtime (decision
+  [0012](spec/decisions/0012-black-box-bot-protocol.md)) behind the
+  Playground — live recipe demos against black-box bots (iframe and remote
+  HTTPS) — then a portable structured scenario model and Starlark.
+- **Later:** AI actors, the model arena and its leaderboards, fuzz testing
+  and evidence-linked UX evaluation, followed by optional Cloud Run
+  infrastructure, flagship Cloud Intelligence and a Marketplace for
+  reusable assets.
 
 Everything required for local development—including the Runtime, CLI, Platform
 Emulators, Playground and Studio—is open source and works without an account.
