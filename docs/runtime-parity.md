@@ -31,7 +31,7 @@ Updated: 2026-07-23 (runtime-ts first slice in flight).
 | Deterministic scenario verbs (send/click/expect/edited/within) | ✅ Works (`cw`) | 📅 Planned | The expect layer is the next TS slice after core; portable scenario format = I-71 ("one file, two runtimes, same verdict") |
 | Run-bundle v1 recording | ✅ Works | 🚧 In progress | `toBundle()` in the first slice must validate against the published schema |
 | Replay (bundle playback) | ➖ N/A by design | ✅ Works | Playback is a rendering concern; the Studio player is the shared replay surface for bundles from BOTH runtimes — parity holds at the format level |
-| AI actors (goal-driven campaigns) | ✅ Works | 📅 Planned | Needs a design for AI API-key security in the browser (keys must not leak into page context); research items I-66/I-70 |
+| AI actors (goal-driven campaigns) | ✅ Works | 📅 Planned | Key-security design = research item I-76; founder direction: bring-your-own-key (client-side, "for the brave") or chatwright.dev subscription (managed keys, "for the lazy/busy") |
 | Arena (model comparison) | ✅ Works | 📅 Planned | Follows browser AI actors |
 | Data-state assertions (DTQL) + checkpoint/branching | ✅ Works | 📅 Planned | Browser needs a bridge to app databases — expected via a local CLI bridge (idea: local-studio-continuity) |
 | AI cassette record/replay | ✅ Works | 📅 Planned | Ports as a concept together with browser AI actors |

@@ -28,6 +28,7 @@ scaffolded meanwhile must not foreclose them.
 | I-73 | Community metrics implementation: events API, storage, distinct-user counting, abuse handling and the GitHub star sync, per decision 0014. | Service boundary spec (open formats, closed service per 0007); rate-limit and audit design; cost model. |
 | I-74 | Federation API: authenticated self-registration of repositories, its trust model versus PR-time validation, and index synchronisation. | API sketch; threat model (squatting, manifest spoofing, id collisions); migration path from PR-only registry. |
 | I-75 | Capability compatibility data pipeline: authoring format under `data/capabilities/`, validation, and page generation (browser-compat-data lessons), including how emulator fidelity declarations and platform docs consume the same keys. | Data schema + two capability trees authored end to end (buttons, message editing) rendering into compatibility tables. |
+| I-76 | Browser AI actors — API-key security. Founder direction (2026-07-23), two modes: **bring your own key** ("for the brave" — key stays client-side, calls go direct from the browser, exposure surface documented honestly) and **chatwright.dev subscription** ("for the lazy/busy" — managed keys server-side, the commercial Cloud layer per decision 0007). | Security note (key storage, exposure surface, CORS/proxy needs) + UX sketch for both modes; neither mode may ever transmit a user's own key to Chatwright servers. |
 
 ## Open Questions
 
