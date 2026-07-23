@@ -1,0 +1,97 @@
+---
+format: https://specscore.md/idea-specification
+status: Approved
+---
+
+# Idea: Actor model arena — benchmark and compare models on Chatwright tasks
+
+**Status:** Approved
+**Date:** 2026-07-23
+**Owner:** alex
+**Promotes To:** —
+**Supersedes:** —
+**Related Ideas:** extends:goal-driven-ai-bot-testing, extends:openai-compatible-provider
+
+## Problem Statement
+
+Choosing an actor model is guesswork: which local or hosted model is good
+enough for a campaign, how much slower is it, what does it cost, and where
+does it fail? The founder wants a comparison report — time to response,
+token usage, quality — across the models he actually runs (Ollama, LM
+Studio, hosted).
+
+## Context
+
+The evidence pipeline already records everything a benchmark needs: every
+actor.LoopEvent carries per-proposal latency, token usage, model id,
+validation verdict and action outcome; every campaign.Report carries task
+outcomes and stop reasons; every run serialises to a replayable bundle. A
+model comparison is therefore the same goal × same bot run across N
+providers, one bundle per cell, plus a comparator that reads bundles and
+emits a table — no new measurement machinery, and every number traceable to
+a bundle a human can replay in the player to see *why* a model failed.
+
+## Recommended Direction
+
+- **Matrix runner**: run one goal/bot scenario across a declared set of
+  provider configs (model, base URL, provider kind), N repeats each, with
+  identical budgets; emit one bundle per run.
+- **Comparator/report**: read the bundles, emit a markdown (later HTML)
+  table per model: proposal latency p50/p95 + total wall time; tokens
+  in/out; cost; structured-output mode used; invalid-proposal and re-prompt
+  rate; outcome (completed / gave up / stopped + reason); steps-to-goal;
+  repeat consistency. Every cell links its bundle.
+- **Quality stays objective** (evidence over claims): completion measured
+  against deterministic/DTQL-verified success criteria only. AI-judge
+  scoring is a later, explicitly-labelled addition.
+- **Home**: post-split, an `arena` package in runtime-go, surfaced later as
+  a CLI subcommand; the first incarnation is a scratchpad harness giving
+  the founder his report the day the OpenAI-compatible provider lands.
+
+## Alternatives Considered
+
+- **Generic LLM benchmarks (MMLU-style) for model choice.** Rejected: they
+  do not measure the actual task — proposing valid, goal-advancing actions
+  against a live conversation with schema constraints.
+- **A separate metrics store.** Rejected: bundles are already the record;
+  a second store would fork evidence.
+
+## MVP Scope
+
+- Scratchpad matrix harness + markdown report over the greetbot goal across
+  the founder's live line-up (Ollama qwen3.6; LM Studio gemma-4-e4b,
+  gemma-4-26b-a4b-qat, qwen3.6-27b), N≥3 repeats.
+- Proof (principle 6): the report is delivered with its bundles, and at
+  least one conclusion in it (e.g. "model X completes the goal, model Y
+  gives up") is verifiable by replaying the linked bundles.
+
+## Not Doing (and Why)
+
+- AI-judge quality scoring — later, labelled, never silently mixed with
+  evidence-backed metrics.
+- Hosted-model cost optimisation studies — needs API keys and priorities.
+- Parallel arena execution — sequential first; timing fidelity beats speed.
+
+## Key Assumptions to Validate
+
+| Tier | Assumption | How to validate |
+|---|---|---|
+| Must-be-true | Same-scenario repeats vary little enough for a meaningful table | Run N≥3 repeats; report variance alongside medians |
+| Should-be-true | Local models differ visibly on the greetbot goal | The first report itself |
+| Might-be-true | The arena doubles as a regression guard when upgrading a model | Re-run after a model update; diff reports |
+
+## SpecScore Integration
+
+- **Existing Features affected:**
+  [`goal-driven-ai-testing`](../features/chatwright/goal-driven-ai-testing/README.md)
+  (provider evaluation), developer-tooling (future CLI subcommand).
+
+## Open Questions
+
+- Report format for sharing: markdown in-repo, or a bundle-like JSON the
+  Studio could render as an arena view?
+- Should repeats vary the persona/system prompt to probe robustness, or
+  stay identical for variance measurement first?
+
+---
+*This document follows the https://specscore.md/idea-specification*
