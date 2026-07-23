@@ -72,8 +72,13 @@ a bundle a human can replay in the player to see *why* a model failed.
   scenario version); entries carry a declared hardware/environment block;
   published entries must attach their bundles (shared evidence, not
   certified — anyone can replay; a Cloud-operated verified-rerun badge may
-  come later). Every published comparison links back — the negative-CAC
-  loop applied to benchmarks.
+  come later). Above the per-scenario boards sits a **leaderboard of
+  scenarios** (founder direction): scenarios ranked by adoption — published
+  comparisons using them, distinct models compared — which drives
+  discovery (join the largest comparable pool), gives scenario authors an
+  incentive to promote their scenario, and tells us which conversational
+  patterns people actually test. Every published comparison links back —
+  the negative-CAC loop applied to benchmarks.
 
 ## Alternatives Considered
 
