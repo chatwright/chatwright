@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chatwright.dev/formats/bot-protocol/v1/schema.json",
+  "title": "Chatwright bot protocol v1 — iframe transport messages",
+  "description": "Window-level handshake messages and port-level envelopes for the iframe transport. Payloads are opaque platform-native JSON, never interpreted by the envelope layer.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/hello"
+    },
+    {
+      "$ref": "#/$defs/helloAck"
+    },
+    {
+      "$ref": "#/$defs/envelope"
+    }
+  ],
+  "$defs": {
+    "hello": {
+      "type": "object",
+      "description": "Bot to host, posted to window.parent when the bot is ready.",
+      "required": [
+        "chatwright",
+        "protocolVersion",
+        "platform"
+      ],
+      "properties": {
+        "chatwright": {
+          "const": "hello"
+        },
+        "protocolVersion": {
+          "const": "1"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Capability key (dotted path)."
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "helloAck": {
+      "type": "object",
+      "description": "Host to bot, replied to the validated origin with a MessagePort in the transfer list.",
+      "required": [
+        "chatwright",
+        "protocolVersion",
+        "platform"
+      ],
+      "properties": {
+        "chatwright": {
+          "const": "hello-ack"
+        },
+        "protocolVersion": {
+          "const": "1"
+        },
+        "platform": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "envelope": {
+      "type": "object",
+      "description": "Every port message. update: host to bot, platform update object. call: bot to host, {method, params}. result: host to bot, the platform response wire shape, same id as its call.",
+      "required": [
+        "id",
+        "kind",
+        "platform",
+        "payload"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "update",
+            "call",
+            "result"
+          ]
+        },
+        "platform": {
+          "type": "string"
+        },
+        "payload": {
+          "description": "Opaque platform-native JSON."
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

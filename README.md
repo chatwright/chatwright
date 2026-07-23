@@ -185,6 +185,7 @@ consumer.
 | [`spec/plans/`](spec/plans/README.md) | Near-term executable delivery plan |
 | [`formats/run-bundle/v1/`](formats/run-bundle/v1/schema.json) | The run-bundle format v1 JSON Schema — the published copy of the canonical schema generated in [sdk-go](https://github.com/chatwright/sdk-go) |
 | [`formats/chatwright-md/v1/`](formats/chatwright-md/v1/README.md) | The `CHATWRIGHT.md` repository-manifest format v1 — spec and front-matter JSON Schema (canonical here; decision 0013) |
+| [`formats/bot-protocol/v1/`](formats/bot-protocol/v1/README.md) | The bot protocol v1 — remote HTTPS by platform reference, and the iframe postMessage envelope (canonical here; decision 0012) |
 | [`prototype/`](prototype/README.md) | Connected Angular + PrimeNG mock-ups |
 | [`docs/product-strategy.md`](docs/product-strategy.md) | Platform vision, open-source boundary and adoption strategy |
 | [`docs/cloud-strategy.md`](docs/cloud-strategy.md) | Cloud Run, Cloud Intelligence, free-tier and paid-service direction |
