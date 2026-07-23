@@ -61,6 +61,12 @@ a bundle a human can replay in the player to see *why* a model failed.
 - **Quality stays objective** (evidence over claims): completion measured
   against deterministic/DTQL-verified success criteria only. AI-judge
   scoring is a later, explicitly-labelled addition.
+- **Exclusion policy (founder question 2026-07-23)**: a model leaves a
+  routine matrix only with a recorded, evidence-linked reason in the report
+  (an exclusion row with bundles), never silently — and only after a
+  retrial following any harness/provider fix that could have contributed
+  to its failure. A failing model is a data point, not an embarrassment to
+  hide.
 - **Home**: post-split, an `arena` package in runtime-go, surfaced later as
   a CLI subcommand; the first incarnation is a scratchpad harness giving
   the founder his report the day the OpenAI-compatible provider lands.
