@@ -21,7 +21,7 @@ format: https://specscore.md/ideas-index-specification
 | [live-recording-sdk](live-recording-sdk.md) | Draft | 2026-07-22 | alex | — |
 | [local-studio-continuity](local-studio-continuity.md) | Draft | 2026-07-22 | alex | — |
 | [observation-model](observation-model.md) | Specifying | 2026-07-22 | alex | chatwright/observation-model, chatwright/observation-model/visible-conversation, chatwright/observation-model/actor-actions, chatwright/observation-model/observation-lineage, chatwright/observation-model/observation-context |
-| [openai-compatible-provider](openai-compatible-provider.md) | Draft | 2026-07-23 | alex | — |
+| [openai-compatible-provider](openai-compatible-provider.md) | Specifying | 2026-07-23 | alex | chatwright/goal-driven-ai-testing |
 | [openvaultdb-artifact-storage](openvaultdb-artifact-storage.md) | Specifying | 2026-07-22 | alex | chatwright/developer-tooling/openvaultdb-artifact-storage |
 | [proposal-content-constraints](proposal-content-constraints.md) | Approved | 2026-07-23 | alex | — |
 | [specscore-rehearse-verification](specscore-rehearse-verification.md) | Specifying | 2026-07-22 | alex | chatwright/scenario-authoring/portable-scenario-documents, chatwright/developer-tooling/rehearse-adapter, chatwright/developer-tooling/specscore-verification-bindings |

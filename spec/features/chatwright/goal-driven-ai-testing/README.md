@@ -9,7 +9,7 @@ status: Draft
 
 **Status:** Draft
 **MVP Priority:** #1
-**Source Ideas:** goal-driven-ai-bot-testing
+**Source Ideas:** goal-driven-ai-bot-testing, openai-compatible-provider
 
 ## Summary
 

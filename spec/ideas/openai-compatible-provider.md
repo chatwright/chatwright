@@ -1,14 +1,14 @@
 ---
 format: https://specscore.md/idea-specification
-status: Draft
+status: Specifying
 ---
 
 # Idea: OpenAI-compatible actor provider — local models for local development
 
-**Status:** Draft
+**Status:** Specifying
 **Date:** 2026-07-23
 **Owner:** alex
-**Promotes To:** —
+**Promotes To:** chatwright/goal-driven-ai-testing
 **Supersedes:** —
 **Related Ideas:** extends:goal-driven-ai-bot-testing
 
