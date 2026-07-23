@@ -77,7 +77,10 @@ a bundle a human can replay in the player to see *why* a model failed.
   comparisons using them, distinct models compared — which drives
   discovery (join the largest comparable pool), gives scenario authors an
   incentive to promote their scenario, and tells us which conversational
-  patterns people actually test. Every published comparison links back —
+  patterns people actually test. A third board ranks **contributors by
+  adoption** (founder direction): the summed adoption of a contributor's
+  scenarios — recognition that turns scenario authorship into standing in
+  the community. Every published comparison links back —
   the negative-CAC loop applied to benchmarks.
 
 ## Alternatives Considered
