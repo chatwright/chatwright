@@ -145,6 +145,29 @@ pushed tag is never moved); v0.1.1 is the first fully CI-green release
 and the version consumers should pin. `go get chatwright.dev/runtime@
 v0.1.1` proven via the vanity path (runtime-go 8651365).
 
+Task 4 COMPLETE (2026-07-23): `chatwright/cli` unarchived and populated
+with history (`git filter-repo`: cmd/, LICENSE, NOTICE), module
+`chatwright.dev/cli`, binary at cmd/chatwright. `chatwright version`
+reports the CLI's own version plus the resolved runtime/sdk versions
+from build info and the run-bundle format id; `platforms` derives names
+from the linked-in runtime emulators. Release v0.1.0 cut by annotated
+tag through strongo/cicd's GoReleaser workflow — six artifacts
+(linux/darwin amd64+arm64, windows amd64, checksums). Founder decision:
+released WITHOUT the Homebrew cask for now — the cask self-skips while
+the CHATWRIGHT_GORELEASER_GITHUB_TOKEN secret is absent and activates
+on the next release once set (`chatwright/homebrew-tap` exists and is
+initialised). Canonical install scripts live: install.sh + install.ps1
+served by the chatwright.dev worker from the ASSETS bundle — gotcha
+recorded: embedding shell-installer text in the worker-script body
+trips the Cloudflare API's WAF (HTML 403 on the versions upload), so
+the scripts ship as build-time assets instead; existing routes
+(vanity go-get, /formats/*, landing, /studio/) verified untouched.
+Proofs green: `curl -fsSL https://chatwright.dev/install.sh | sh`
+end-to-end (download, SHA-256 verify, install, version) and
+`go install chatwright.dev/cli/cmd/chatwright@latest` (first
+sum.golang.org lookup 500 then success, as Task 0 predicted)
+(cli f1d9139, studio 4c9bff4).
+
 ## Out of scope
 
 The TypeScript runtime and `@chatwright/sdk` extraction; the recorder
