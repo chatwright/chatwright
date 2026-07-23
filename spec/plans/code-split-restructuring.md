@@ -94,6 +94,15 @@ the format-release checklist, with a CI drift check comparing the two.
 | 5 | Prune this repo to the standard: remove Go code, rewrite README as the front door (what Chatwright is; install one-liner; repo map), update quickstarts/release-process/glossary pointers. | 3 |
 | 6 | Consumers: studio player TS types + samples regenerated if Task 1 approved normalisation; backstage notes; migration note for sneat-bots/sneat-go next bump. | 3 |
 
+## Status note (2026-07-23)
+
+Task 1 is decided: the founder approved full camelCase wire normalisation.
+Normalisation is pulled forward and executed pre-split in the current repo —
+explicit `json` tags on every type reaching bundle JSON, schema/goldens/
+samples regenerated — so the wire settles before any cut and Task 2's sdk
+extraction inherits the final shape. Task 0 (vanity prototype) dispatched
+the same day.
+
 ## Out of scope
 
 The TypeScript runtime and `@chatwright/sdk` extraction; the recorder
