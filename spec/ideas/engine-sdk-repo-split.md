@@ -1,11 +1,11 @@
 ---
 format: https://specscore.md/idea-specification
-status: Draft
+status: Approved
 ---
 
-# Idea: Engine/SDK code split — the standard repo, per-language SDK + emulator, thin CLI
+# Idea: Engine/SDK code split — the standard repo, per-language SDK + runtime, thin CLI
 
-**Status:** Draft
+**Status:** Approved
 **Date:** 2026-07-23
 **Owner:** alex
 **Promotes To:** —
@@ -49,12 +49,14 @@ the chatwright.dev worker (`go-import` meta; npm scope):**
 - `chatwright.dev/runtime` (Go) / `@chatwright/runtime` (TS): the heavy
   engine — platform emulation (Telegram first) plus the testing runtime
   (observe/goal/actor/campaign/run). Depends on sdk, never the reverse.
-  Recommended name: **runtime** — decision 0004's "one runtime" is exactly
-  what this repo holds, and the glossary's Platform Emulator is a component
-  inside it; `emulator` would name the whole after one part. (`emulator`
-  remains the founder-listed alternative until confirmed.)
-- `chatwright.dev/cli`: thin CLI importing sdk + emulator;
-  `go install chatwright.dev/cli@latest`.
+  Name confirmed by founder (2026-07-23): `runtime-<lang>` — decision
+  0004's "one runtime" is exactly what this repo holds, and the glossary's
+  Platform Emulator is a component inside it.
+- The CLI: thin, importing sdk + runtime, in repo `chatwright/cli`. Module
+  path `chatwright.dev/chatwright` (root main package) so the install
+  one-liner is `go install chatwright.dev/chatwright@latest` and the binary
+  is named `chatwright` — Go names binaries after the last path element, so
+  a `chatwright.dev/cli` module would install a binary called `cli`.
 - `chatwright/chatwright` becomes **the standard**: specs, docs, glossary,
   `formats/`, and — once a second engine exists — a conformance suite
   (golden scenarios + expected evidence + schema validation) every engine's
@@ -128,8 +130,6 @@ pinned consumers (sneat-bots, sneat-go) migrate on their own next bump.
 
 ## Open Questions
 
-- Final name pick, `runtime-go` vs `emulator-go` (founder narrowed to these
-  two; `runtime` recommended above) — the last open naming call.
 - Does the CLI keep its own version or track the runtime's releases?
 - Where does the conformance suite's expected-evidence format live once two
   engines exist — formats/ or a dedicated conformance/ tree?
