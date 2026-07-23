@@ -42,6 +42,13 @@ a bundle a human can replay in the player to see *why* a model failed.
   timeout), and hosted providers have cold paths too. The measured
   cold-start/load time is reported as its own metric, never mixed into
   proposal latency.
+- **Right-size context windows (founder rule 2026-07-23)**: where the
+  server allows it, load models with an explicitly small context — actor
+  proposals run ~1k tokens, while observed defaults allocated a 116k-token
+  window × 4 parallel slots of KV cache, wasting memory and slowing prompt
+  processing. Mechanisms: `lms load --context-length` (LM Studio); a
+  native-API pre-load with `num_ctx` options (Ollama). Recorded in the
+  report's environment block so entries stay comparable.
 - **Comparator/report**: read the bundles, emit a markdown (later HTML)
   table per model: proposal latency p50/p95 + total wall time; tokens
   in/out; cost; structured-output mode used; a **retry breakdown**
