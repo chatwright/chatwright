@@ -100,8 +100,14 @@ Task 1 is decided: the founder approved full camelCase wire normalisation.
 Normalisation is pulled forward and executed pre-split in the current repo —
 explicit `json` tags on every type reaching bundle JSON, schema/goldens/
 samples regenerated — so the wire settles before any cut and Task 2's sdk
-extraction inherits the final shape. Task 0 (vanity prototype) dispatched
-the same day.
+extraction inherits the final shape. Task 0 (vanity prototype) COMPLETE
+the same day: the chatwright.dev worker serves go-import/go-source meta for
+sdk/runtime/cli/vanity-proof (studio df99001, deployed green, existing
+routes unaffected); `go install chatwright.dev/vanity-proof@latest` and
+`go get` both proven from a clean machine. Gotchas recorded for the cut:
+edge propagation takes seconds (retry, don't fail); the first
+sum.golang.org lookup of a brand-new tag can 500 for ~a minute; pkg.go.dev
+indexing is lazy and decoupled — never a gate for install.
 
 ## Out of scope
 
