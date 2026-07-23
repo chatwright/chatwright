@@ -4,6 +4,32 @@ User-visible changes per release. Format follows
 [Keep a Changelog](https://keepachangelog.com/); pre-1.0 versioning intent is
 described in [docs/release-process.md](docs/release-process.md).
 
+## Code split — 2026-07-23
+
+Not a release on this module path: no tag accompanies this entry, and no new
+tags will ever be cut on `github.com/chatwright/chatwright`.
+
+### Changed
+
+- The Go code moved out of this repository, with full history, into three
+  repositories under `chatwright.dev` vanity import paths:
+  [chatwright/sdk-go](https://github.com/chatwright/sdk-go) (module
+  `chatwright.dev/sdk` — the run-bundle wire model, `Write`/`Read` and the
+  canonical JSON Schema),
+  [chatwright/runtime-go](https://github.com/chatwright/runtime-go) (module
+  `chatwright.dev/runtime` — the engine; scenario API at
+  `chatwright.dev/runtime/cw`) and
+  [chatwright/cli](https://github.com/chatwright/cli) (module
+  `chatwright.dev/cli` — the `chatwright` binary). The work described under
+  Unreleased below shipped there.
+- This repository is now the Chatwright standard: the specification
+  (`spec/`), the run-bundle format (`formats/`, whose canonical schema is
+  generated in sdk-go) and the documentation (`docs/`). It contains no
+  engine code.
+- Existing consumers keep building: the old module path's `v0.x` tags remain
+  resolvable forever. New releases happen per repository under the new
+  paths — see [docs/release-process.md](docs/release-process.md).
+
 ## Unreleased
 
 ### Added

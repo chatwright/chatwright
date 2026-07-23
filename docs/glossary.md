@@ -17,7 +17,7 @@ private backstage. Decisions referenced below live in
 | **Tagline** | *Emulate messaging platforms locally. Test real conversational applications.* |
 | **Product descriptor** | *An open, local-first conversation development platform.* Use this noun phrase when a sentence needs one. |
 | **Conversation Execution Platform** | Retired term. The architecture insight it named (one runtime, many execution modes) is now recorded as declared endpoint profiles (decision 0008). Do not use in new writing. |
-| **Chatwright CLI** | The open-source distribution: the Go runtime packages plus the `chatwright` command (`go install github.com/chatwright/chatwright/cmd/chatwright@latest`). "CLI" alone never refers to a repository. |
+| **Chatwright CLI** | The open-source `chatwright` command, released from module `chatwright.dev/cli` (`curl -fsSL https://chatwright.dev/install.sh \| sh`, or `go install chatwright.dev/cli/cmd/chatwright@latest`). "CLI" alone never refers to a repository. |
 | **Chatwright Studio** | The open-source (Apache-2.0) web experience — local-first visual inspection, authoring and the Playground UI. Not a paid product (decision 0007). |
 | **Chatwright Cloud** | The optional, commercial, operated services: hosted execution, retention, collaboration, organisations, managed AI. The only closed layer. |
 | **Playground** | The manual-testing surface where human actors interact with bots through a Platform Emulator. The product term — not "live emulator", not "manual emulator" (a retired spec path). The Studio route `/emulator` predates this term. |

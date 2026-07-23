@@ -6,19 +6,23 @@ port and expects the bot-under-test to call back into it instead of
 point its client at a different host — these pages show that one setting for
 five popular frameworks, plus the matching Chatwright-side Go test.
 
-There are two integration shapes, following the two worked examples in
-[`examples/`](../../examples/):
+The Chatwright-side tests are written against the scenario API
+`chatwright.dev/runtime/cw` (`go get chatwright.dev/runtime`); by convention
+the handle is `w := cw.New(t, ...)`, leaving `cw` for the package. There are
+two integration shapes, following the two worked examples in the runtime
+repository's
+[`examples/`](https://github.com/chatwright/runtime-go/tree/main/examples):
 
 - **In-process (Go)** — the bot runs inside the same test binary as
-  Chatwright. Point the framework's client at `cw.BotAPIURL()` at
-  construction time, then hand its webhook handler to `cw.ServeWebhook`. See
-  [`examples/greetbot`](../../examples/greetbot/).
+  Chatwright. Point the framework's client at `w.BotAPIURL()` at
+  construction time, then hand its webhook handler to `w.ServeWebhook`. See
+  [`examples/greetbot`](https://github.com/chatwright/runtime-go/tree/main/examples/greetbot).
 - **External process (any language)** — the bot runs as a separate process,
   configured entirely through environment variables before it starts, and
-  Chatwright attaches to its webhook over real HTTP with `cw.WebhookAt`. See
-  [`examples/pybot`](../../examples/pybot/), which establishes the
-  `TELEGRAM_API_ROOT` / `PORT` env-var contract every external-process guide
-  below reuses.
+  Chatwright attaches to its webhook over real HTTP with `w.WebhookAt`. See
+  [`examples/pybot`](https://github.com/chatwright/runtime-go/tree/main/examples/pybot),
+  which establishes the `TELEGRAM_API_ROOT` / `PORT` env-var contract every
+  external-process guide below reuses.
 
 ## Guides
 

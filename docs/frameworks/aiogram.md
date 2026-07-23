@@ -3,9 +3,9 @@
 An [aiogram](https://aiogram.dev) bot runs as a separate Python process,
 configured entirely through environment variables before it starts — the
 same external-process shape as
-[`examples/pybot`](../../examples/pybot/pybot.py) (which deliberately avoids
-aiogram to prove the stdlib-only case; this page is what a real aiogram bot
-does instead). Chatwright never imports it; your test starts the process
+[`examples/pybot`](https://github.com/chatwright/runtime-go/blob/main/examples/pybot/pybot.py)
+(which deliberately avoids aiogram to prove the stdlib-only case; this page
+is what a real aiogram bot does instead). Chatwright never imports it; your test starts the process
 and attaches to its webhook over real HTTP.
 
 **Verified against:** `aiogram` v3.30.0 (PyPI latest, Python ≥3.10), the
@@ -15,8 +15,9 @@ and `aiogram/client/telegram.py` source (`TelegramAPIServer.from_base`).
 ## What you need
 
 - `pip install aiogram` (no extras needed for a webhook bot)
-- A Go test that starts the bot as a subprocess — mirror
-  [`pybot_e2e_test.go`](../../examples/pybot/pybot_e2e_test.go)'s
+- A Go test (`go get chatwright.dev/runtime`, import
+  `chatwright.dev/runtime/cw`) that starts the bot as a subprocess — mirror
+  [`pybot_e2e_test.go`](https://github.com/chatwright/runtime-go/blob/main/examples/pybot/pybot_e2e_test.go)'s
   `startPybot` helper, substituting the Python interpreter and script
 
 ## Bot-side: read the env-var contract, set a custom `TelegramAPIServer`
@@ -61,10 +62,10 @@ apiAddr := freeAddr(t)
 botAddr := freeAddr(t)
 startAiogramBot(t, "http://"+apiAddr, botAddr) // sets TELEGRAM_API_ROOT, PORT
 
-cw := chatwright.New(t, chatwright.WithListenAddr(apiAddr))
-cw.WebhookAt("http://" + botAddr + "/webhook")
+w := cw.New(t, cw.WithListenAddr(apiAddr))
+w.WebhookAt("http://" + botAddr + "/webhook")
 
-chat := cw.PrivateChat(chatwright.User{ID: "alice", FirstName: "Alice"})
+chat := w.PrivateChat(cw.User{ID: "alice", FirstName: "Alice"})
 chat.SendText("Hi")
 chat.ExpectBotMessage().Within(2 * time.Second).Text("Howdy stranger")
 ```
@@ -73,7 +74,7 @@ chat.ExpectBotMessage().Within(2 * time.Second).Text("Howdy stranger")
 
 | Variable | Set by | Meaning |
 |---|---|---|
-| `TELEGRAM_API_ROOT` | test | Emulator's Bot API base URL (`cw.BotAPIURL()`) — passed to `TelegramAPIServer.from_base` |
+| `TELEGRAM_API_ROOT` | test | Emulator's Bot API base URL (`w.BotAPIURL()`) — passed to `TelegramAPIServer.from_base` |
 | `PORT` | test | Local TCP port the bot's webhook listens on |
 
 ## What the emulator supports
