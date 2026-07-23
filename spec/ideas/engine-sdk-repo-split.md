@@ -32,8 +32,10 @@ profile (browsers cannot receive webhooks; evidence must say what the
 boundary was). Go module-graph pruning isolates consumers from unimported
 packages within one module; vanity import paths decouple module identity
 from repository layout entirely. The `chatwright/cli` repository slot is
-retired but reserved. The founder's proposed component set (2026-07-23):
-go SDK, go emulator, ts emulator, CLI.
+retired but reserved. Founder decisions (2026-07-23): the component set is
+go SDK, go runtime/emulator, ts runtime/emulator, CLI; repo naming is
+role-first (`sdk-go`, not `go-sdk`); and the SDK definitely lives in a
+separate repository from the runtime from day one.
 
 ## Recommended Direction
 
@@ -44,9 +46,13 @@ the chatwright.dev worker (`go-import` meta; npm scope):**
 - `chatwright.dev/sdk` (Go) / `@chatwright/sdk` (TS): the language
   embodiment of the standard — bundle read/write, anchors, the future
   recorder + sinks. Library-pure dependencies; what a production bot embeds.
-- `chatwright.dev/emulator` (Go) / `@chatwright/emulator` (TS): the heavy
+- `chatwright.dev/runtime` (Go) / `@chatwright/runtime` (TS): the heavy
   engine — platform emulation (Telegram first) plus the testing runtime
   (observe/goal/actor/campaign/run). Depends on sdk, never the reverse.
+  Recommended name: **runtime** — decision 0004's "one runtime" is exactly
+  what this repo holds, and the glossary's Platform Emulator is a component
+  inside it; `emulator` would name the whole after one part. (`emulator`
+  remains the founder-listed alternative until confirmed.)
 - `chatwright.dev/cli`: thin CLI importing sdk + emulator;
   `go install chatwright.dev/cli@latest`.
 - `chatwright/chatwright` becomes **the standard**: specs, docs, glossary,
@@ -54,18 +60,18 @@ the chatwright.dev worker (`go-import` meta; npm scope):**
   (golden scenarios + expected evidence + schema validation) every engine's
   CI runs. No engine code.
 
-**Physical layout (repos) — staged, because vanity paths make repo layout
-invisible to imports:**
+**Physical layout (repos) — per founder decision, three Go-side repos from
+day one, cut post-Listus-proof in one window:**
 
-1. Post-Listus-proof cut: Go moves out of the main repo. sdk and emulator
-   start as two modules colocated in one repo (`chatwright-go`, or the
-   founder's `chatwright-go-emulator` naming), already on their vanity
-   paths; `chatwright-cli` cut in the same window.
-2. Whenever wanted (e.g. when the recorder ships or format v1 freezes): the
-   sdk module moves to its own repo — a file move with zero import churn,
-   because `chatwright.dev/sdk` never changes.
-3. `chatwright-ts-emulator` (and `@chatwright/sdk` extraction from the
-   player's bundle reader) follow as the TS track starts.
+- `chatwright/sdk-go` — module `chatwright.dev/sdk`
+- `chatwright/runtime-go` (or `emulator-go` — see recommendation above) —
+  module `chatwright.dev/runtime`
+- `chatwright/cli` — module `chatwright.dev/cli`
+- `chatwright/runtime-ts` (and `@chatwright/sdk` extraction from the
+  player's bundle reader) follow as the TS track starts.
+
+Vanity paths still earn their keep: any later re-arrangement (or a rename
+settling emulator↔runtime) never churns imports.
 
 Old `github.com/chatwright/chatwright` tags remain resolvable forever;
 pinned consumers (sneat-bots, sneat-go) migrate on their own next bump.
@@ -75,21 +81,22 @@ pinned consumers (sneat-bots, sneat-go) migrate on their own next bump.
 - **One combined Go module (core folded into SDK).** Simplest operationally
   and module-graph pruning isolates builds — but it leaves the SDK's
   dependency manifest polluted for production-bot supply-chain review, and
-  the sdk/emulator boundary is the durable one (it mirrors the standard
-  itself). Rejected as the end state; survives only as stage-1 colocation.
-- **Four separate repos from day one.** The release-train tax (tag sdk →
-  bump emulator → bump cli) lands exactly during the format's
-  fastest-evolving weeks. Rejected in favour of staged physical splitting
-  under stable vanity identities.
+  the sdk/runtime boundary is the durable one (it mirrors the standard
+  itself). Rejected by founder decision: the SDK lives in its own repo.
+- **Colocating sdk + runtime modules in one repo as a staging step.**
+  Avoids the cross-repo release train during fast format evolution, but the
+  founder decided the SDK is definitely a separate repo from day one; the
+  tax is accepted and mitigated by cutting only after format v1's current
+  polish settles.
 - **GitHub-path module names.** Workable fallback; vanity paths cost one
   worker route and permanently decouple imports from repo layout.
 
 ## MVP Scope
 
 - Decision recorded (promote this idea) + vanity-import route live on
-  chatwright.dev serving `sdk`/`emulator`/`cli` module paths.
-- Stage-1 cut post-Listus-proof: chatwright-go (sdk + emulator modules,
-  moved with history) + chatwright-cli; main repo prunes to the standard;
+  chatwright.dev serving `sdk`/`runtime`/`cli` module paths.
+- The cut, post-Listus-proof, in one window: sdk-go, runtime-go and cli
+  repos (packages moved with history); main repo prunes to the standard;
   fleet CI + release process (strongo/cicd, Homebrew cask) rewired.
 - Proof (principle 6): a bot developer project importing only
   `chatwright.dev/sdk` builds with no emulator or CLI dependencies in its
@@ -121,16 +128,9 @@ pinned consumers (sneat-bots, sneat-go) migrate on their own next bump.
 
 ## Open Questions
 
-- Repo naming: founder proposed lang-first (`chatwright-go-sdk`,
-  `chatwright-go-emulator`, `chatwright-ts-emulator`); the wider Go
-  ecosystem convention is role-first (`anthropic-sdk-go`, `aws-sdk-go` ⇒
-  `chatwright-sdk-go`, `chatwright-emulator-go`), which also sorts engine
-  peers adjacently in the org listing. Cosmetic under vanity paths — founder
-  picks.
-- Does "emulator" as the module name over-scope once it carries the whole
-  testing runtime (goal/actor/campaign/run), or is that honest enough?
-  ("engine" clashes with the glossary's headless conversational engine.)
-- Does the CLI keep its own version or track the emulator's releases?
+- Final name pick, `runtime-go` vs `emulator-go` (founder narrowed to these
+  two; `runtime` recommended above) — the last open naming call.
+- Does the CLI keep its own version or track the runtime's releases?
 - Where does the conformance suite's expected-evidence format live once two
   engines exist — formats/ or a dedicated conformance/ tree?
 
