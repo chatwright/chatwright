@@ -109,6 +109,23 @@ edge propagation takes seconds (retry, don't fail); the first
 sum.golang.org lookup of a brand-new tag can 500 for ~a minute; pkg.go.dev
 indexing is lazy and decoupled — never a gate for install.
 
+Task 2 COMPLETE (2026-07-23): `chatwright/sdk-go` cut with history
+(`git filter-repo`: bundle/, internal/schemagen/, formats/, LICENSE,
+NOTICE), module `chatwright.dev/sdk`, single root package `sdk` owning
+every wire type the schema describes (three Go-name-only renames where
+one package now holds all types: observe's Actor enum → `MessageActor`,
+campaign.Evidence → `FindingEvidence`, datastate.Evidence →
+`DataStateEvidence`; JSON and schema untouched). Schema regenerated from
+sdk types is byte-identical to the published copy; an explicit namer
+table pins the published `$defs` keys and panics on any unlisted type.
+`SingleAIGoalRun`/`SortObservations` deliberately removed sdk-side —
+they move runtime-side with Task 3. Root scenario package for Task 3 is
+decided by the founder: `chatwright.dev/runtime/cw`, package `cw`.
+CI green (strongo/cicd, version bumping disabled), tag v0.1.0 pushed;
+gate proven: a scratch consumer importing only `chatwright.dev/sdk`
+builds and runs with go.sum containing exactly one module —
+`chatwright.dev/sdk` (sdk-go 27d8d39).
+
 ## Out of scope
 
 The TypeScript runtime and `@chatwright/sdk` extraction; the recorder
