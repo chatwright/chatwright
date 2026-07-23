@@ -65,6 +65,14 @@ The [Format drift workflow](../.github/workflows/format-drift.yml) enforces
 both: it diffs this repository's committed copy against sdk-go's `main` and
 against the copy served at chatwright.dev, on every push/PR and weekly.
 
+The `CHATWRIGHT.md` manifest format (decision 0013) follows the same
+pattern with one difference: its canonical schema lives **here**, at
+[`formats/chatwright-md/v1/schema.json`](../formats/chatwright-md/v1/schema.json)
+(hand-authored; no generator yet). A schema change means updating the studio
+worker's copy — `worker/formats/chatwright-md/v1/schema.json` — in the same
+window; the drift workflow diffs the served copy against this repository's
+canonical one.
+
 ## Common checklist per code release
 
 1. **Green gates** for that repository (see above), plus

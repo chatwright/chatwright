@@ -5,6 +5,10 @@ name: Format drift
 # in chatwright/sdk-go from the sdk wire types. This workflow fails when the
 # published copies drift from the canonical one — see the format-release
 # checklist in docs/release-process.md.
+#
+# It also guards formats/chatwright-md/v1/schema.json (decision 0013):
+# canonical HERE (hand-authored, no generator yet), with a served copy at
+# chatwright.dev (the studio worker's worker/formats/chatwright-md/v1/).
 
 on:
   push:
@@ -45,5 +49,18 @@ jobs:
         run: |
           if ! diff -u formats/run-bundle/v1/schema.json /tmp/site-schema.json; then
             echo "::error file=formats/run-bundle/v1/schema.json::The schema served at https://chatwright.dev/formats/run-bundle/v1/schema.json (the studio worker's copy: worker/formats/run-bundle/v1/schema.json in chatwright/studio) has drifted from this repository's committed copy. Update the worker's copy per the format-release checklist in docs/release-process.md."
+            exit 1
+          fi
+
+      - name: Fetch the chatwright-md schema served at chatwright.dev
+        run: |
+          curl -fsSL \
+            https://chatwright.dev/formats/chatwright-md/v1/schema.json \
+            -o /tmp/site-chatwright-md.json
+
+      - name: Diff the canonical chatwright-md schema against the chatwright.dev copy
+        run: |
+          if ! diff -u formats/chatwright-md/v1/schema.json /tmp/site-chatwright-md.json; then
+            echo "::error file=formats/chatwright-md/v1/schema.json::The schema served at https://chatwright.dev/formats/chatwright-md/v1/schema.json (the studio worker's copy: worker/formats/chatwright-md/v1/schema.json in chatwright/studio) has drifted from this repository's canonical copy. Update the worker's copy per the format-release checklist in docs/release-process.md."
             exit 1
           fi
