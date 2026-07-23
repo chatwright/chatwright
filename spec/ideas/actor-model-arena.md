@@ -65,10 +65,11 @@ a bundle a human can replay in the player to see *why* a model failed.
   comparisons serialise to a shareable arena-report JSON format (sibling of
   the run bundle; Studio renders it locally like the player renders
   bundles; markdown becomes a by-product). chatwright.dev gains a publish
-  surface for comparisons and a leaderboard aggregating publicly shared
-  stats. Comparability rules: the leaderboard aggregates only **canonical
-  arena scenarios** (versioned in the standard repo — same goal, budgets,
-  scenario version) grouped with a declared hardware/environment block;
+  surface for comparisons and **one leaderboard per canonical scenario**
+  (founder: "apples to apples and oranges to oranges") — the scenario is
+  the leaderboard's unit, never a filter on a global board. Canonical
+  arena scenarios are versioned in the standard repo (same goal, budgets,
+  scenario version); entries carry a declared hardware/environment block;
   published entries must attach their bundles (shared evidence, not
   certified — anyone can replay; a Cloud-operated verified-rerun badge may
   come later). Every published comparison links back — the negative-CAC
