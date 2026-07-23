@@ -1,8 +1,9 @@
 # Chatwright product strategy
 
-- **Updated:** 2026-07-22
-- **Vision:** the open local development platform and managed intelligence layer
-  for conversational applications
+- **Updated:** 2026-07-23
+- **Vision:** the best place to learn, design, test and compare conversational
+  UX across messaging platforms — an executable knowledge platform on an open
+  local development stack with a managed intelligence layer
 
 ## Product thesis
 
@@ -10,6 +11,15 @@ Chatwright can define a broader category than bot testing. One portable
 conversation model should support designing a flow, exercising a real bot,
 understanding evidence, exploring quality with AI and turning discoveries into
 reviewed regression tests and implementation work.
+
+The 2026-07-23 repositioning (idea: executable-knowledge-platform, decisions
+0011–0014) frames the category as an **executable knowledge platform**: a
+connected graph of Jobs, Recipes, Capabilities, Platforms and Implementations
+whose pages run — live demos in the browser, black-box bots over
+platform-native payloads, recordings as run bundles, and a federated
+repository ecosystem indexed through `CHATWRIGHT.md` manifests. Testing
+remains the launch wedge and the strongest proof of the substrate; learning,
+designing and comparing are the paths that widen the funnel.
 
 The platform has four product areas:
 

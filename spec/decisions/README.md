@@ -17,6 +17,10 @@ format: https://specscore.md/decisions-index-specification
 | [0008](0008-declared-endpoint-profiles.md) | Declared endpoint profiles generalise the execution boundary (amends 0006) | Approved | 2026-07-22 | product, runtime, boundary | chatwright, conversation-runtime, agent-harnesses |
 | [0009](0009-complete-environment-branching.md) | Branch a coordinated environment with replay fallback | In Review | 2026-07-22 | checkpoint, branch, replay | state-branching |
 | [0010](0010-dalgo-branchable-database-providers.md) | Use DALgo with dalgo2memory and inGitDB first | Approved | 2026-07-22 | dalgo, ingitdb, provider | state-branching |
+| [0011](0011-executable-knowledge-graph.md) | An executable knowledge graph over the run substrate | Approved | 2026-07-23 | product, domain-model, knowledge-graph, positioning | chatwright, playground, marketplace |
+| [0012](0012-black-box-bot-protocol.md) | Black-box bots over platform-native payloads; a browser runtime | Approved | 2026-07-23 | runtime, protocol, browser, transport, architecture | conversation-runtime, platform-emulators, playground |
+| [0013](0013-chatwright-md-federation.md) | CHATWRIGHT.md manifests and a federated central index | Approved | 2026-07-23 | federation, community, formats, repositories, discovery | marketplace, developer-tooling |
+| [0014](0014-community-metrics.md) | Community appreciation through independent metrics | Approved | 2026-07-23 | community, metrics, anti-gaming, product | marketplace, cloud |
 
 ## Open Questions
 

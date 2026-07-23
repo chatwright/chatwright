@@ -23,6 +23,22 @@ private backstage. Decisions referenced below live in
 | **Playground** | The manual-testing surface where human actors interact with bots through a Platform Emulator. The product term — not "live emulator", not "manual emulator" (a retired spec path). The Studio route `/emulator` predates this term. |
 | **chatwrite** | Historical only: the former subdirectory/module of the runtime before it moved to the repository root (2026-07-22). Never a product name. |
 
+## Knowledge platform
+
+| Term | Meaning |
+|---|---|
+| **North star** | *The best place to learn, design, test and compare conversational UX across messaging platforms.* The platform ambition (idea: executable-knowledge-platform); the Tagline remains the launch-wedge line. |
+| **knowledge graph** | The descriptive layer over the run substrate: Jobs, Recipes, Capabilities, Platforms, Implementations, Authors and Repositories, whose edges point at executable artifacts (decision 0011). |
+| **Job** | An intent someone wants to accomplish ("collect RSVP"). A thin entry-point node solved by Recipes. |
+| **Recipe** | The central executable content asset: an answer to one or more Jobs, with prose, trade-offs, Implementations and a runnable demo. |
+| **Capability** | A platform primitive identified by a **capability key** — a stable dotted path (`messaging.buttons.inline`) used identically by compatibility data, emulator fidelity declarations, `CHATWRIGHT.md` manifests, bot-protocol negotiation and search facets. |
+| **Implementation** | One Recipe realised on one Platform with one technique, tiered **official / alternative / community**, with documented trade-offs. The unit of comparison. |
+| **Recording** | A persisted run — always a run bundle; there is no second recording format. Downloadable without an account; saving to Chatwright Cloud requires authentication. |
+| **bot protocol** | The black-box contract with a bot: platform-native payloads over one of two transports — remote HTTPS (the emulated platform API server) or in-browser iframe via `postMessage` with a minimal envelope (decision 0012). |
+| **CHATWRIGHT.md** | The repository manifest (format `https://chatwright.dev/formats/chatwright-md/v1`) declaring a repository's bots, platforms, capabilities, implementations and demos. Its `id` is the identity, never the repository name. |
+| **central index** | The curated [chatwright/recipes](https://github.com/chatwright/recipes) repository: first-party Jobs/Recipes/Capabilities content plus the registry (and manifest cache) of federated repositories (decision 0013). |
+| **Try in Chatwright badge** | The README badge linking `chatwright.dev/try/github/{owner}/{repo}` — works the moment `CHATWRIGHT.md` exists, no registration. |
+
 ## Execution model
 
 | Term | Meaning |
