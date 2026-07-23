@@ -200,6 +200,11 @@ go install from a clean environment, all pre-split e2e gates green in
 runtime-go, drift checks live in CI on both sides, spec lint clean) —
 the split completes when the founder merges PR #6.
 
+Task 5 COMPLETE (2026-07-23): the founder merged PR #6 (merge commit
+8c0fff6); this repository is now the standard — zero Go files, no
+go.mod, Format drift green on main. The code-split restructuring
+(Tasks 0-6) is fully executed; the plan's Gate holds in its entirety.
+
 ## Out of scope
 
 The TypeScript runtime and `@chatwright/sdk` extraction; the recorder
