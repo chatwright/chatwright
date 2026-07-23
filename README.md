@@ -21,6 +21,11 @@ strategies, and a connected PrimeNG Studio prototype in
 [`prototype/`](prototype/README.md). The engine code lives in dedicated
 repositories — see the [repository map](#the-chatwright-repositories) below.
 
+Chatwright is developed **spec-first with [SpecScore](https://specscore.md/)**:
+every idea, decision, feature and plan in [`spec/`](spec/README.md) follows
+the SpecScore specification formats and passes `specscore spec lint` with
+zero violations before it ships.
+
 ## Install
 
 ```sh
