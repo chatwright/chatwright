@@ -36,6 +36,12 @@ a bundle a human can replay in the player to see *why* a model failed.
 - **Matrix runner**: run one goal/bot scenario across a declared set of
   provider configs (model, base URL, provider kind), N repeats each, with
   identical budgets; emit one bundle per run.
+- **Warm-up is mandatory for every provider/model (founder rule
+  2026-07-23)**: one untimed call before any timed repeat — local servers
+  JIT-load models (observed: LM Studio loading a 27B exceeded a 60s call
+  timeout), and hosted providers have cold paths too. The measured
+  cold-start/load time is reported as its own metric, never mixed into
+  proposal latency.
 - **Comparator/report**: read the bundles, emit a markdown (later HTML)
   table per model: proposal latency p50/p95 + total wall time; tokens
   in/out; cost; structured-output mode used; a **retry breakdown**
@@ -51,6 +57,22 @@ a bundle a human can replay in the player to see *why* a model failed.
 - **Home**: post-split, an `arena` package in runtime-go, surfaced later as
   a CLI subcommand; the first incarnation is a scratchpad harness giving
   the founder his report the day the OpenAI-compatible provider lands.
+- **Open source (founder decision 2026-07-23)**: the comparator is a local
+  capability and ships open, like every local capability; operated
+  comparison services (hosted matrices, historical tracking) belong to the
+  Cloud layer.
+- **Sharing, publishing and a leaderboard (founder direction 2026-07-23)**:
+  comparisons serialise to a shareable arena-report JSON format (sibling of
+  the run bundle; Studio renders it locally like the player renders
+  bundles; markdown becomes a by-product). chatwright.dev gains a publish
+  surface for comparisons and a leaderboard aggregating publicly shared
+  stats. Comparability rules: the leaderboard aggregates only **canonical
+  arena scenarios** (versioned in the standard repo — same goal, budgets,
+  scenario version) grouped with a declared hardware/environment block;
+  published entries must attach their bundles (shared evidence, not
+  certified — anyone can replay; a Cloud-operated verified-rerun badge may
+  come later). Every published comparison links back — the negative-CAC
+  loop applied to benchmarks.
 
 ## Alternatives Considered
 
@@ -92,10 +114,10 @@ a bundle a human can replay in the player to see *why* a model failed.
 
 ## Open Questions
 
-- Report format for sharing: markdown in-repo, or a bundle-like JSON the
-  Studio could render as an arena view?
 - Should repeats vary the persona/system prompt to probe robustness, or
   stay identical for variance measurement first?
+- Leaderboard moderation/identity: anonymous submissions with evidence, or
+  lightweight accounts first?
 
 ---
 *This document follows the https://specscore.md/idea-specification*
