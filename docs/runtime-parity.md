@@ -23,13 +23,13 @@ Updated: 2026-07-23 (runtime-ts first slice in flight).
 
 | Feature | Go runtime | TS runtime | Note |
 |---|---|---|---|
-| Telegram emulation: text, inline keyboards, versioned edits | ✅ Works | 🚧 In progress | First TS slice in flight (2026-07-23), semantics mirrored from the Go emulator |
+| Telegram emulation: text, inline keyboards, versioned edits | ✅ Works | ✅ Works | TS first slice landed 2026-07-23: sendMessage/editMessageText/answerCallbackQuery/getMe, 501+uncaptured for the rest; 20 tests, CI green |
 | WhatsApp surface (text, webhook-only) | ✅ Works (preview) | 📅 Planned | Follows the Telegram slice; capability data in chatwright/recipes marks chatwright-ts unsupported meanwhile |
 | Remote bots: webhook delivery over HTTPS | ✅ Works | ⛔ Blocked | Browsers cannot accept inbound HTTP (no server/listener primitive in the web platform); needs a relay/tunnel design — research item I-68 |
 | Remote bots: `getUpdates` long-polling | ✅ Works | ⛔ Blocked | Same limitation — no inbound server surface in a page; a relay could poll on the page's behalf (I-68) |
-| Iframe bots (postMessage, bot protocol v1) | ➖ N/A by design | 🚧 In progress | iframes/`postMessage` do not exist in Go's environment (decision 0012); protocol proven live against greetbot 2026-07-23 |
+| Iframe bots (postMessage, bot protocol v1) | ➖ N/A by design | ✅ Works | IframeHost landed (handshake, port handoff, correlation, queueing); protocol proven live against greetbot 2026-07-23 |
 | Deterministic scenario verbs (send/click/expect/edited/within) | ✅ Works (`cw`) | 📅 Planned | The expect layer is the next TS slice after core; portable scenario format = I-71 ("one file, two runtimes, same verdict") |
-| Run-bundle v1 recording | ✅ Works | 🚧 In progress | `toBundle()` in the first slice must validate against the published schema |
+| Run-bundle v1 recording | ✅ Works | ✅ Works | `Session.toBundle()` output validates against the published schema in CI (ajv); single deterministic part per run so far |
 | Replay (bundle playback) | ➖ N/A by design | ✅ Works | Playback is a rendering concern; the Studio player is the shared replay surface for bundles from BOTH runtimes — parity holds at the format level |
 | AI actors (goal-driven campaigns) | ✅ Works | 📅 Planned | Key-security design = research item I-76; founder direction: bring-your-own-key (client-side, "for the brave") or chatwright.dev subscription (managed keys, "for the lazy/busy") |
 | Arena (model comparison) | ✅ Works | 📅 Planned | Follows browser AI actors |
