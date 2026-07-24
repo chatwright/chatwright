@@ -37,6 +37,8 @@ private backstage. Decisions referenced below live in
 | **bot protocol** | The black-box contract with a bot: platform-native payloads over one of two transports — remote HTTPS (the emulated platform API server) or in-browser iframe via `postMessage` with a minimal envelope (decision 0012). |
 | **CHATWRIGHT.md** | The repository manifest (format `https://chatwright.dev/formats/chatwright-md/v1`) declaring a repository's bots, platforms, capabilities, implementations and demos. Its `id` is the identity, never the repository name. |
 | **central index** | The curated [chatwright/recipes](https://github.com/chatwright/recipes) repository: first-party Jobs/Recipes/Capabilities content plus the registry (and manifest cache) of federated repositories (decision 0013). |
+| **Conversation Composer** / **Composer** | The authoring surface — the third door of the Studio's one conversation surface (Player = watch, Playground = try, Composer = perform). "Builder" is reserved for possible future bot code-building. Idea: conversation-composer. |
+| **message bar** | The chat input area (text box + send affordances) at the bottom of a conversation surface. One per actor in the Composer. Never "composer" — that word belongs to the surface. |
 | **Try in Chatwright badge** | The README badge linking `chatwright.dev/try/github/{owner}/{repo}` — works the moment `CHATWRIGHT.md` exists, no registration. |
 
 ## Execution model

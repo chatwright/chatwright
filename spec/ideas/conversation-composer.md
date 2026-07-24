@@ -29,17 +29,17 @@ the typing from final text and a tempo curve, because recordings carry
 only sent messages, not how they were composed. The Studio direction is
 one conversation surface with capability-flagged entry points
 (studio-ui-surfaces idea in chatwright/studio): watch (Player) and try
-(Playground). The founder's feature (2026-07-24) adds the third: compose. Naming (founder 2026-07-24): **Composer** — "Builder" is deliberately reserved for possible future bot building (code implementation). The chat input area component is being renamed away from "composer" to avoid collision (candidate: message bar).
+(Playground). The founder's feature (2026-07-24) adds the third: compose. Naming (founder 2026-07-24): **Composer** — "Builder" is deliberately reserved for possible future bot building (code implementation). The chat input area is the **message bar** (founder decision 2026-07-24) — "composer" belongs exclusively to this surface.
 
 ## Recommended Direction
 
 ### The Composer is the third door of the one surface
 
 **Player = watch. Playground = try. Composer = perform.** One chat pane;
-underneath it, **one composer per actor** — two for a private chat, more
+underneath it, **one message bar per actor** — two for a private chat, more
 for a group chat, laid out in a single row when space allows (2–3
 actors), stacked otherwise. **TAB / SHIFT+TAB cycles the focused
-composer** (mouse works too); the author acts out each side in turn.
+message bar** (mouse works too); the author acts out each side in turn.
 
 Two performance modes, freely mixed per actor:
 
@@ -70,7 +70,7 @@ composition:
   - type: send
 ```
 
-Replay then types the message into **the respective actor's composer**
+Replay then types the message into **the respective actor's message bar**
 with the recorded rhythm — real hesitation, real corrections — instead
 of the Player's synthesised animation. Bundles without a composition
 track keep today's synthesised behaviour; the field is optional and
@@ -154,7 +154,7 @@ The Player displays the provenance badge always.
 1. This spec agreed; composition-track wire sketch reviewed against the
    sdk-go model (additive optional field + provenance in metadata).
 2. Composer slice 1 in the Studio: two performed actors, one private
-   chat, per-actor composers with TAB cycling, live typing capture
+   chat, per-actor message bars with TAB cycling, live typing capture
    (text/pause/backspace/clear/send), the bot-message keyboard editor
    (rows/buttons add-delete, Telegram grid first), export with
    `provenance: performed`.
