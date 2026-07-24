@@ -99,14 +99,31 @@ doing its job inside a tool.
 ### Recordings become tweakable — with provenance honesty
 
 The builder doubles as the **recording editor**: load any bundle, adjust
-texts, timings, pauses; re-export. This is powerful and dangerous — an
-edited recording must never masquerade as test evidence (principle 3,
-decision 0006). Therefore the bundle metadata gains a **provenance**
-marker: `recorded` (produced by a runtime run, untouched), `performed`
-(authored in the builder), `edited` (derived from a recording and
-modified). Verification-bearing surfaces (reports, arena, CI gates)
-accept only `recorded`; the Player displays the provenance badge always.
-Provenance is the non-negotiable core of this idea.
+texts, timings, pauses, keyboards; re-export. This is powerful and
+dangerous — an edited recording must never masquerade as test evidence
+(principle 3, decision 0006). Provenance is therefore **two-level**
+(founder decision 2026-07-24):
+
+- **Per run**: `recorded` (untouched runtime output), `performed`
+  (authored from scratch), `edited` (recorded baseline + modifications).
+  A bundle's runs[] may mix them; evidence-bearing surfaces (reports,
+  arena, CI gates) accept only `recorded` runs.
+- **Per entry/item**: in an `edited` run, the recorded baseline is
+  **immutable** and edits are an overlay — each overlay item marks its
+  op (`added` | `edited` | `deleted`, with `deleted` retained as
+  tombstones, never removed) against the baseline entry it targets. The
+  journal's append-only philosophy extends to editing: nothing recorded
+  is ever destroyed.
+
+Because both layers ship in one bundle, the viewer can **switch between
+recorded and final state** — and a diff view highlights exactly what was
+changed, added or deleted. That makes an edited-over-recorded bundle a
+new kind of artifact: a **visual bug report** — actual behaviour and
+desired behaviour in one replayable file. The desired layer is also a
+natural assertion source: "edit to how it should be" is a golden state a
+future test can be generated from.
+
+The Player displays the provenance badge always.
 
 ### What it unlocks
 
@@ -176,10 +193,14 @@ Provenance is the non-negotiable core of this idea.
 - Does the composition track attach to journal entries or live as a
   parallel per-actor performance lane referencing entries (multi-chat
   group performances may need the latter)?
-- Is `provenance` per-bundle or per-run (a bundle's runs[] could mix a
-  recorded run with a performed intro)?
-- Do live-actor (bot) messages in a performed session keep
-  `provenance: performed` for the whole bundle, or per-entry attribution?
+- Resolved (founder 2026-07-24): provenance is per-run AND per
+  entry/item, with the recorded baseline immutable under an edit overlay
+  and a recorded↔final toggle in the viewer.
+- Wire shape of the overlay: patch entries referencing baseline entries
+  by index/id, or a parallel journal with entry-level provenance marks?
+  (Design session with the sdk wire model.)
+- Can the desired-state layer compile into assertions automatically
+  ("generate a test from this edit")?
 - Should authored keyboards be reusable presets (a keyboard library per
   builder project) or always per-message?
 
