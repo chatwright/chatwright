@@ -12,7 +12,7 @@ format: https://specscore.md/ideas-index-specification
 | [actor-model-arena](actor-model-arena.md) | Approved | 2026-07-23 | alex | — |
 | [app-state-branching](app-state-branching.md) | Specifying | 2026-07-22 | alex | chatwright/state-branching, chatwright/state-branching/database-state-holders |
 | [campaign-progress-reporting](campaign-progress-reporting.md) | Approved | 2026-07-23 | alex | — |
-| [conversation-builder](conversation-builder.md) | Draft | 2026-07-24 | alex | — |
+| [conversation-composer](conversation-composer.md) | Draft | 2026-07-24 | alex | — |
 | [chatwright](chatwright.md) | Implementing | 2026-07-21 | alex | chatwright, chatwright/agent-implementation-loop, chatwright/ai-driven-testing, chatwright/cloud, chatwright/conversation-runtime, chatwright/deterministic-testing, chatwright/deterministic-testing/data-state-assertions, chatwright/developer-tooling, chatwright/fuzz-testing, chatwright/manual-emulator, chatwright/marketplace, chatwright/observability, chatwright/platform-adapters, chatwright/platform-emulators, chatwright/platform-emulators/telegram, chatwright/platform-emulators/telegram/client, chatwright/platform-emulators/telegram/server-api, chatwright/platform-emulators/whatsapp, chatwright/playground, chatwright/scenario-authoring, chatwright/scenario-authoring/scenario-composition, chatwright/state-branching, chatwright/state-branching/database-state-holders |
 | [datatug-investigation-workspace](datatug-investigation-workspace.md) | Specifying | 2026-07-22 | alex | chatwright/developer-tooling/datatug-integration |
 | [engine-sdk-repo-split](engine-sdk-repo-split.md) | Approved | 2026-07-23 | alex | — |

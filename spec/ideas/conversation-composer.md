@@ -3,7 +3,7 @@ format: https://specscore.md/idea-specification
 status: Draft
 ---
 
-# Idea: Conversation builder — author conversations by performing them
+# Idea: Conversation Composer — author conversations by performing them
 
 **Status:** Draft
 **Date:** 2026-07-24
@@ -29,13 +29,13 @@ the typing from final text and a tempo curve, because recordings carry
 only sent messages, not how they were composed. The Studio direction is
 one conversation surface with capability-flagged entry points
 (studio-ui-surfaces idea in chatwright/studio): watch (Player) and try
-(Playground). The founder's feature (2026-07-24) adds the third: build.
+(Playground). The founder's feature (2026-07-24) adds the third: compose. Naming (founder 2026-07-24): **Composer** — "Builder" is deliberately reserved for possible future bot building (code implementation). The chat input area component is being renamed away from "composer" to avoid collision (candidate: message bar).
 
 ## Recommended Direction
 
-### The builder is the third door of the one surface
+### The Composer is the third door of the one surface
 
-**Player = watch. Playground = try. Builder = perform.** One chat pane;
+**Player = watch. Playground = try. Composer = perform.** One chat pane;
 underneath it, **one composer per actor** — two for a private chat, more
 for a group chat, laid out in a single row when space allows (2–3
 actors), stacked otherwise. **TAB / SHIFT+TAB cycles the focused
@@ -50,7 +50,7 @@ Two performance modes, freely mixed per actor:
 
 ### The recording gains a composition track
 
-Today's journal records *what was sent*. The builder records *how it was
+Today's journal records *what was sent*. The Composer records *how it was
 composed*: an optional, additive **composition track** per outbound
 entry — an ordered list of composer events with timing (founder's
 sketch, refined):
@@ -98,7 +98,7 @@ doing its job inside a tool.
 
 ### Recordings become tweakable — with provenance honesty
 
-The builder doubles as the **recording editor**: load any bundle, adjust
+The Composer doubles as the **recording editor**: load any bundle, adjust
 texts, timings, pauses, keyboards; re-export. This is powerful and
 dangerous — an edited recording must never masquerade as test evidence
 (principle 3, decision 0006). Provenance is therefore **two-level**
@@ -144,16 +144,16 @@ The Player displays the provenance badge always.
   same composition track.
 - **Synthesised typing only (no composition track).** Rejected: authored
   rhythm is the design signal; synthesis flattens exactly what the
-  builder exists to craft.
+  Composer exists to craft.
 - **A separate authoring app.** Rejected: one conversation surface,
-  three doors — the builder shares the pane, the journal and the
+  three doors — the Composer shares the pane, the journal and the
   recording format.
 
 ## MVP Scope
 
 1. This spec agreed; composition-track wire sketch reviewed against the
    sdk-go model (additive optional field + provenance in metadata).
-2. Builder slice 1 in the Studio: two performed actors, one private
+2. Composer slice 1 in the Studio: two performed actors, one private
    chat, per-actor composers with TAB cycling, live typing capture
    (text/pause/backspace/clear/send), the bot-message keyboard editor
    (rows/buttons add-delete, Telegram grid first), export with
@@ -202,6 +202,6 @@ The Player displays the provenance badge always.
 - Can the desired-state layer compile into assertions automatically
   ("generate a test from this edit")?
 - Should authored keyboards be reusable presets (a keyboard library per
-  builder project) or always per-message?
+  Composer project) or always per-message?
 
 *This document follows the https://specscore.md/idea-specification*
