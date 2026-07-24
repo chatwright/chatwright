@@ -15,6 +15,12 @@ An offline interface in which developers control human actors, keep several
 conversations open, inspect live evidence and record useful interactions while a
 Platform Emulator connects those actions to real local bots.
 
+## Contents
+
+| Child | Description |
+|---|---|
+| [in-browser-test-runs](in-browser-test-runs/README.md) | Run deterministic and AI-goal test scenarios against a bot entirely in the Studio Playground, with selectable AI providers (bring-your-own-key, local models, Chatwright cloud) and an optional chatwright server companion for local-model proxying, metrics and DTQL side-effect verification. |
+
 ## Problem
 
 Manual bot testing usually requires a real account, internet access, a deployed
