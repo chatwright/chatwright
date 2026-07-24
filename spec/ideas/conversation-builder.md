@@ -1,11 +1,11 @@
 ---
 format: https://specscore.md/idea-specification
-status: Specifying
+status: Draft
 ---
 
 # Idea: Conversation builder — author conversations by performing them
 
-**Status:** Specifying
+**Status:** Draft
 **Date:** 2026-07-24
 **Owner:** alex
 **Promotes To:** —
