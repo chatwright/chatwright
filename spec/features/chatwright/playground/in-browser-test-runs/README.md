@@ -113,9 +113,24 @@ so Studio can detect it; an AI-proxy endpoint that forwards proposals to a
 configured local backend and records per-call metrics (latency, tokens,
 structured-output mode); and a side-effect endpoint that evaluates a scenario's
 DTQL assertions via dalgo against the configured database. It sends the CORS and
-Private-Network-Access response headers the Studio origin requires. Being
-host-side infrastructure rather than a runtime feature, it needs no TypeScript
-twin.
+Private-Network-Access response headers the Studio origin requires, accepting two
+origins out of the box — `https://chatwright.dev` (the hosted UI) and
+`http://chatwright.localhost` (the locally-served UI) — and any origin added by
+configuration. Being host-side infrastructure rather than a runtime feature, it
+needs no TypeScript twin.
+
+### Local-first offline mode
+
+The companion can also serve the Studio UI itself, so the whole tester runs with
+the network unplugged. The Studio build publishes the built UI as a versioned
+`studio-ui-<version>.zip` release asset; the server downloads it once into a
+local cache, verifies its integrity, and serves it at `http://chatwright.localhost`.
+Because the UI and the API are then the same origin, the cross-origin dance does
+not apply to the locally-served UI at all. Fully offline means the locally-served
+UI plus a local model (proxied by the server) plus local DB verification (via
+dalgo) — no internet on any path. The first UI fetch needs the network; every run
+after the cache is populated does not. The server records which UI version it is
+serving, and refuses a UI whose version is incompatible with its own contract.
 
 ### Declared verifiability of assertions
 
@@ -250,6 +265,24 @@ Then a background daemon serves on the fixed local address with a PID file and a
 And `chatwright server stop` terminates it
 And `chatwright server restart` cycles it
 And `chatwright server serve` runs the same server in the foreground
+
+### AC: companion-accepts-both-default-origins
+
+Scenario: The companion server works with the hosted and the local UI out of the box
+Given `chatwright server` with no origin configuration
+When a request arrives from `https://chatwright.dev` and, separately, from `http://chatwright.localhost`
+Then both receive the CORS and Private-Network-Access headers allowing the call
+And an operator can add further allowed origins by configuration
+
+### AC: companion-serves-cached-ui-offline
+
+Scenario: The companion serves the Studio UI so the tester runs offline
+Given the Studio UI is published as a versioned release asset
+When the companion server is asked to serve the UI
+Then it downloads the asset once into a local cache and verifies its integrity
+And it serves the UI at `http://chatwright.localhost` same-origin with its API
+And once cached, the UI, a local model and DB verification run with no network
+And a UI whose version is incompatible with the server contract is refused
 
 ### AC: engine-parity-across-runtimes
 
