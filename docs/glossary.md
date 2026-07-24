@@ -90,6 +90,11 @@ private backstage. Decisions referenced below live in
 | **trace** | The technical record (HTTP requests, API calls, events), correlated to the transcript by stable IDs. |
 | **metrics** | First-class measurements (latency, sizes, counts; tokens next) from message to run scope. |
 | **fidelity labels** | Declared, never implied: `HTTP`/`direct` (transport), `faithful`/`logical` (platform behaviour), supported/partial/unsupported (coverage). "Fidelity is declared" is doctrine — no "full platform" claims. |
+| **AI-judged assertion** | A scenario assertion whose oracle is a model reading recorded evidence, not a pattern match. The judge interprets evidence and never produces, edits or overrides it (principle 3). Feature: `ai-driven-testing/ai-judged-assertions`. |
+| **judgement record** | The evidence one AI-judged assertion adds to a bundle: verdict, rationale, resolved evidence window, judge identity, cassette mode and usage. The only thing a judge is ever allowed to write. |
+| **verdict** | An AI-judged assertion's outcome, always one of four string constants: `passed`, `failed`, `inconclusive`, `unavailable`. The first two are decisive; the last two are *undecided* and never count as a pass. Studio renders both undecided values as *unverified*. |
+| **judged** vs **verified** | An outcome supported only by a model's opinion is labelled **judged**; **verified** is reserved for deterministic evidence. Declared fidelity applied to evaluation. |
+| **cassette** | A checked-in, human-readable JSON record of provider interactions (actor proposals, judgements) keyed by provider config + canonical request, replayed in CI at zero token cost. A separate artefact — never embedded in a bundle. |
 
 ## Run bundles and playback
 

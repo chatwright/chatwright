@@ -15,6 +15,12 @@ Persona- and goal-driven actors that explore conversational paths, respect
 constraints and produce evidence-linked outcome and UX evaluations over the same
 runtime used by deterministic tests.
 
+## Contents
+
+| Child | Description |
+|---|---|
+| [ai-judged-assertions](ai-judged-assertions/README.md) | Semantic assertions decided by a model over already-recorded evidence: closed verdict vocabulary, cassette-backed reproducibility, budget accounting and runtime parity |
+
 ## Problem
 
 Natural-language flows may reach the same valid outcome through many wordings and
@@ -35,7 +41,9 @@ speaker, impatient customer—are scenario data, not hard-coded product types.
 Goal completion may use deterministic state, a milestone, an application event,
 an observed message, a custom evaluator or an AI judgement. Deterministic
 evidence is preferred when available but is not mandatory for inherently
-conversational outcomes.
+conversational outcomes. The concrete contract for the AI-judged case—verdict
+vocabulary, evidence window, reproducibility and budget—is
+[ai-judged-assertions](ai-judged-assertions/README.md).
 
 ### Evaluation and exploration
 
