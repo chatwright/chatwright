@@ -77,6 +77,25 @@ track keep today's synthesised behaviour; the field is optional and
 additive (a v1-compatible extension via the sdk-go wire model + schema
 drift flow, not a v2).
 
+### The message editing panel — buttons are authored, not typed
+
+Clicking any authored message opens an **editing panel in the right rail**
+(the Player's existing right-panel pattern). For performed bot messages it
+is a **keyboard editor**: add rows, add buttons to a row, delete buttons,
+reorder; each button carries a label and an action id (callback data).
+Authored buttons become real journal actions — so replay renders them,
+and the performance can continue *through* them: the author clicks the
+authored button to act out the user's choice, and (on Telegram) a
+follow-up edit of the bot message plays out exactly as a real bot would.
+
+**The editor is platform-honest, driven by the capability data**: on a
+Telegram actor it offers the full inline-keyboard grid; on a WhatsApp
+actor it enforces the real limits (three reply buttons, or list mode) and
+says why — the same capability keys that power the compat tables and the
+manifests now gate the authoring UI. Designing a conversation teaches the
+platform's constraints as you hit them, which is the knowledge platform
+doing its job inside a tool.
+
 ### Recordings become tweakable — with provenance honesty
 
 The builder doubles as the **recording editor**: load any bundle, adjust
@@ -119,7 +138,8 @@ Provenance is the non-negotiable core of this idea.
    sdk-go model (additive optional field + provenance in metadata).
 2. Builder slice 1 in the Studio: two performed actors, one private
    chat, per-actor composers with TAB cycling, live typing capture
-   (text/pause/backspace/clear/send), export with
+   (text/pause/backspace/clear/send), the bot-message keyboard editor
+   (rows/buttons add-delete, Telegram grid first), export with
    `provenance: performed`.
 3. Player consumes the composition track for typed-in replay in the
    respective composer (falls back to synthesis when absent).
@@ -160,5 +180,7 @@ Provenance is the non-negotiable core of this idea.
   recorded run with a performed intro)?
 - Do live-actor (bot) messages in a performed session keep
   `provenance: performed` for the whole bundle, or per-entry attribution?
+- Should authored keyboards be reusable presets (a keyboard library per
+  builder project) or always per-message?
 
 *This document follows the https://specscore.md/idea-specification*
