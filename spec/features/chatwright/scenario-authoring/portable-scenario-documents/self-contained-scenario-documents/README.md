@@ -94,7 +94,7 @@ Top-level members:
 | `id`, `version`, `title` | yes | The scenario's stable identity, its own revision, its one-line summary |
 | `description` | no | Prose for a reader |
 | `requires` | no | Capability strings a runner must support |
-| `fidelity` | yes | `endpointProfile`, `transport`, `environment`, `dataSensitivity` |
+| `fidelity` | yes | `endpointProfile`, `environment`, `dataSensitivity` |
 | `platform` | yes | Platform id (`telegram`) |
 | `chats` | yes | Declared chats; exactly one in v1 |
 | `bot` | yes | The bot under test: how it is reached, and its roster identity |
@@ -121,7 +121,7 @@ declaration, not two:
 | Member | Purpose |
 |---|---|
 | `id`, `name` | Roster actor id and display name |
-| `transport` | `http` or `iframe` (the two bot-protocol transports), or `direct` for the headless-engine profile |
+| `transport` | `http` or `iframe` (the two bot-protocol transports), or `direct` for the headless-engine profile. Required with `url`, forbidden with `exampleBot` |
 | `delivery` | `http` only: `webhook` (the emulator pushes to `url`) or `polling` (the bot long-polls the emulator's `getUpdates`) |
 | `url` | The bot's webhook URL, or the iframe `src` |
 | `headers` | Optional request headers for `webhook` delivery; each value is a secret reference |
@@ -132,6 +132,24 @@ and for `http` + `webhook`, and forbidden for `http` + `polling`—a polling bot
 needs no inbound address at all, which is what makes "point Chatwright at Listus
 Bot" expressible: the operator points the bot's Bot API base URL at the
 emulator, and the document declares nothing about the bot's own address.
+
+**Transport is authored only where an author can know it.** With `url` the
+author knows the transport and declares it. With `exampleBot` the runtime wires
+its own example however it likes, so the document declares no transport and the
+*result* records the one actually used. Fidelity is declared in the result
+either way; duplicating a transport label into `fidelity` would only create a
+member that can disagree with `bot`.
+
+**Today no bot transport is supported by both runtimes**, and that is recorded
+rather than wished away: `docs/runtime-parity.md` has remote HTTP bots as
+"⛔ Blocked" in `runtime-ts` (a page has no inbound server surface) and iframe
+bots as "➖ N/A by design" in `runtime-go`. So a `url` document is executable in
+exactly one runtime today and the other MUST refuse by naming the unsupported
+transport—never produce a different verdict, never approximate. `exampleBot`
+is consequently the only transport-neutral endpoint, which is what makes the
+greetbot document usable as the cross-runtime conformance fixture. When a relay
+closes the `runtime-ts` HTTP gap (research item I-68), `url` documents become
+transport-neutral too with no change to this format.
 
 **There is no bot-token member, deliberately.** The Telegram emulator records the
 token from the `/bot<token>/<method>` request path but never validates it, so
@@ -228,8 +246,6 @@ and its environment is not a result (principle 4):
 - `endpointProfile`—`platform-emulated` or `headless-engine`, the vocabulary of
   decision 0008 and `sdk.EndpointProfilePlatformEmulated`. Evidence is never
   interchangeable across profiles.
-- `transport`—`http`, `iframe` or `direct`, reusing `CHATWRIGHT.md`'s existing
-  `transport` values plus `direct` for the headless profile.
 - `environment`—`dev`, `test`, `production` or `unknown`, the vocabulary the
   sensitive-data-redaction idea fixed (founder, 2026-07-25). A document's
   explicit declaration is the most authoritative source; below it sit a
@@ -418,7 +434,6 @@ are the Go values verbatim.
   "requires": ["ai-goal", "exampleBot:greetbot"],
   "fidelity": {
     "endpointProfile": "platform-emulated",
-    "transport": "http",
     "environment": "dev",
     "dataSensitivity": "synthetic"
   },
@@ -429,8 +444,6 @@ are the Go values verbatim.
   "bot": {
     "id": "greetbot",
     "name": "GreetBot",
-    "transport": "http",
-    "delivery": "webhook",
     "exampleBot": "greetbot"
   },
   "cast": [
@@ -513,13 +526,14 @@ are the Go values verbatim.
 ```
 
 Point it at a real deployed bot instead of the bundled example by replacing
-`bot` and `fidelity`, and nothing else:
+`bot` and `fidelity`, and nothing else. Note what this costs: the document now
+names a transport, so it becomes executable in `runtime-go` only until the
+`runtime-ts` HTTP gap closes, and `runtime-ts` must refuse it by name.
 
 ```json
 {
   "fidelity": {
     "endpointProfile": "platform-emulated",
-    "transport": "http",
     "environment": "test",
     "dataSensitivity": "synthetic"
   },
@@ -565,13 +579,24 @@ And no Go or TypeScript source was written or rebuilt to run it
 ### AC: same-document-same-verdict-in-both-runtimes
 
 Scenario: One document, two runtimes, same verdict
-Given the greetbot document as a shared conformance fixture
+Given the greetbot document as a shared conformance fixture, whose `exampleBot`
+endpoint names no transport and is therefore transport-neutral
 When the Go runtime and the TypeScript runtime each parse and resolve it
 Then both produce byte-identical resolved run descriptions
 And executing it against the same recorded provider evidence yields the same
 verdict and the same verification detail string in both
 And any deviation is recorded in `docs/runtime-parity.md` with its reason and
 proof link
+
+### AC: unsupported-transport-is-refused-by-name
+
+Scenario: A runtime meets a bot transport it cannot provide
+Given a document whose `bot` declares `transport: "http"` with a `url`
+When the TypeScript runtime, which has no inbound server surface, resolves it
+Then it refuses naming the unsupported transport and the runtime-parity row
+And it does not fall back to another transport, approximate the endpoint, or
+report any verdict
+And the same refusal shape applies to `runtime-go` given `transport: "iframe"`
 
 ### AC: inline-secret-is-rejected
 
@@ -717,6 +742,12 @@ And the worked example in this feature validates against that schema
 - Is `polling` delivery honest enough for a `production` bot? The operator has
   to repoint the bot's Bot API base URL, which is a real configuration change to
   a running system, and nothing in the document can prove it happened.
+- Should a document be able to declare *several* acceptable transports for one
+  bot—the same bot reachable at an HTTPS webhook and as an iframe page, as
+  greetbot already is—so that one file stays executable in both runtimes while
+  the transport gap exists? It would make the parity claim broader immediately,
+  at the cost of a document asserting an equivalence between two endpoints that
+  nothing verifies.
 
 ---
 *This document follows the https://specscore.md/feature-specification*
