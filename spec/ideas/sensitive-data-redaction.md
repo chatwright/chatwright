@@ -174,12 +174,18 @@ Two costs this incurs, both product decisions rather than cryptographic ones:
   hostnames and timing are all inferences about a business. The plaintext envelope
   needs an explicit field list, not a "everything except the body" default.
 
-Key management is where schemes like this fail, and it is not a detail: a key
-derived from the Sneat sign-in is one Cloud could also derive, which is not
-end-to-end; a genuinely user-held key means a lost key is lost bundles with no
-recovery, and sharing with a colleague—or with an AI agent dispatched to fix the
-bug, which the north-star loop requires—means wrapping the content key per
-recipient.
+**The key is genuinely user-held** (founder, 2026-07-25)—never derived from the
+Sneat sign-in, because a key Cloud can derive is a key Cloud can use, and then "we
+structurally cannot read it" is false and the whole reason to build this for
+production bundles evaporates. The Playground's BYOK key is the working precedent:
+held client-side, never transmitted.
+
+The costs are real and must be designed for, not discovered: a lost key is
+permanently lost bundles with no recovery path, a second device needs the key
+transferred, and sharing—with a colleague, or with an AI agent dispatched to fix
+the bug, which the north-star loop requires—means wrapping the content key per
+recipient. None of that is optional work; it is what user-held keys cost, and the
+alternative was a weaker guarantee dressed up as a strong one.
 
 **Verification, because a redaction pipeline you cannot check is a liability.** A
 bundle declares which policy was applied, so a bundle carrying *no* declaration is
@@ -280,13 +286,14 @@ matchers and assertions still resolve on replay.
   `production` label, and therefore owns the redaction default.
 - Should a `production` run require a second, explicit confirmation rather than
   just a declaration?
-- **Key management for decision 6**, which is where such schemes usually fail: is
-  the content key derived from the Sneat sign-in — convenient, recoverable, but
-  derivable by Cloud too, so not end-to-end — or genuinely user-held, meaning a
-  lost key is permanently lost bundles?
-- How is an encrypted bundle shared, given the north-star loop requires an AI agent
-  to *read* one? Per-recipient key wrapping is the standard answer and it makes
-  revocation and agent access first-class design work, not a footnote.
+- How is an encrypted bundle shared, given the key is user-held and the north-star
+  loop requires an AI agent to *read* one? Per-recipient key wrapping is the
+  standard answer, which makes revocation and agent key custody first-class design
+  work rather than a footnote.
+- Is there any recovery path for a lost user-held key, or is permanent loss the
+  accepted and documented outcome? An escrow would restore recoverability at the
+  cost of the guarantee just chosen, so "none" is the consistent answer — but it
+  needs saying out loud, in the UI, before the first bundle is written.
 - Exactly which fields sit in the plaintext metadata envelope? Scenario names and
   internal bot hostnames are business inferences, so this needs an explicit
   allow-list rather than "everything except the body".
