@@ -58,7 +58,7 @@ guards) → act (scenario API) → record outcome → repeat`, with deterministi
 stop via `goal.Budgets` (steps, wall duration via injected clock, repeated
 failures) and non-progress detection (N consecutive invalid or no-effect
 proposals). Every iteration appends a structured loop event (observation seq,
-proposal, validation verdict, action result, usage) — the raw material of the
+proposal, validation freshness, action result, usage) — the raw material of the
 report.
 
 ### Report

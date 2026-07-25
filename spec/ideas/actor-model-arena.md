@@ -24,7 +24,7 @@ Studio, hosted).
 
 The evidence pipeline already records everything a benchmark needs: every
 actor.LoopEvent carries per-proposal latency, token usage, model id,
-validation verdict and action outcome; every campaign.Report carries task
+validation freshness and action outcome; every campaign.Report carries task
 outcomes and stop reasons; every run serialises to a replayable bundle. A
 model comparison is therefore the same goal × same bot run across N
 providers, one bundle per cell, plus a comparator that reads bundles and

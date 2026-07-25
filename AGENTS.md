@@ -46,7 +46,7 @@ don't edit unilaterally.)
 - Docs use British English; Go code/comments may use American English; never
   mixed within a file.
 - JSON artefacts (run bundles, cassettes, reports) carry human-readable
-  string constants, never integer enums; in Go, kind/direction/verdict types
+  string constants, never integer enums; in Go, kind/direction/freshness types
   are string types.
 - Go: `gofmt` clean, `go vet ./...`, `go test -race ./...` before pushing.
 - Contributions: DCO sign-off — see [CONTRIBUTING.md](CONTRIBUTING.md).
