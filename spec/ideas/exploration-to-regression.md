@@ -27,8 +27,22 @@ cassette key is an **implicit, total, unnamed assertion over the entire
 conversation state**. Nothing declares what mattered; everything matters
 equally.
 
-The founder identified the consequence (2026-07-25): a bot that renders a live
-exchange rate, or any date or time, in a message or a button label produces a
+**The motivating example is already in this codebase, and nothing is wrong with
+the bot.** `runtime-go/examples/greetbot` labels its language button `English`.
+The public `chatwright/greetbot` repo's shared model labels it `English` too—but
+its Telegram adapter renders `English (1)`, deliberately, spelling out the digit
+that types the same pick so a tap and a typed reply agree on numbering
+(`telegram/bot.js`: *"purely how this adapter draws buttons"*). The arena
+scenario's success criteria say *click the action labelled exactly "English"*.
+
+So the same bot, with identical semantics, is unrunnable against its own
+published adapter—because the scenario bound to **rendered text** instead of to
+the action's identity. No regression, no bug, no volatile data: just one adapter
+drawing a label differently. That is the whole problem in one case, and
+`contains: "English"` survives it while `exact` on rendered text does not.
+
+The founder identified the general consequence (2026-07-25): a bot that renders a
+live exchange rate, or any date or time, in a message or a button label produces a
 different prompt tomorrow, so the key changes, so replay is a cache miss—a
 failure reported as `ErrCassetteCacheMiss` rather than anything a reader can act
 on. Because `History` carries N previous loop events, one volatile value poisons
