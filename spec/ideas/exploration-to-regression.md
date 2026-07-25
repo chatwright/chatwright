@@ -82,24 +82,38 @@ when the UI or the callback data changes and the test fails—the human adjusts 
 matcher **from the test report** and re-runs with the corrected matching. Three
 things follow, and they are requirements rather than niceties:
 
-1. **A failure must be repairable from what it reports.** A matcher that fails to
-   resolve has to surface the matcher that failed *and* the actions that were
-   actually available, with their visible and hidden attributes, or the reader
-   cannot write the correction without going and reading the journal by hand.
-2. **Correcting must be cheap to validate, then real to confirm.** A corrected
-   matcher can be checked instantly against the captured failing journal—does it
-   now resolve to exactly one action?—before any re-run. The re-run itself then
-   goes against the current bot, because the bot changing is what broke the
-   matcher in the first place.
+1. **The report's first job is triage, not blame.** When a bot message matches no
+   expected action, the reader has to answer one question: *is the bot actually
+   broken, or was the matcher too strict?* The report therefore presents the
+   actions that really were available with **both** their titles and their hidden
+   data, because that is precisely the evidence that separates "this flow is
+   gone" from "the label was reworded" or "the callback data gained a version
+   suffix". A report that shows only the failure decides nothing.
+2. **Correcting is cheap to validate, then real to confirm.** A corrected matcher
+   can be checked instantly against the captured failing journal—does it now
+   resolve to exactly one action?—before any re-run. The re-run itself then goes
+   against the current bot, because the bot changing is what broke the matcher in
+   the first place.
 3. **Re-synthesis must never clobber a human correction.** This directly
    constrains the re-runnable synthesis above: every matcher carries its origin
    (synthesised or human-authored), and a later synthesis pass leaves
-   human-authored matchers alone. Without that rule, the two capabilities fight
+   human-authored matchers alone. Without that rule the two capabilities fight
    each other and the human silently loses.
 
-A correction made in a report is only real once it lands back in the scenario
-artefact in the repository. A fix that lives only in a UI session is a fix that
-gets made again next week.
+**The runner owns the scenario and its store; the UI is a view and a command
+surface over the runner.** The UI does not write scenarios. It tells the runner
+"replace this exact match with this regular expression"; the runner applies the
+change, persists it through whatever store backs that scenario, re-runs, and
+returns the next report. Where a scenario lives—local file, git, a Cloud
+service, a user's own storage—is a store implementation detail and must not leak
+into the repair loop, the report format or the UI. Assuming a git checkout would
+quietly make the loop unusable for exactly the hosted cases it most needs to
+serve.
+
+The same command surface serves a non-human operator: an agent triaging a failed
+run makes the identical decision through the identical runner API. That matters
+for the north-star loop—find a bug, dispatch an agent, verify the scenario
+passes—but the repair loop is worth building for the human case alone.
 
 There is no universal stability ordering to encode. Callback data is *not*
 inherently stable—it can carry timestamps, versions or nonces—so choosing a
@@ -183,8 +197,8 @@ fails, with a readable reason, when the flow is genuinely broken.
 | Should-be-true | The exactly-one-action gate catches over-loose regexes | Deliberately synthesise a too-loose matcher; confirm the gate rejects it against the recorded journal |
 | Might-be-true | Record-twice-and-diff earns its cost as a volatility signal | Compare matcher quality with and without the diff on the same runs; drop it if judgement alone suffices |
 | Might-be-true | AI matchers stay rare enough to keep regression runs effectively deterministic | Count deterministic vs AI matchers across the first real scenarios; if AI matchers dominate, the approach needs rethinking |
-| Should-be-true | A failing matcher can be corrected from the report alone, without opening the journal | Break greetbot's keyboard, hand the founder only the report, and see whether the correction is writable from what it shows |
-| Should-be-true | Repairing in the UI and landing the fix in the repository is one continuous act, not two | Walk the full loop once — fail, correct in the report, re-run, commit — and count the manual steps |
+| Must-be-true | The report lets a reader distinguish "the bot is broken" from "the matcher was too strict" without opening the journal | Break greetbot's keyboard, then separately just reword a label; hand the founder only the reports and see whether each is correctly triaged |
+| Should-be-true | The repair loop is store-agnostic — the same UI and report work over a local file, git and a hosted store | Walk the loop once against a local file and once against a hosted store; the report format and UI actions must be identical |
 
 ## SpecScore Integration
 
@@ -219,11 +233,10 @@ fails, with a readable reason, when the flow is genuinely broken.
   avoids synthesising matchers nobody will review.
 - Should normalised-text comparison be the only default, or should an assertion
   be able to declare presentation-sensitivity from day one?
-- How does a correction made in the test report reach the repository — does the
-  report emit a patch to the scenario file for the human to commit, does it write
-  the file directly when run locally, or does it open a pull request? This decides
-  whether the repair loop is usable against Cloud runs, where there is no local
-  checkout to write to.
+- What is the minimum scenario-store interface the runner needs — load, save,
+  and what else? Versioning or optimistic concurrency matters the moment two
+  people or two agents repair the same scenario, and a git-backed store answers
+  that very differently from a Firestore-backed one.
 - Is a human-authored matcher permanently locked against re-synthesis, or can a
   later pass propose a replacement for review without applying it? The lock is
   safe; the proposal is more useful, and both need the origin field either way.
