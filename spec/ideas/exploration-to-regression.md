@@ -134,6 +134,92 @@ inherently stable—it can carry timestamps, versions or nonces—so choosing a
 matcher is a judgement about a specific bot, which is precisely why it earns its
 own step rather than a preference table.
 
+### Matcher vocabulary
+
+A matcher is a triple—**field, operator, value**—since it applies to visible and
+hidden attributes alike: `{field: callbackData, op: regex, value: "^lang:"}`.
+
+Operators for v1 are **`exact`**, **`contains`** and **`regex`** (founder,
+2026-07-25). `exact` is not redundant with `regex` for three reasons that
+outlive any performance argument:
+
+- **Escaping is a correctness hazard.** Bot labels are full of regex
+  metacharacters—`50% off`, `Total (USD)`, `4.5★`, `Yes / No`. If regex is the
+  only tool, every literal must be escaped, and an unescaped `.` silently
+  matches any character. That is a matcher that is *too loose*: false pass,
+  green suite, broken bot. With `exact`, the common case cannot be got wrong.
+- **Readability is the premise.** The reason declared matchers replace a hash is
+  that a human can read and correct them. `exact: "Buy (2) items"` beats
+  `regex: "^Buy \(2\) items$"`, which must be mentally unescaped to see it is
+  just a literal.
+- **The operator is evidence.** `exact` records a belief that the value is
+  stable; `contains` records that only a fragment matters; `regex` records that
+  part varies by a known shape. An `exact` matcher that starts failing is a more
+  interesting signal than a regex that does—something presumed stable moved.
+
+`contains` earns its place on the same evidence-of-belief argument. Its looseness
+is mitigated—but not eliminated—by exactly-one resolution: the gate catches a
+matcher that is ambiguous *today*, not one that a button added next month would
+also satisfy. So synthesis should prefer `exact` where the evidence allows, and
+treat `contains` as more naturally a human choice than a synthesised default.
+
+**`startsWith` and `endsWith` are deferred**, on a real hazard rather than
+scope discipline: they are unambiguous as string operations but ambiguous in the
+author's *intent* for right-to-left text, where the logically-first character is
+displayed last. Bidirectional labels—an Arabic string carrying a Latin product
+name or a number—have a logical order that does not match the visual one, so
+"starts with" means two different things to the author and the runtime. Deciding
+which one the operator promises is a prerequisite, not a detail.
+
+That hazard generalises beyond the deferred operators. Labels can carry
+**invisible directional-control characters** (U+200E, U+200F, U+202A–U+202E), so
+an `exact` matcher written from what a human sees on screen can fail against what
+is actually in the string. Normalisation must therefore cover invisible and
+bidi-control characters, not only markup and whitespace.
+
+Regex must pin a **common subset across runtimes**. Go's `regexp` is RE2—no
+backreferences, no lookahead—while JavaScript has both, so `(?=...)` would work
+in `runtime-ts` and fail in `runtime-go`, breaking "one scenario file, two
+runtimes, same verdict" (principle 7). The validator rejects out-of-subset
+constructs at synthesis time, not at replay time in one runtime.
+
+### Testing the matcher judgement
+
+Step 2 is a judgement, so it needs its own test suite, built from hand-authored
+fixture tables rather than live recordings—controlled volatility is the point.
+Each case is the same action observed across two or more runs, and the expected
+outcome is a matcher *kind* plus a behaviour.
+
+The suite must cover all three outcomes and, most importantly, refusal:
+
+| Expected | Case |
+|---|---|
+| `exact` | stable label across runs |
+| `exact` | stable label containing regex metacharacters (`50% off (today)`) — the escaping trap |
+| `exact` | volatile label, stable callback → matches the stable *field*, not a stable substring |
+| `regex` | volatile numeric suffix (`Rate: 0.92` / `Rate: 0.94`) |
+| `regex` | volatile embedded date (`Book for 25 Jul` / `26 Jul`) |
+| `regex` | volatile callback token (`lang:en:tok_abc` / `lang:en:tok_xyz`) |
+| AI matcher | unbounded LLM-phrased label (`Sure, let's go` / `Okay, proceed` / `Right, onward`) |
+| AI matcher | localised label with no stable hidden data (`Continue` / `Продолжить`) |
+| refuse | proposed matcher resolves to two actions |
+| refuse | proposed matcher also matches a decoy action |
+| refuse | nothing stable in label or hidden data and no semantic anchor — must report "cannot synthesise, needs human" rather than emit something that will flap |
+
+Enumerable variation is *not* an AI case: weekday names are handled by
+`(Mon|Tue|…)`. The AI tier is for text that is unbounded, not merely variable.
+
+**Assert behaviour, never the regex string.** `^Rate: [\d.]+$` and
+`^Rate: \d+\.\d+$` are both correct, so string-equality assertions would make
+this suite brittle in precisely the way this idea exists to fix. Assert instead
+that the synthesised matcher resolves to exactly one action on run 1, exactly one
+on run 2, and does not match the decoy—which is the same exactly-one gate
+production needs, so harness and validator are one implementation.
+
+These tests replay judge cassettes, which is circular only in appearance: the
+judge cassette keys on a *constructed synthesis request*, not on a live bot
+conversation, so it is not exposed to the volatility problem being solved.
+
 Separate **how an action is found** from **what is claimed about it**. Match on
 whatever is stable for this bot; assert separately on what the user must see. A
 scenario matching purely on callback data would keep passing with every button
@@ -193,7 +279,10 @@ fails, with a readable reason, when the flow is genuinely broken.
   destroy the user-faithfulness the exploration's evidence rests on
 - Asserting formatting by default — markup comparison is opt-in; the default
   compares normalised text, or every styling tweak becomes a false failure
-- A matcher algebra beyond exact/regex/AI plus exactly-one resolution — richer
+- `startsWith` / `endsWith` in v1 — deferred pending a decision on what they
+  promise for right-to-left and bidirectional text; the vocabulary ships as
+  `exact`, `contains`, `regex`
+- A matcher algebra beyond those three plus exactly-one resolution — richer
   selectors can wait for a scenario that needs them
 - Auto-committing a promoted scenario — synthesis produces a proposal for a
   human or judge to approve, never a silently committed test
@@ -247,6 +336,11 @@ fails, with a readable reason, when the flow is genuinely broken.
   avoids synthesising matchers nobody will review.
 - Should normalised-text comparison be the only default, or should an assertion
   be able to declare presentation-sensitivity from day one?
+- When `startsWith` / `endsWith` arrive, do they operate on logical string order
+  (what the runtime sees) or visual order (what the author saw)? Logical is the
+  only implementable answer, which means the UI must show authors where the
+  logical start actually is for a bidirectional label, or they will write
+  matchers that look right and match nothing.
 - What is the minimum scenario-store interface both clients need beyond
   `Create`/`Get`/`List`/`Update`? Because scenarios are mutable where recordings
   are not, two people or two agents can repair the same scenario at once —
