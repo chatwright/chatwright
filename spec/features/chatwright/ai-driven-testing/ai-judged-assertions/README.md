@@ -518,14 +518,15 @@ And both outcomes are reproducible offline at zero token cost
 
 ## Open Questions
 
-- **Cassette portability mechanism.** The contract requires one cassette to
-  replay in both runtimes, which requires the judgement request to serialise
-  byte-identically in Go and TypeScript. Should the format mandate one shared
-  canonical serialisation—a field order declared in the schema, or an
-  established canonical-JSON standard—or should each runtime record its own
-  cassette with
-  parity proven only at the verdict level—accepting two fixture files per
-  scenario?
+- ~~**Cassette portability mechanism.**~~ **ANSWERED** (founder, 2026-07-25):
+  one shared canonical serialisation. A single checked-in cassette must replay
+  in both runtimes, so the judgement request serialises byte-identically in Go
+  and TypeScript, and that one file is itself the parity proof. The format
+  therefore owes a declared canonical encoding—field order, and explicit
+  number and string encoding rules, since Go's and JavaScript's default
+  float formatting differ and that difference is the most likely way this
+  silently breaks. A conformance fixture comparing both runtimes' serialised
+  request bytes for the same input belongs in the shipping PR.
 - **Self-judging.** The default is allowed-but-labelled (`selfJudged`), so
   comparison reports can discount it. Should the model arena instead refuse a
   judge whose model id equals the acting model id outright?
