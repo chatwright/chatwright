@@ -34,7 +34,10 @@ Updated: 2026-07-24 (Telegram editMessageText real-Telegram fidelity fix: omitti
 | AI actors (goal-driven campaigns) | ✅ Works | 📅 Planned | Key-security design = research item I-76; founder direction: bring-your-own-key (client-side, "for the brave") or chatwright.dev subscription (managed keys, "for the lazy/busy") |
 | Arena (model comparison) | ✅ Works | 📅 Planned | Follows browser AI actors |
 | Data-state assertions (DTQL) + checkpoint/branching | ✅ Works | 📅 Planned | Browser needs a bridge to app databases — expected via a local CLI bridge (idea: local-studio-continuity) |
-| AI cassette record/replay | ✅ Works | 📅 Planned | Ports as a concept together with browser AI actors |
+| AI cassette record/replay | ✅ Works | 📅 Planned | Ports as a concept together with browser AI actors. ⚠️ The Go cassette key is `sha256(providerConfig + "\x00" + json.Marshal(prompt))` — Go struct field order — so a shared cassette needs a declared canonical serialisation, not just a TS implementation |
+| Scenario documents v1: parse / validate / verify | ✅ Works | ✅ Works | Full behavioural parity: same rule codes, same JSON pointers, byte-identical verify-detail strings (asserted against the shared fixture in both runtimes). Bot transport is a declared **mirror image**: TS refuses `http` by name, accepts `iframe`; Go is the reverse — so `exampleBot` is currently the only endpoint both can serve |
+| Scenario documents v1: build / execute | ✅ Works (exampleBot + url) | ⚠️ Partial (exampleBot only) | TS Build refuses `url`-addressed bots and every non-greetbot or `model`-kind provider **by name**. TS has no cassette engine, so the greetbot fixture's cassette provider is satisfied by substituting TS's own deterministic policy provider — recorded in `BuiltScenario.providerOverrides`, never presented as "the cassette ran" |
+| Scenario documents v1: `ceiling` / `failurePolicy` enforcement | ✅ Works | 📅 Planned | TS validates the shape but has no execution-time `RunCeiling`/`FailurePolicy` semantics in its `run` package at all — a pre-existing gap, not introduced by the scenario-document work |
 
 ## How to change this file
 
