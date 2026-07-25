@@ -100,20 +100,34 @@ things follow, and they are requirements rather than niceties:
    human-authored matchers alone. Without that rule the two capabilities fight
    each other and the human silently loses.
 
-**The runner owns the scenario and its store; the UI is a view and a command
-surface over the runner.** The UI does not write scenarios. It tells the runner
-"replace this exact match with this regular expression"; the runner applies the
-change, persists it through whatever store backs that scenario, re-runs, and
-returns the next report. Where a scenario lives—local file, git, a Cloud
-service, a user's own storage—is a store implementation detail and must not leak
-into the repair loop, the report format or the UI. Assuming a git checkout would
-quietly make the loop unusable for exactly the hosted cases it most needs to
-serve.
+**The store is a shared component, and the runner and the UI are peers over it.**
+Neither owns it. The UI reads and writes the store directly—it lists scenarios,
+opens one, and saves a corrected matcher—and it starts a run by dispatching the
+runner with a scenario **ID**, not scenario content. The runner loads that
+scenario from the same store, executes it, and writes its report back.
 
-The same command surface serves a non-human operator: an agent triaging a failed
-run makes the identical decision through the identical runner API. That matters
-for the north-star loop—find a bug, dispatch an agent, verify the scenario
-passes—but the repair loop is worth building for the human case alone.
+This removes a mutation channel entirely: the UI never asks the runner to change
+a matcher. It writes the correction to the store and dispatches a run by ID. The
+runner needs no scenario-editing API at all; its surface stays "run this
+scenario, produce this report."
+
+Where a scenario lives—local file, git, a Cloud service, the user's own
+storage—is a store implementation detail and must not leak into the report
+format, the UI or the runner. The precedent already exists in the Cloud module:
+`RecordingStore` is a `Create`/`Get`/`List` seam over dalgo, wired to
+dalgo2firestore in production and dalgo2memory in tests. A scenario store is its
+sibling, with one addition—recordings are immutable, so `RecordingStore` has no
+`Update`, whereas matcher repair is an update by definition. That is exactly
+where the concurrency question below bites.
+
+Keeping both clients equal over one store is also what keeps the CLI and the
+Studio true peers rather than one being a degraded view of the other.
+
+A non-human operator is then just another store client: an agent triaging a
+failed run reads the report, writes the corrected matcher, and dispatches a run
+by ID—the same three operations the UI performs, with no special API. That
+matters for the north-star loop—find a bug, dispatch an agent, verify the
+scenario passes—but the repair loop is worth building for the human case alone.
 
 There is no universal stability ordering to encode. Callback data is *not*
 inherently stable—it can carry timestamps, versions or nonces—so choosing a
@@ -233,10 +247,11 @@ fails, with a readable reason, when the flow is genuinely broken.
   avoids synthesising matchers nobody will review.
 - Should normalised-text comparison be the only default, or should an assertion
   be able to declare presentation-sensitivity from day one?
-- What is the minimum scenario-store interface the runner needs — load, save,
-  and what else? Versioning or optimistic concurrency matters the moment two
-  people or two agents repair the same scenario, and a git-backed store answers
-  that very differently from a Firestore-backed one.
+- What is the minimum scenario-store interface both clients need beyond
+  `Create`/`Get`/`List`/`Update`? Because scenarios are mutable where recordings
+  are not, two people or two agents can repair the same scenario at once —
+  does the seam carry a version for optimistic concurrency, and does a
+  git-backed store satisfy it the same way a Firestore-backed one does?
 - Is a human-authored matcher permanently locked against re-synthesis, or can a
   later pass propose a replacement for review without applying it? The lock is
   safe; the proposal is more useful, and both need the origin field either way.
