@@ -100,7 +100,22 @@ things follow, and they are requirements rather than niceties:
    human-authored matchers alone. Without that rule the two capabilities fight
    each other and the human silently loses.
 
-**The store is a shared component, and the runner and the UI are peers over it.**
+**Record diagnostics generously; the only bound is volume, not principle**
+(founder, 2026-07-25). If a detail helps troubleshooting and is cheap, it goes
+in. So a matcher resolution records the field and operator it used, the value
+that actually matched—including **which member of a value list** matched, so
+rotted translations cannot hide behind a green scenario—any regex capture groups,
+the candidate actions that were considered and rejected, and the matcher's
+origin. A refusal records why it refused.
+
+The bound is size and sensitivity, and it already has a precedent: the Cloud
+module caps a stored bundle at `MaxStoredBundleBytes` (900 KiB, sized to
+Firestore's document limit) and rejects an oversized recording with a clear error
+rather than truncating it silently. Diagnostics inherit that posture—bounded, and
+when something *is* dropped or truncated it is **declared**, never quietly
+omitted, per principle 4. Conversation text is user data in any real bot, so
+"generous" means generous with *structure and provenance*, not with unbounded
+transcript volume.
 Neither owns it. The UI reads and writes the store directly—it lists scenarios,
 opens one, and saves a corrected matcher—and it starts a run by dispatching the
 runner with a scenario **ID**, not scenario content. The runner loads that
@@ -372,9 +387,6 @@ fails, with a readable reason, when the flow is genuinely broken.
   avoids synthesising matchers nobody will review.
 - Should normalised-text comparison be the only default, or should an assertion
   be able to declare presentation-sensitivity from day one?
-- Should a report name *which* member of a value list actually matched? Without
-  it, a scenario can silently drift to always matching the third variant while
-  the first two are dead, and nobody learns that the translations rotted.
 - When `startsWith` / `endsWith` arrive, do they operate on logical string order
   (what the runtime sees) or visual order (what the author saw)? Logical is the
   only implementable answer, which means the UI must show authors where the
