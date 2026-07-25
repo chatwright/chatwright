@@ -529,10 +529,14 @@ And both outcomes are reproducible offline at zero token cost
 - **Self-judging.** The default is allowed-but-labelled (`selfJudged`), so
   comparison reports can discount it. Should the model arena instead refuse a
   judge whose model id equals the acting model id outright?
-- **The `incomplete` exit code in CI.** The default makes an undecided
-  judgement a non-zero exit, on the grounds that a broken judge is a broken
-  test. Should the default instead be a zero exit with a warning, leaving
-  strictness opt-in?
+- ~~**The `incomplete` exit code in CI.**~~ **ANSWERED** (founder,
+  2026-07-24): an undecided judgement exits non-zero. A broken judge is a
+  broken test. The exit code stays *distinct* from an assertion failure so CI
+  can tell "the bot is broken" from "the judge is unavailable", and
+  `whenUndecided: "skip"` remains the per-assertion opt-out. Accepted
+  consequence: a CI job with no judge credential goes red until it is either
+  configured or explicitly opted out — which is the intended pressure, not a
+  side effect.
 - **Prompt-revision churn.** The judge prompt template is part of the cassette
   key, so editing it invalidates every checked-in cassette at once. Accept the
   churn, or version the template and keep old cassettes replayable against the
