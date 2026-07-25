@@ -116,6 +116,8 @@ when something *is* dropped or truncated it is **declared**, never quietly
 omitted, per principle 4. Conversation text is user data in any real bot, so
 "generous" means generous with *structure and provenance*, not with unbounded
 transcript volume.
+
+**The store is a shared component, and the runner and the UI are peers over it.**
 Neither owns it. The UI reads and writes the store directly—it lists scenarios,
 opens one, and saves a corrected matcher—and it starts a run by dispatching the
 runner with a scenario **ID**, not scenario content. The runner loads that
