@@ -157,11 +157,17 @@ before any decision is made. If classification is used at all it must be
 local-only—a capability `chatwright server` already provides.
 
 **6. Cloud stores plaintext metadata plus client-side-encrypted content, under a
-user-held key** (founder, 2026-07-25). So the question is not whether Cloud may
-keep a production, real-subject bundle, but *in what form*: a bounded plaintext
-envelope—run id, timestamp, scenario id, environment label, sensitivity mode,
-verdict, counts, durations—beside an opaque encrypted body carrying the journal,
-labels, hidden attributes and cassettes.
+user-held key** — ⏸️ **PARKED 2026-07-25, direction recorded, mechanism deferred to
+a dedicated security session** (founder: "I want later a dedicated session on
+security — for now let's focus on getting things off the ground"). Nothing below is
+settled beyond the two decisions already taken: the split shape, and the key being
+user-held rather than Sneat-derived. Do not begin implementing this section without
+that session.
+
+So the question is not whether Cloud may keep a production, real-subject bundle,
+but *in what form*: a bounded plaintext envelope—run id, timestamp, scenario id,
+environment label, sensitivity mode, verdict, counts, durations—beside an opaque
+encrypted body carrying the journal, labels, hidden attributes and cassettes.
 
 Two costs this incurs, both product decisions rather than cryptographic ones:
 
@@ -286,10 +292,18 @@ matchers and assertions still resolve on replay.
   `production` label, and therefore owns the redaction default.
 - Should a `production` run require a second, explicit confirmation rather than
   just a declaration?
+### ⏸️ Parked for the dedicated security session
+
+These belong to decision 6 and are deliberately unanswered. They are recorded so
+the session starts from a list rather than a blank page.
+
 - How is an encrypted bundle shared, given the key is user-held and the north-star
   loop requires an AI agent to *read* one? Per-recipient key wrapping is the
   standard answer, which makes revocation and agent key custody first-class design
-  work rather than a footnote.
+  work rather than a footnote. Alternatives raised and not chosen: run the agent
+  client-side where the key already is (simplest, but no hosted agent can ever read
+  a bundle), or hand the agent a scoped short-lived plaintext copy (creates the
+  plaintext this design exists to prevent).
 - Is there any recovery path for a lost user-held key, or is permanent loss the
   accepted and documented outcome? An escrow would restore recoverability at the
   cost of the guarantee just chosen, so "none" is the consistent answer — but it
