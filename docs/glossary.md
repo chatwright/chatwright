@@ -50,6 +50,8 @@ private backstage. Decisions referenced below live in
 | **fake Bot API** / **emulated platform API server** | The bot-facing half of a Platform Emulator — the endpoints the bot under test calls. Both phrasings acceptable; prefer "emulated platform API server" in public copy. |
 | **bot under test** / **system under test** | The developer's real software. Chatwright never emulates it. "System under test" is the profile-neutral term (a bot, a conversational engine, or — if promoted — an agent CLI). |
 | **endpoint profile** | The declared execution boundary of a run: platform-emulated (strongest), headless engine, or future profiles. Evidence always names its profile and is never interchangeable across profiles (decision 0008). |
+| **environment label** | Which deployment a run's bot endpoint actually was: `dev`, `test`, `production` or `unknown`. A dimension *alongside* the endpoint profile (transport), not a rename of it. An unrecognised host is `unknown` — never guessed into `dev` or `production`. |
+| **example bot** | A bot the runtime itself ships as an example (`greetbot`), nameable by a scenario document when no authorable URL exists. Not an extension point: it can never introduce third-party code into a runner. |
 | **webhook delivery** | Real HTTP delivery of platform updates to the bot's actual webhook — the strongest integration mode (decision 0003). |
 
 ## Actors and identity
@@ -66,6 +68,10 @@ private backstage. Decisions referenced below live in
 | Term | Meaning |
 |---|---|
 | **scenario** | The authored, platform-neutral description of a conversation and its assertions. Scenarios express intent; Platform Emulators own mechanics. |
+| **scenario document** | A self-contained, committable file that declares *what a scenario is* — bot endpoint, cast, parts, goal, budgets, declared fidelity, verification — executable by both runtimes with no code written. Format `https://chatwright.dev/formats/scenario-document/v1`. Never carries a secret and never carries an executable string. |
+| **scenario manifest** | The *invocation* layer: a versioned file naming *which* scenario (a registered one, or a scenario document) with the case, inputs, modes and `verifies` bindings. Format `https://chatwright.dev/formats/scenario-manifest/v1`. A manifest is optional — a scenario document runs on its own. |
+| **journal expectation** | One ordered, declarative check a scenario document makes against the journal, built from `{field, op, value}` conditions (operators `exact`, `contains`, `regex`; lists mean any-of) — the declarative form of an independent completion re-derivation. Distinct from an **action matcher**, which selects an action to act on. |
+| **secret reference** | The only way a scenario document names a credential: `{"secretRef": "<name>"}` resolving to a declared environment variable or named credential the runner holds. A literal in a secret-bearing field makes the document **rejected**, never warned about. |
 | **fragment** | A reusable, input-isolated piece of scenario invoked by path, with provenance recorded (scenario composition). |
 | **run** | One execution in one environment with one endpoint profile: an ordered sequence of parts over one continuous conversation and cast. A plain scripted test is a single deterministic part; a plain campaign is a single AI-goal part. A "test" is a deterministic run with assertions. |
 | **conversation** / **chat** | The stateful exchange inside a run. Not a synonym for scenario. |
@@ -94,6 +100,7 @@ private backstage. Decisions referenced below live in
 | **judgement record** | The evidence one AI-judged assertion adds to a bundle: verdict, rationale, resolved evidence window, judge identity, cassette mode and usage. The only thing a judge is ever allowed to write. |
 | **verdict** | An AI-judged assertion's outcome, always one of four string constants: `passed`, `failed`, `inconclusive`, `unavailable`. The first two are decisive; the last two are *undecided* and never count as a pass. Studio renders both undecided values as *unverified*. |
 | **judged** vs **verified** | An outcome supported only by a model's opinion is labelled **judged**; **verified** is reserved for deterministic evidence. Declared fidelity applied to evaluation. |
+| **data-sensitivity mode** | Whether a run touched real user data: `synthetic` (the default and the safe value) or `real-subject`. The environment label *defaults* it and never determines it — a `test` endpoint restored from a production dump is still `real-subject`. Declaring `real-subject` makes a redaction policy mandatory. |
 | **cassette** | A checked-in, human-readable JSON record of provider interactions (actor proposals, judgements) keyed by provider config + canonical request, replayed in CI at zero token cost. A separate artefact — never embedded in a bundle. |
 
 ## Run bundles and playback

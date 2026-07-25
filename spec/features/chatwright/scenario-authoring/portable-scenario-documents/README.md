@@ -16,6 +16,12 @@ owned by an application repository, invoked locally or from Rehearse, referenced
 by SpecScore and evolved without pretending arbitrary Go code can round-trip
 through a document.
 
+## Contents
+
+| Child | Description |
+|---|---|
+| [self-contained-scenario-documents](self-contained-scenario-documents/README.md) | One committed, language-neutral document that declares a bot endpoint, an AI goal with tasks and budgets, and everything else a run needs — executed by both runtimes to the same verdict with no code written. |
+
 ## Problem
 
 The Go-first authoring API is appropriate for discovering scenario runtime
@@ -40,6 +46,14 @@ chats, fixtures, reusable fragments, messages/actions, expectations,
 checkpoints, branches and data assertions directly. Support is capability-based:
 a reader rejects an unsupported construct or version explicitly rather than
 silently dropping it.
+
+That second document model now exists for the AI-goal subset as a distinct
+format, `https://chatwright.dev/formats/scenario-document/v1` — see
+[self-contained-scenario-documents](self-contained-scenario-documents/README.md).
+The manifest is neither superseded nor duplicated: the manifest says which
+scenario and what inputs, the document says what the scenario is, and a
+document runs with no manifest at all. Fragments, checkpoints and branches stay
+in registered code until they are as frozen as the goal/budget contract is.
 
 ### Canonical product ownership
 
@@ -160,6 +174,10 @@ And run evidence applies the configured redaction policy
   validated without loading application code?
 - When is the runtime model stable enough to promote actors, fragments,
   checkpoints and branches from registered code into the structured schema?
+  Answered for actors, chats, parts, goals and budgets (founder, 2026-07-25):
+  now, in
+  [self-contained-scenario-documents](self-contained-scenario-documents/README.md).
+  Still open for fragments, checkpoints and branches.
 
 ---
 *This document follows the https://specscore.md/feature-specification*
