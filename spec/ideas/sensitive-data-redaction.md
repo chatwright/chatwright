@@ -45,12 +45,27 @@ recordings are meant to be durable and portable:
   designed to be **checked into a repository**. A leak here does not sit in a
   ticket; it sits in git history, possibly public, permanently.
 
-Two existing decisions constrain the answer. The ecosystem has already rejected
-at-rest encryption as its privacy mechanism (OVDB decision: users pick a private
-repository instead; encryption design parked), so a recoverable-ciphertext scheme
-would cut against a recorded stance. And `cloud/recordings` already establishes the
-posture for a limit it cannot meet: `MaxStoredBundleBytes` rejects an oversized
-recording with a clear error rather than truncating it silently.
+One existing decision informs the answer without settling it. OVDB decided against
+at-rest encryption *as its* privacy mechanism—users pick a private repository
+instead—and parked encryption as opt-in if ever. That is OVDB-scoped and not an
+ecosystem ban, and it concerns **server-held** at-rest encryption, where the
+custodian holds the keys and therefore gains little. **Client-side encryption under
+a user-held key is a different threat model**: the custodian structurally cannot
+read the content, even when compromised. The Playground already establishes that
+pattern here—a BYOK key is held client-side and never transmitted to Chatwright
+(I-76).
+
+And `cloud/recordings` establishes the posture for a limit it cannot meet:
+`MaxStoredBundleBytes` rejects an oversized recording with a clear error rather
+than truncating it silently.
+
+**Redaction and encryption defend against different adversaries, and neither
+substitutes for the other.** Encryption protects content from anyone without the
+key—the storage provider, an attacker, a mis-shared bucket. Redaction protects
+content from everyone who is *legitimately handed the key*: the colleague on the
+ticket, the AI agent dispatched to fix the bug, the reviewer reading a committed
+cassette. A bundle can be perfectly encrypted and still expose a passport number
+to every authorised reader. Both layers are needed.
 
 ## Recommended Direction
 
@@ -113,8 +128,10 @@ requirement, not a preference. Matchers and assertions are built over recorded
 values, so blanket masking to `****` destroys the thing that makes a recording
 replayable. Each distinct sensitive value maps to a **stable token within a run**
 (`AB1234567` → `«passport:7f3a»`), preserving structure where possible so a matcher
-like `contains: "Balance: "` survives. One-way, not recoverable—consistent with the
-ecosystem's rejection of at-rest encryption.
+like `contains: "Balance: "` survives. Redaction itself is **one-way**: it removes
+what should not be visible to *any* reader, so there is nothing to recover. That is
+independent of whether the surviving content is then encrypted at rest, which
+decision 6 covers.
 
 **4. Redaction runs before matcher synthesis.** Ordering matters and getting it
 wrong is subtle: synthesise matchers over raw values and they reference strings that
@@ -139,6 +156,31 @@ sensitive.** That transmits the exact payload being protected, to a third party,
 before any decision is made. If classification is used at all it must be
 local-only—a capability `chatwright server` already provides.
 
+**6. Cloud stores plaintext metadata plus client-side-encrypted content, under a
+user-held key** (founder, 2026-07-25). So the question is not whether Cloud may
+keep a production, real-subject bundle, but *in what form*: a bounded plaintext
+envelope—run id, timestamp, scenario id, environment label, sensitivity mode,
+verdict, counts, durations—beside an opaque encrypted body carrying the journal,
+labels, hidden attributes and cassettes.
+
+Two costs this incurs, both product decisions rather than cryptographic ones:
+
+- **Cloud features that need content stop working for encrypted bundles**:
+  server-side search over transcripts, server-side replay or rendering,
+  server-side judging, any quota computed from content. Those must move
+  client-side or be declared unavailable for encrypted bundles. Silently
+  degrading them would be the worst outcome.
+- **Metadata leaks more than "metadata" suggests.** Scenario names, internal bot
+  hostnames and timing are all inferences about a business. The plaintext envelope
+  needs an explicit field list, not a "everything except the body" default.
+
+Key management is where schemes like this fail, and it is not a detail: a key
+derived from the Sneat sign-in is one Cloud could also derive, which is not
+end-to-end; a genuinely user-held key means a lost key is lost bundles with no
+recovery, and sharing with a colleague—or with an AI agent dispatched to fix the
+bug, which the north-star loop requires—means wrapping the content key per
+recipient.
+
 **Verification, because a redaction pipeline you cannot check is a liability.** A
 bundle declares which policy was applied, so a bundle carrying *no* declaration is
 treated as **unknown, never as clean**. A `scan` verb re-runs the pattern floor over
@@ -148,10 +190,15 @@ principle 4.
 
 ## Alternatives Considered
 
-- **Encrypt recordings at rest, decrypt for authorised viewers.** Lost because it
-  contradicts a recorded ecosystem decision (OVDB: no at-rest encryption; users
-  pick a private repository), and because it addresses storage while the plaintext
-  still flows through every replay, report and cassette.
+- **Server-held at-rest encryption, decrypted for authorised viewers.** Lost
+  because the custodian holds the keys, so it defends against a stolen disk and
+  little else — and it does nothing about the readers who are handed the
+  plaintext legitimately. Superseded by decision 6's client-side, user-held-key
+  model, which is a different threat model rather than a stronger version of the
+  same one.
+- **Encryption instead of redaction.** Lost on adversary mismatch: encryption
+  cannot protect content from someone holding the key, and every legitimate reader
+  holds the key. They are layers, not alternatives.
 - **Redact only on export or share.** Lost as a primary mechanism: the unredacted
   artefact exists first, which is the whole risk. Retained as a backstop.
 - **Blanket masking to a fixed placeholder.** Lost on correctness—it destroys
@@ -172,8 +219,9 @@ matchers and assertions still resolve on replay.
 
 ## Not Doing (and Why)
 
-- Recoverable or key-escrowed redaction — contradicts the recorded
-  no-at-rest-encryption stance and reintroduces a key to manage and leak
+- Reversible redaction — what redaction removes should be visible to no reader, so
+  recoverability only adds a key to manage and leak; encryption of the *surviving*
+  content is a separate layer (decision 6), not a contradiction of this
 - Remote AI classification — transmits what it is meant to protect
 - Jurisdiction-specific compliance framing (GDPR/HIPAA article mapping) — the
   mechanism should be sound first; legal mapping is a separate exercise an
@@ -231,9 +279,19 @@ matchers and assertions still resolve on replay.
   configuration, or both with one overriding the other? Whoever owns it owns the
   `production` label, and therefore owns the redaction default.
 - Should a `production` run require a second, explicit confirmation rather than
-  just a declaration — and should Cloud be allowed to refuse to *store* a
-  `production` + `real-subject` bundle at all, on the grounds that such a
-  recording is exactly what should not become durable?
+  just a declaration?
+- **Key management for decision 6**, which is where such schemes usually fail: is
+  the content key derived from the Sneat sign-in — convenient, recoverable, but
+  derivable by Cloud too, so not end-to-end — or genuinely user-held, meaning a
+  lost key is permanently lost bundles?
+- How is an encrypted bundle shared, given the north-star loop requires an AI agent
+  to *read* one? Per-recipient key wrapping is the standard answer and it makes
+  revocation and agent access first-class design work, not a footnote.
+- Exactly which fields sit in the plaintext metadata envelope? Scenario names and
+  internal bot hostnames are business inferences, so this needs an explicit
+  allow-list rather than "everything except the body".
+- Which Cloud features are declared unavailable for encrypted bundles — search,
+  server-side rendering, server-side judging — versus moved client-side?
 
 ---
 *This document follows the https://specscore.md/idea-specification*
