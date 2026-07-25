@@ -163,6 +163,36 @@ matcher that is ambiguous *today*, not one that a button added next month would
 also satisfy. So synthesis should prefer `exact` where the evidence allows, and
 treat `contains` as more naturally a human choice than a synthesised default.
 
+**`exact` and `contains` accept a list of values, meaning any-of** (founder,
+2026-07-25). This is not ergonomic sugar: it moves whole classes of case out of
+the AI tier, which is the expensive and drift-prone one. A localised label
+becomes `exact: ["Continue", "Продолжить", "Continuar"]`—deterministic, free,
+stable—where a single-value vocabulary would have forced an AI matcher.
+Variation that is *enumerable* (translations, a bot's serious/humorous phrasing
+variants, anything whose set lives in the bot's own source) belongs here, not in
+the AI tier. It also restores a symmetry: `regex` already has alternation via
+`(a|b|c)`, so lists give the literal operators equivalent power without pushing
+authors into regex and its escaping hazard.
+
+Two rules the list semantics must pin down:
+
+- **A list is always any-of, for both operators.** `contains: [a, b, c]` means
+  "contains a, or b, or c"—never "contains all of them". If all-of is wanted,
+  that is several matchers, not one list. Inconsistent list semantics between the
+  two operators would be a permanent source of misread scenarios.
+- **A list is a matching tool, never a locale assertion.** `exact: ["Continue",
+  "Продолжить"]` passes whether the bot replied in English or Russian—including
+  when the scenario set the user's locale to Russian and the bot wrongly answered
+  in English. In a scenario *about* language onboarding that is a false pass. So a
+  list finds the action; a separate assertion claims the bot used the right
+  language. This is the match/assert split again, and lists are the sharpest case
+  for why it exists.
+
+A list is also mostly **not derivable from run diffs**: two runs in one locale
+reveal one variant. Lists therefore come from human authoring or from reading the
+bot's own source, which is a real limit on record-twice-and-diff rather than a
+gap in it.
+
 **`startsWith` and `endsWith` are deferred**, on a real hazard rather than
 scope discipline: they are unambiguous as string operations but ambiguous in the
 author's *intent* for right-to-left text, where the logically-first character is
@@ -200,14 +230,20 @@ The suite must cover all three outcomes and, most importantly, refusal:
 | `regex` | volatile numeric suffix (`Rate: 0.92` / `Rate: 0.94`) |
 | `regex` | volatile embedded date (`Book for 25 Jul` / `26 Jul`) |
 | `regex` | volatile callback token (`lang:en:tok_abc` / `lang:en:tok_xyz`) |
+| `exact` list | localised label with a known translation set (`Continue` / `Продолжить` / `Continuar`) — must NOT escalate to AI |
+| `exact` list | bot's own tone variants (`Let's go` / `Onward, adventurer`) read from its source |
 | AI matcher | unbounded LLM-phrased label (`Sure, let's go` / `Okay, proceed` / `Right, onward`) |
-| AI matcher | localised label with no stable hidden data (`Continue` / `Продолжить`) |
+| AI matcher | localised label whose translation set is open-ended or unavailable |
+| refuse | list matcher used where the scenario asserts a specific locale — the locale claim belongs in an assertion, not the matcher |
 | refuse | proposed matcher resolves to two actions |
 | refuse | proposed matcher also matches a decoy action |
 | refuse | nothing stable in label or hidden data and no semantic anchor — must report "cannot synthesise, needs human" rather than emit something that will flap |
 
 Enumerable variation is *not* an AI case: weekday names are handled by
-`(Mon|Tue|…)`. The AI tier is for text that is unbounded, not merely variable.
+`(Mon|Tue|…)`, and translations or tone variants by a value list. The AI tier is
+for text that is unbounded, not merely variable—and a synthesiser that reaches
+for it on an enumerable set is failing, which is why two of the cases above
+assert the *absence* of escalation.
 
 **Assert behaviour, never the regex string.** `^Rate: [\d.]+$` and
 `^Rate: \d+\.\d+$` are both correct, so string-equality assertions would make
@@ -336,6 +372,9 @@ fails, with a readable reason, when the flow is genuinely broken.
   avoids synthesising matchers nobody will review.
 - Should normalised-text comparison be the only default, or should an assertion
   be able to declare presentation-sensitivity from day one?
+- Should a report name *which* member of a value list actually matched? Without
+  it, a scenario can silently drift to always matching the third variant while
+  the first two are dead, and nobody learns that the translations rotted.
 - When `startsWith` / `endsWith` arrive, do they operate on logical string order
   (what the runtime sees) or visual order (what the author saw)? Logical is the
   only implementable answer, which means the UI must show authors where the
