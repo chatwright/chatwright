@@ -611,6 +611,9 @@ func parseSendMessage(r *http.Request) (chatID int64, text string, markup *tgbot
 		if err = json.NewDecoder(r.Body).Decode(&p); err != nil {
 			return 0, "", nil, fmt.Errorf("sendMessage: invalid JSON body: %w", err)
 		}
+		if err = validateInlineKeyboardMarkup(p.ReplyMarkup); err != nil {
+			return 0, "", nil, fmt.Errorf("sendMessage: invalid reply_markup: %w", err)
+		}
 		return parseChatID(string(p.ChatID)), p.Text, p.ReplyMarkup, nil
 	}
 
@@ -619,9 +622,13 @@ func parseSendMessage(r *http.Request) (chatID int64, text string, markup *tgbot
 	}
 	if rm := r.FormValue("reply_markup"); rm != "" {
 		var m tgbotapi.InlineKeyboardMarkup
-		if json.Unmarshal([]byte(rm), &m) == nil {
-			markup = &m
+		if err = json.Unmarshal([]byte(rm), &m); err != nil {
+			return 0, "", nil, fmt.Errorf("sendMessage: invalid reply_markup: %w", err)
 		}
+		if err = validateInlineKeyboardMarkup(&m); err != nil {
+			return 0, "", nil, fmt.Errorf("sendMessage: invalid reply_markup: %w", err)
+		}
+		markup = &m
 	}
 	return parseChatID(r.FormValue("chat_id")), r.FormValue("text"), markup, nil
 }
@@ -643,6 +650,9 @@ func parseEditMessageText(r *http.Request) (chatID int64, messageID int, text st
 		if err = json.NewDecoder(r.Body).Decode(&p); err != nil {
 			return 0, 0, "", nil, fmt.Errorf("editMessageText: invalid JSON body: %w", err)
 		}
+		if err = validateInlineKeyboardMarkup(p.ReplyMarkup); err != nil {
+			return 0, 0, "", nil, fmt.Errorf("editMessageText: invalid reply_markup: %w", err)
+		}
 		return parseChatID(string(p.ChatID)), p.MessageID, p.Text, p.ReplyMarkup, nil
 	}
 
@@ -652,11 +662,26 @@ func parseEditMessageText(r *http.Request) (chatID int64, messageID int, text st
 	messageID, _ = strconv.Atoi(r.FormValue("message_id"))
 	if rm := r.FormValue("reply_markup"); rm != "" {
 		var m tgbotapi.InlineKeyboardMarkup
-		if json.Unmarshal([]byte(rm), &m) == nil {
-			markup = &m
+		if err = json.Unmarshal([]byte(rm), &m); err != nil {
+			return 0, 0, "", nil, fmt.Errorf("editMessageText: invalid reply_markup: %w", err)
 		}
+		if err = validateInlineKeyboardMarkup(&m); err != nil {
+			return 0, 0, "", nil, fmt.Errorf("editMessageText: invalid reply_markup: %w", err)
+		}
+		markup = &m
 	}
 	return parseChatID(r.FormValue("chat_id")), messageID, r.FormValue("text"), markup, nil
+}
+
+// validateInlineKeyboardMarkup deliberately reuses the same Telegram wire
+// type and validation rules that production bots use. A fake API that silently
+// accepts malformed button payloads makes a black-box test green while the real
+// Bot API rejects the delivery with HTTP 400.
+func validateInlineKeyboardMarkup(markup *tgbotapi.InlineKeyboardMarkup) error {
+	if markup == nil {
+		return nil
+	}
+	return markup.Validate()
 }
 
 // parseGenericChatID best-effort extracts a top-level chat_id field from a
