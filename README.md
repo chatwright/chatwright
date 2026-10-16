@@ -26,6 +26,13 @@ every idea, decision, feature and plan in [`spec/`](spec/README.md) follows
 the SpecScore specification formats and passes `specscore spec lint` with
 zero violations before it ships.
 
+## DataTug in our development toolbox
+
+[DataTug](https://datatug.app) is our flagship product within a wider
+development toolbox that includes Chatwright. A proposed workflow for
+investigating Chatwright data assertions in DataTug remains design work; it is
+not a shipped integration. See [how we build DataTug with our tools](https://datatug.app/en/under-the-hood/tools-we-built/).
+
 ## Install
 
 ```sh
