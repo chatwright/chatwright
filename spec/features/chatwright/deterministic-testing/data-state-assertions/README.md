@@ -3,7 +3,7 @@ format: https://specscore.md/feature-specification
 status: Draft
 ---
 
-# Feature: DTQL data-state assertions
+# Feature: TugQL data-state assertions
 
 > [SpecScore.**Studio**](https://specscore.studio): | [Explore](https://specscore.studio/app/github.com/chatwright/chatwright/spec/features/chatwright/deterministic-testing/data-state-assertions?op=explore) | [Edit](https://specscore.studio/app/github.com/chatwright/chatwright/spec/features/chatwright/deterministic-testing/data-state-assertions?op=edit) | [Ask question](https://specscore.studio/app/github.com/chatwright/chatwright/spec/features/chatwright/deterministic-testing/data-state-assertions?op=ask) | [Request change](https://specscore.studio/app/github.com/chatwright/chatwright/spec/features/chatwright/deterministic-testing/data-state-assertions?op=request-change) |
 **Status:** Draft
@@ -11,7 +11,7 @@ status: Draft
 
 ## Summary
 
-Run read-only DTQL queries against a named application database after a settled
+Run read-only TugQL queries against a named application database after a settled
 message/action, at a checkpoint or at branch completion. Assert the returned
 records and retain a bounded, redacted recordset as evidence so a scenario proves
 what the application stored, not only what the bot said.
@@ -24,7 +24,7 @@ failures. Application-specific database helpers can, but they duplicate query,
 normalisation, rendering and failure-reporting logic and do not transfer across
 DALgo providers.
 
-DTQL is a canonical, human-readable representation of DALgo structured queries.
+TugQL is a canonical, human-readable representation of DALgo structured queries.
 Using it as the scenario artifact lets Chatwright execute the assertion directly
 against the branch's database while DataTug can author, inspect and render the
 same query and recordset without inventing a second query language.
@@ -54,15 +54,15 @@ must be the branch's replacement handle, never the source or a sibling handle.
 An omitted holder is allowed only when exactly one query-capable database holder
 is registered. An unknown or ambiguous holder fails before query execution.
 
-### DTQL query artifact
+### TugQL query artifact
 
-The executable artifact is canonical DTQL YAML which deserialises to a read-only
+The executable artifact is canonical TugQL YAML which deserialises to a read-only
 `dal.StructuredQuery`. It may be authored inline, loaded from a scenario-owned
-file or produced from typed runtime inputs and then serialised to canonical DTQL
+file or produced from typed runtime inputs and then serialised to canonical TugQL
 before execution. The concrete query stored in evidence contains resolved
-values; the first release does not add a placeholder syntax to DTQL.
+values; the first release does not add a placeholder syntax to TugQL.
 
-Unsupported DTQL or database-provider query capabilities fail explicitly. The
+Unsupported TugQL or database-provider query capabilities fail explicitly. The
 runner must not silently fall back to scanning all records in application code
 or bypass the registered `dal.DB`.
 
@@ -82,7 +82,7 @@ every excluded field is visible in evidence and cannot affect the assertion
 secretly.
 
 On success the run may show a bounded result preview. On failure it shows the
-canonical DTQL, holder, attachment point, expected shape and bounded actual
+canonical TugQL, holder, attachment point, expected shape and bounded actual
 records. Larger results are retained as a referenced artifact when a result
 store is configured. Redaction happens before persistence or terminal display;
 truncation and redaction are both declared.
@@ -90,7 +90,7 @@ truncation and redaction are both declared.
 ### Listus MVP proof
 
 Listus stores a list as a record in the parent-scoped `lists` collection and
-stores list items inside that record's `items` field. The MVP DTQL query targets
+stores list items inside that record's `items` field. The MVP TugQL query targets
 the authenticated user's auto-created default family space and the
 `buy!groceries` list, and returns the actual list record including `count` and
 `items`.
@@ -102,22 +102,22 @@ assertion proves that:
 - its `items` contains an active item titled `milk`;
 - its stored count agrees with the item collection stored in the record.
 
-At `few-items-added`, another DTQL assertion proves that the same list record
+At `few-items-added`, another TugQL assertion proves that the same list record
 contains exactly milk, bread, eggs and apples as active items before the
 checkpoint becomes branchable. Mutation branches query the same record after
 add/re-add, mark/remove-done and selected-remove/remove-all operations.
 
-The current DTQL subset supports root collections only, while this Listus record
+The current TugQL subset supports root collections only, while this Listus record
 uses a parent-scoped collection. The Listus MVP therefore includes the smallest
-lossless DTQL/DALgo extension required to represent and execute that concrete
+lossless TugQL/DALgo extension required to represent and execute that concrete
 parent key path. It does not generalise into joins, arbitrary collection groups
 or a new path/query language.
 
 ### DataTug boundary
 
 Chatwright owns assertion scheduling, result semantics and run evidence. DALgo
-owns the structured query and DTQL serialization. DataTug is the compatible
-authoring/inspection surface for DTQL and returned recordsets; Chatwright does
+owns the structured query and TugQL serialization. DataTug is the compatible
+authoring/inspection surface for TugQL and returned recordsets; Chatwright does
 not require a DataTug daemon or shell out to the DataTug CLI in the first
 release.
 
@@ -132,14 +132,14 @@ scenario execution to another process.
 - [State branching](../../state-branching/README.md)
 - [Database state holders](../../state-branching/database-state-holders/README.md)
 - [Observability](../../observability/README.md)
-- DALgo `dtql` and query-capable database adapters
+- DALgo `tugql` and query-capable database adapters
 
 ## Acceptance Criteria
 
 ### AC: message-assertion-observes-committed-state
 
 Scenario: A Listus user adds milk
-Given a DTQL assertion attached after the add-item conversation step
+Given a TugQL assertion attached after the add-item conversation step
 When the bot response and registered application work have settled
 Then the assertion queries the current environment's registered Listus database
 And the returned list record contains an active item titled milk
@@ -149,23 +149,23 @@ And the returned list record contains an active item titled milk
 Scenario: The populated-list checkpoint is created
 Given the chat transcript claims four groceries were added
 When the `few-items-added` checkpoint assertion returns a missing or extra item
-Then checkpoint publication fails with the DTQL and actual records
+Then checkpoint publication fails with the TugQL and actual records
 And no child branch can start from that checkpoint
 
 ### AC: query-uses-branch-database
 
 Scenario: A sibling branch removes list items
 Given the assertion targets the named Listus database holder
-When its branch-completion DTQL executes
+When its branch-completion TugQL executes
 Then it reads the replacement database bound to that sibling
 And mutations from the source or another sibling are not visible
 
 ### AC: listus-parented-record-is-queryable
 
-Scenario: DTQL selects the Listus groceries list
+Scenario: TugQL selects the Listus groceries list
 Given the default family-space module key and the parent-scoped `lists`
 collection
-When the concrete DTQL query executes through `dalgo2memory`
+When the concrete TugQL query executes through `dalgo2memory`
 Then it returns only the `buy!groceries` list record for that parent
 And evidence can show its `count` and nested `items` fields
 
@@ -177,10 +177,10 @@ When failure evidence is produced
 Then it declares the query, holder, total/returned row counts and truncation
 And no configured sensitive field is printed or persisted in plaintext
 
-### AC: dtql-is-the-shared-artifact
+### AC: tugql-is-the-shared-artifact
 
 Scenario: A developer investigates a failed state assertion
-Given the run contains the concrete canonical DTQL and result schema
+Given the run contains the concrete canonical TugQL and result schema
 When the artifact is opened by a compatible DataTug surface
 Then it represents the same query Chatwright executed
 And Chatwright did not translate it through a private query language
@@ -189,7 +189,7 @@ And Chatwright did not translate it through a private query language
 
 - Should successful record previews be opt-in per assertion or enabled by
   default below a conservative row/byte limit?
-- Which stable representation should identify parent key paths in DTQL without
+- Which stable representation should identify parent key paths in TugQL without
   conflating a database path with a user-visible string?
 - When DataTug saved-query support stabilises, should Chatwright reference a
   DataTug project query by immutable digest or vendor a canonical copy into the

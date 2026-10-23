@@ -14,21 +14,21 @@ status: Specifying
 
 ## Problem Statement
 
-How might a developer author and investigate Chatwright DTQL assertions with
+How might a developer author and investigate Chatwright TugQL assertions with
 DataTug's query and recordset surfaces while keeping deterministic execution
 local to Chatwright and preserving the exact query and branch state which
 produced the evidence?
 
 ## Context
 
-Chatwright's DTQL data-state assertions already establish the critical shared
-artifact: canonical DTQL YAML representing a read-only DALgo structured query.
+Chatwright's TugQL data-state assertions already establish the critical shared
+artifact: canonical TugQL YAML representing a read-only DALgo structured query.
 Chatwright runs that query after settled message work, at a checkpoint or at
 branch completion, and captures a bounded redacted recordset. This proves that
 a bot persisted the claimed state rather than merely sending the expected text.
 
 DataTug is designed to author, render and run queries and to present recordsets.
-Its planned brokered query builder uses the same canonical DALgo AST and DTQL
+Its planned brokered query builder uses the same canonical DALgo AST and TugQL
 YAML, supports deterministic Web editing and opens a local loopback daemon
 through a one-time deep link. That creates a useful integration without
 inventing another query language or requiring DataTug inside a CI run.
@@ -44,7 +44,7 @@ recordset, with live read-only rerun offered only as an explicit second action.
 Define a versioned Chatwright data-investigation bundle which DataTug can open.
 The bundle contains:
 
-- canonical resolved DTQL and its digest;
+- canonical resolved TugQL and its digest;
 - assertion kind and expected shape;
 - bounded, redacted actual recordset plus schema/column metadata;
 - total/returned row counts and truncation declaration;
@@ -59,11 +59,11 @@ then:
 1. inspect the exact query/result/assertion difference;
 2. clone the query into a local DataTug tab and make deterministic edits;
 3. map the holder/profile to a local read-only connection and rerun explicitly;
-4. export canonical DTQL back to the scenario repository for review.
+4. export canonical TugQL back to the scenario repository for review.
 
-Edited DTQL is a new proof definition with a new digest. It cannot retroactively
+Edited TugQL is a new proof definition with a new digest. It cannot retroactively
 change the old run or turn its result green. Chatwright revalidates imported
-DTQL against its supported DALgo/provider capabilities before a later run.
+TugQL against its supported DALgo/provider capabilities before a later run.
 
 ### Transport and trust boundary
 
@@ -87,22 +87,22 @@ is read-only and opt-in; opening captured evidence never contacts the database.
 - **Open only the live query.** Rejected because the original branch may have
   been released and current data is not the evidence which failed.
 - **Store only a screenshot/table rendering.** Rejected because it loses the
-  executable DTQL and machine-comparable recordset.
+  executable TugQL and machine-comparable recordset.
 - **Let DataTug decide Chatwright assertion pass/fail.** Rejected because
   attachment order, normalization, checkpoint gating and branch context belong
   to Chatwright.
 - **Round-trip through native SQL or provider syntax.** Rejected because Listus
-  uses a document database shape and DTQL is already the portable lossless
+  uses a document database shape and TugQL is already the portable lossless
   artifact.
 
 ## MVP Scope
 
-- Versioned investigation bundle for one DTQL assertion and recordset.
+- Versioned investigation bundle for one TugQL assertion and recordset.
 - DataTug import/render without requiring a connection.
 - Local loopback handoff with one-time-code deep link.
-- Clone captured DTQL into an editable DataTug tab.
+- Clone captured TugQL into an editable DataTug tab.
 - Optional explicit read-only rerun after local connection-profile mapping.
-- Export canonical DTQL and import it into Chatwright as a reviewed scenario
+- Export canonical TugQL and import it into Chatwright as a reviewed scenario
   change.
 - Listus failure example showing the parent-scoped groceries record, expected
   items and actual nested `items`/`count` fields.
@@ -114,7 +114,7 @@ is read-only and opt-in; opening captured evidence never contacts the database.
 - Automatic live rerun when a bundle opens—the original result is evidence and
   credentials/branch state may not be available.
 - Mutating database actions—investigation is read-only.
-- Native-query-to-DTQL conversion—DTQL remains the canonical source artifact.
+- Native-query-to-TugQL conversion—TugQL remains the canonical source artifact.
 - Uploading private result rows to a hosted UI by default.
 - Editing Chatwright actor/message/branch steps in DataTug—it owns the data-query
   surface, not the conversation scenario.
@@ -124,7 +124,7 @@ is read-only and opt-in; opening captured evidence never contacts the database.
 
 | Tier | Assumption | How to validate |
 |---|---|---|
-| Must-be-true | Chatwright and DataTug round-trip canonical DTQL without semantic loss. | Import, edit/export and deserialize the Listus parent-scoped query; compare the resulting DALgo structured query. |
+| Must-be-true | Chatwright and DataTug round-trip canonical TugQL without semantic loss. | Import, edit/export and deserialize the Listus parent-scoped query; compare the resulting DALgo structured query. |
 | Must-be-true | A captured recordset is sufficient for useful first inspection when the branch database no longer exists. | Give a failed bundle to a developer without the application environment and measure whether they can explain the mismatch. |
 | Must-be-true | Opening a bundle leaks neither credentials nor unredacted fields. | Inspect the bundle, deep link, daemon requests and browser state under a configured redaction policy. |
 | Should-be-true | DataTug materially improves assertion authoring versus hand-editing YAML. | Author and refine several Listus queries through both workflows and compare time, errors and comprehension. |
@@ -134,7 +134,7 @@ is read-only and opt-in; opening captured evidence never contacts the database.
 ## SpecScore Integration
 
 - **Feature:** [DataTug integration](../features/chatwright/developer-tooling/datatug-integration/README.md)
-- **Executable query boundary:** [DTQL data-state assertions](../features/chatwright/deterministic-testing/data-state-assertions/README.md)
+- **Executable query boundary:** [TugQL data-state assertions](../features/chatwright/deterministic-testing/data-state-assertions/README.md)
 - **Evidence surface:** [Conversation observability](../features/chatwright/observability/README.md)
 
 ## Open Questions
@@ -145,7 +145,7 @@ is read-only and opt-in; opening captured evidence never contacts the database.
   flattening away useful structure?
 - Can a released `dalgo2memory` branch be retained temporarily for explicit
   rerun, and how is that retention bounded?
-- Should imported DTQL be vendored into the scenario repository or referenced by
+- Should imported TugQL be vendored into the scenario repository or referenced by
   immutable DataTug project URL and digest after saved queries stabilize?
 
 ---

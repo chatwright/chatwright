@@ -59,7 +59,7 @@ a bundle a human can replay in the player to see *why* a model failed.
   outcome (completed / gave up / stopped + reason); steps-to-goal;
   repeat consistency. Every cell links its bundle.
 - **Quality stays objective** (evidence over claims): completion measured
-  against deterministic/DTQL-verified success criteria only. AI-judge
+  against deterministic/TugQL-verified success criteria only. AI-judge
   scoring is a later, explicitly-labelled addition.
 - **Exclusion policy (founder question 2026-07-23)**: a model leaves a
   routine matrix only with a recorded, evidence-linked reason in the report

@@ -9,7 +9,7 @@ status: Specifying
 **Date:** 2026-07-22
 **Owner:** alex
 **MVP Priority:** #1
-**Promotes To:** chatwright/goal-driven-ai-testing, chatwright/goal-driven-ai-testing/goal-and-task-contract, chatwright/goal-driven-ai-testing/autonomous-exploration, chatwright/goal-driven-ai-testing/dtql-state-verification, chatwright/goal-driven-ai-testing/campaign-reporting
+**Promotes To:** chatwright/goal-driven-ai-testing, chatwright/goal-driven-ai-testing/goal-and-task-contract, chatwright/goal-driven-ai-testing/autonomous-exploration, chatwright/goal-driven-ai-testing/tugql-state-verification, chatwright/goal-driven-ai-testing/campaign-reporting
 **Supersedes:** —
 **Related Ideas:** depends_on:observation-model, extends:app-state-branching
 
@@ -30,7 +30,7 @@ discover commands and visible actions, pursue several related tasks and notice c
 inconsistent state, ambiguous behaviour and UX obstacles.
 
 A shopping-list response is not sufficient evidence by itself. Listus data is
-backed by DALgo, and DTQL can verify that the expected records exist in the
+backed by DALgo, and TugQL can verify that the expected records exist in the
 default family space belonging to the created user. Runtime identifiers such as
 application `user_id` and family `space_id` are created during the run, so the
 assertion layer needs typed, run-scoped bindings with provenance.
@@ -111,7 +111,7 @@ and `family_space`; the assertion engine resolves actual domain IDs:
 bindings:
   app_user_id:
     resolve:
-      dtql: |
+      tugql: |
         from users
         where platform_user_id = $alice_platform_user_id
         select id
@@ -119,7 +119,7 @@ bindings:
 
   family_space_id:
     resolve:
-      dtql: |
+      tugql: |
         from space_members
         where user_id = $app_user_id
           and space_type = "family"
@@ -151,7 +151,7 @@ The final report distinguishes:
 - coverage gap where reliable verification was unavailable.
 
 Each finding links to the relevant task, observations, messages/actions,
-accepted proposals, trace events, milestones and DTQL assertion evidence.
+accepted proposals, trace events, milestones and TugQL assertion evidence.
 
 ## Alternatives Considered
 
@@ -182,7 +182,7 @@ accepted proposals, trace events, milestones and DTQL assertion evidence.
 - Text input and generic visible actions with authoritative validation.
 - Step, duration, token/cost and repeated-failure budgets.
 - Progress tracking, non-progress detection and structured stop reasons.
-- DTQL checks at message-, task- or milestone-level checkpoints.
+- TugQL checks at message-, task- or milestone-level checkpoints.
 - Run-scoped resolution of application user and default family-space IDs.
 - Deterministic URL structure/information assertions and explicitly configured
   reachability checks.
@@ -197,7 +197,7 @@ accepted proposals, trace events, milestones and DTQL assertion evidence.
 - Guaranteeing exhaustive coverage from one AI campaign.
 - Depending on database branching for the first usable run.
 - Teaching the model application database schemas through unrestricted access;
-  approved DTQL assertions and resolvers define the state boundary.
+  approved TugQL assertions and resolvers define the state boundary.
 - Allowing the AI to invent authoritative success from prose without assertion
   evidence where state verification is configured.
 - Implementing many platforms, models or parallel AI actors before one Listus
@@ -211,7 +211,7 @@ accepted proposals, trace events, milestones and DTQL assertion evidence.
 |---|---|---|
 | Must-be-true | An AI actor can discover and complete Listus onboarding and shopping-list tasks from the generic Observation Model. | Run fresh-user campaigns without supplying Listus commands or callback data. |
 | Must-be-true | Runtime bindings reliably resolve the created application user and its default family space. | Repeat onboarding with new identities and deliberately test missing/ambiguous memberships. |
-| Must-be-true | DTQL catches state failures that transcript-only evaluation misses. | Inject acknowledgement-without-write and wrong-space defects and compare findings. |
+| Must-be-true | TugQL catches state failures that transcript-only evaluation misses. | Inject acknowledgement-without-write and wrong-space defects and compare findings. |
 | Must-be-true | URL assertions distinguish incorrect information from endpoint unavailability deterministically. | Seed a wrong-space URL, a reachable wrong URL and a valid timed-out URL and inspect independent phase results. |
 | Must-be-true | Budgets and non-progress detection stop loops predictably. | Exercise repeated menus, unavailable actions, timeouts and contradictory responses. |
 | Should-be-true | The same goal/task contract works for Sneat Bot with only target-specific resolvers/assertions. | Port one campaign without changing actor or runtime semantics. |
@@ -223,7 +223,7 @@ accepted proposals, trace events, milestones and DTQL assertion evidence.
 - **Umbrella feature:** [Goal-Driven AI Testing](../features/chatwright/goal-driven-ai-testing/README.md)
 - **Goal contract:** [Goal and Task Contract](../features/chatwright/goal-driven-ai-testing/goal-and-task-contract/README.md)
 - **Actor loop:** [Autonomous Exploration](../features/chatwright/goal-driven-ai-testing/autonomous-exploration/README.md)
-- **State oracle:** [DTQL State Verification](../features/chatwright/goal-driven-ai-testing/dtql-state-verification/README.md)
+- **State oracle:** [TugQL State Verification](../features/chatwright/goal-driven-ai-testing/tugql-state-verification/README.md)
 - **Deterministic assertions:** Deterministic Assertions (private, pre-announcement — not yet promoted to this public tree)
 - **URL checks:** URL Verification (private, pre-announcement — not yet promoted to this public tree)
 - **Outcome:** [Campaign Reporting](../features/chatwright/goal-driven-ai-testing/campaign-reporting/README.md)
@@ -236,7 +236,7 @@ accepted proposals, trace events, milestones and DTQL assertion evidence.
 - Which model/configuration is the first reference `AIActor`?
 - Which tasks are strict requirements versus exploratory suggestions?
 - How does the actor request clarification when the goal is contradictory?
-- Which DTQL resolvers and assertions belong to the reusable scenario versus a
+- Which TugQL resolvers and assertions belong to the reusable scenario versus a
   Listus/Sneat adapter?
 - Should controlled or disabled availability be the default for URL assertions
   in offline/local campaigns?

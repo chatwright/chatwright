@@ -24,7 +24,7 @@ Chatwright's fake Bot API.
 The pilot branches database state only. It uses `dalgo2memory`, runs sibling
 branches sequentially, registers one Listus database in the reference journey
 and separately proves a two-database holder group. New-user and existing-user
-journeys invoke the same reusable list-items fragment. Read-only DTQL assertions
+journeys invoke the same reusable list-items fragment. Read-only TugQL assertions
 after messages and at checkpoints prove what Listus persisted and attach the
 queried records to run evidence.
 
@@ -49,11 +49,11 @@ known bugs`.
   with the default family space auto-created by the Sneat auth system and
   assigned to the user rather than hidden in a pre-seeded onboarded fixture;
 - an explicit existing-user fixture which invokes the same list fragment;
-- message-level, checkpoint and branch-completion DTQL queries against the named
+- message-level, checkpoint and branch-completion TugQL queries against the named
   Listus database holder;
 - semantic record assertions over item title, done state and count, not generated
   IDs or timestamps, with bounded result previews in evidence;
-- the smallest DTQL extension needed to address Listus's parent-scoped `lists`
+- the smallest TugQL extension needed to address Listus's parent-scoped `lists`
   collection and return its nested `items` field;
 - named checkpoints `onboarding-complete` and `few-items-added`;
 - database-only evidence, lineage, fixture-specific digests and cleanup status.
@@ -86,22 +86,22 @@ Listus reference journeys
 
 list-items-modification
 ├── Add milk
-├── DTQL: show the groceries list record and assert stored active milk
+├── TugQL: show the groceries list record and assert stored active milk
 ├── Add bread, eggs and apples
-├── DTQL: assert exactly four active items and show the list record
+├── TugQL: assert exactly four active items and show the list record
 ├── Checkpoint: few-items-added
 ├── Branch: add-new-and-existing
 │   ├── Add bananas
 │   ├── Re-add milk
-│   └── DTQL: verify current deduplication/reactivation semantics
+│   └── TugQL: verify current deduplication/reactivation semantics
 ├── Branch: mark-bought-and-remove-done
 │   ├── Mark selected items bought
 │   ├── Remove done items
-│   └── DTQL: show the record and verify only untouched active items remain
+│   └── TugQL: show the record and verify only untouched active items remain
 └── Branch: remove-selected-then-remove-all
     ├── Remove selected items
     ├── Remove all remaining items
-    └── DTQL: show the record and verify its items are empty
+    └── TugQL: show the record and verify its items are empty
 ~~~
 
 The re-add branch preserves whatever behaviour the existing Listus tests and
@@ -119,7 +119,7 @@ provision that space itself or silently call the existing-user fixture.
 
 `few-items-added` contains exactly milk, bread, eggs and apples, all active. Each
 sibling begins with that semantic state, even after an earlier sibling mutates
-its own database. A DTQL assertion against the concrete list record gates
+its own database. A TugQL assertion against the concrete list record gates
 checkpoint publication; transcript text alone cannot establish this invariant.
 
 Because the checkpoint excludes emulator state, every sibling receives a fresh
@@ -131,9 +131,9 @@ checkpoint.
 
 | Repository | Responsibility |
 |---|---|
-| `chatwright/chatwright` | scenario composition, DTQL data assertions, holder registry/coordinator, runner/environment binding, evidence and public specifications |
-| DALgo | additive provider-neutral branching primitive, DTQL parent-path support and conformance harness plus `adapters/dalgo2memory`; do not widen mandatory `dal.DB` |
-| `datatug/datatug` | read-only compatibility reference for DTQL authoring/inspection; no daemon or CLI dependency in this MVP |
+| `chatwright/chatwright` | scenario composition, TugQL data assertions, holder registry/coordinator, runner/environment binding, evidence and public specifications |
+| DALgo | additive provider-neutral branching primitive, TugQL parent-path support and conformance harness plus `adapters/dalgo2memory`; do not widen mandatory `dal.DB` |
+| `datatug/datatug` | read-only compatibility reference for TugQL authoring/inspection; no daemon or CLI dependency in this MVP |
 | `sneat-co/listus` | source of truth for the parent-scoped list record and embedded-item schema; change only if an exposed query seam is required |
 | `sneat-bots` | reusable Listus scenario/fragment definitions, product fixtures and assertions, conversation actions, direct integration rung and deterministic bot/framework seams |
 | `sneat-go` | execution host for those scenarios: actual ListusBot and SneatBot profiles, profile-specific fake-auth onboarding, environment/database factories and Telegram webhook adapter |
@@ -182,7 +182,7 @@ note. Freeze semantics, not cosmetic API names: uniquely named holders,
 immutable checkpoints, fresh replacement `dal.DB` handles, all-or-none grouped
 checkpoint/branch start, reverse-order compensation, explicit unsupported
 capabilities and database-only manifests. Also freeze when message/checkpoint
-DTQL assertions execute, how they select a named holder and how a failed query
+TugQL assertions execute, how they select a named holder and how a failed query
 gates checkpoint publication. Do not add methods to `dal.DB`.
 
 ### Wave 0 contract freeze
@@ -278,7 +278,7 @@ parent invocation path, fragment source, effective inputs and qualified
 checkpoint identity. Add semantic text/action matching only where the Listus
 journey demonstrates a real need.
 
-#### Task 2A: DTQL data-state assertion runtime
+#### Task 2A: TugQL data-state assertion runtime
 
 **Model:** Terra
 **Repository:** `chatwright/chatwright`
@@ -287,9 +287,9 @@ journey demonstrates a real need.
 
 Implement the smallest provider-neutral assertion layer from the data-state
 feature: attachment after settled message/action work, checkpoint gating,
-branch-completion checks, named-holder resolution, canonical DTQL evidence,
+branch-completion checks, named-holder resolution, canonical TugQL evidence,
 bounded/redacted record previews and deterministic row normalisation. Use a fake
-DTQL executor for contract tests until Task 4 lands; do not invent a private
+TugQL executor for contract tests until Task 4 lands; do not invent a private
 query language or require a DataTug process.
 
 #### Task 3: Holder registry and group coordinator
@@ -304,7 +304,7 @@ Prove duplicate-name rejection, deterministic order, no partial publication,
 reverse cleanup, idempotent release and no application continuation after a
 partial branch failure.
 
-#### Task 4: DALgo branching and Listus DTQL contracts
+#### Task 4: DALgo branching and Listus TugQL contracts
 
 **Model:** Sol
 **Repository:** DALgo
@@ -314,9 +314,9 @@ partial branch failure.
 Place an optional branching primitive beside, not inside, mandatory `dal.DB`.
 Build a provider-neutral conformance harness around application-supplied seed,
 mutation and semantic-digest callbacks so providers need not expose generic
-record enumeration. In the same DALgo-owned lane, prove the existing DTQL and
+record enumeration. In the same DALgo-owned lane, prove the existing TugQL and
 `dalgo2memory` query behaviour against the actual Listus storage shape. Extend
-DTQL only as needed to losslessly encode a parent-scoped `CollectionRef` and
+TugQL only as needed to losslessly encode a parent-scoped `CollectionRef` and
 select the intended `buy!groceries` list record with its `count` and nested
 `items`; keep joins and arbitrary collection-group work out of scope.
 
@@ -361,7 +361,7 @@ Implement checkpoint/branch for the default serialised engine. Deep-copy record
 key parent chains and mutable byte values; create a fresh database per branch;
 cover empty state plus insert/update/delete/nested-key isolation; and return an
 explicit unsupported error for columnar/custom engines. Run the shared
-conformance harness and race tests. Add an end-to-end DTQL query case proving a
+conformance harness and race tests. Add an end-to-end TugQL query case proving a
 parent-scoped Listus-shaped record remains queryable in every fresh branch.
 
 #### Task 8: Branch application/environment binding
@@ -390,7 +390,7 @@ the deterministic direct path, create `few-items-added`, run all mutation
 siblings and prove semantic-digest isolation. Keep execution dependencies behind
 an adapter so `sneat-bots` does not import `sneat-go`. This is the fast
 diagnostic rung, not the final fidelity claim. After adding milk, execute and
-show the parent-scoped groceries-list DTQL result; gate `few-items-added` and
+show the parent-scoped groceries-list TugQL result; gate `few-items-added` and
 every mutation branch with the corresponding stored-state assertion.
 
 #### Task 10: Execute the Listus scenarios against `sneat-go`
@@ -408,7 +408,7 @@ transport. It must not copy the list scenario steps. Each new-user parent create
 its qualified `onboarding-complete`; new and existing parents for both profiles
 invoke the exact same list fragment. Assertions use visible bot behaviour plus
 semantic database digests and never reuse pre-checkpoint message handles.
-The same DTQL assertions from `sneat-bots` must run against the database
+The same TugQL assertions from `sneat-bots` must run against the database
 handle supplied by the `sneat-go` execution host; the host must not replace them
 with direct Listus facade assertions.
 
@@ -423,7 +423,7 @@ with direct Listus facade assertions.
 Integrate commits in dependency order, remove temporary replacements, run
 focused and affected suites with race detection, and repeat the complete
 scenario 20 times. Verify manifests, lineage, branch/replay mechanism, excluded
-state and cleanup evidence. Verify each concrete DTQL, selected holder, returned
+state and cleanup evidence. Verify each concrete TugQL, selected holder, returned
 record preview and assertion outcome are correlated to the triggering message or
 checkpoint. Record any retained experimental API as internal.
 
@@ -443,15 +443,15 @@ separate from delivered behaviour.
 |---|---|---|---|---|
 | 0 | Lead/architecture | Sol | baselines, contract decisions, integration map | — |
 | 1 | Composition | Terra | Chatwright fragment/provenance files and tests | Task 1 |
-| 1 | DTQL assertions | Terra | Chatwright data-state assertion files and fake-executor tests | Task 1 |
+| 1 | TugQL assertions | Terra | Chatwright data-state assertion files and fake-executor tests | Task 1 |
 | 1 | Coordinator | Sol | Chatwright holder/coordinator files and tests | Task 1 |
-| 1 | DALgo contract | Sol | DALgo optional branch contract, DTQL parent path and conformance files | Task 1 |
+| 1 | DALgo contract | Sol | DALgo optional branch contract, TugQL parent path and conformance files | Task 1 |
 | 1 | Listus behaviour | Terra | `sneat-bots` Listus actions/direct tests | Task 1 |
 | 1 | Onboarding spike | Sol | `sneat-go` ListusBot harness/onboarding tests | Task 1 |
 | 2 | Memory provider | Terra | `dalgo2memory` implementation/tests | Task 4 |
 | 2 | Runtime binding | Sol | factory/binding seam only | Tasks 3, 6, 7 |
-| 2 | Scenario definition/direct run | Terra | reusable scenario definitions, DTQL files/assertions and direct runner in `sneat-bots` | Tasks 2, 2A, 4, 5, 7 |
-| 2 | `sneat-go` execution host | Sol | adapter/harness files beside the actual ListusBot profile; no copied scenario or DTQL definitions | Tasks 2, 2A, 4, 5, 8, 9 |
+| 2 | Scenario definition/direct run | Terra | reusable scenario definitions, TugQL files/assertions and direct runner in `sneat-bots` | Tasks 2, 2A, 4, 5, 7 |
+| 2 | `sneat-go` execution host | Sol | adapter/harness files beside the actual ListusBot profile; no copied scenario or TugQL definitions | Tasks 2, 2A, 4, 5, 8, 9 |
 | 3 | Integration lead | Sol | dependency updates, final fixes and gate | all implementation tasks |
 | 3 | Documentation | Terra or Luna | docs/status files only | Task 11 |
 
@@ -468,7 +468,7 @@ onboarding defect boundary; it benefits from the strongest cross-repository
 reasoning.
 
 Use **Terra for bounded tasks after Task 1 freezes the contract**: scenario
-composition, DTQL assertion execution/evidence, Listus actions/direct tests, the
+composition, TugQL assertion execution/evidence, Listus actions/direct tests, the
 serialised memory provider and documentation. Terra should not independently
 choose competing lifecycle, query or package contracts.
 
@@ -479,8 +479,8 @@ practical first run should use Sol and Terra only rather than block on it.
 
 ## Implementation Result
 
-The database-branching foundation and non-DTQL reference journey are implemented
-on the four integration branches. The DTQL assertion gate added to this plan on
+The database-branching foundation and non-TugQL reference journey are implemented
+on the four integration branches. The TugQL assertion gate added to this plan on
 `main` remains pending, so the expanded plan is still `Executing`.
 The canonical Chatwright runtime remains under `chatwrite/`; its publishable Go
 module path is `github.com/chatwright/chatwright/chatwrite`, matching that nested
@@ -528,11 +528,11 @@ No cross-repository `replace` directive is committed. `sneat-bots` and
 - Both named checkpoints carry qualified lineage and `database-only` scope.
 - New-user and existing-user journeys invoke one list-items fragment.
 - After adding milk, the run shows the parent-scoped `buy!groceries` record and a
-  DTQL assertion proves its stored `items` contains active milk with a consistent
+  TugQL assertion proves its stored `items` contains active milk with a consistent
   count.
-- `few-items-added` and every mutation sibling are gated by DTQL stored-state
+- `few-items-added` and every mutation sibling are gated by TugQL stored-state
   assertions executed against the current branch's named database holder.
-- DTQL/result evidence is canonical, bounded, redacted and correlated to its
+- TugQL/result evidence is canonical, bounded, redacted and correlated to its
   triggering message, checkpoint or branch completion.
 - All three mutation siblings pass and each later sibling starts from the same
   four-active-item digest.
@@ -612,19 +612,19 @@ database-only and sequential, uses the default serialised dalgo2memory engine,
 and defers inGitDB, columnar mode and non-database state.
 
 After Task 1, delegate the plan's independent lanes. Use Sol for holder/DALgo
-contracts, the minimal DTQL parent-path extension, onboarding/runtime binding and
-the final Telegram E2E. Use Terra for scenario composition, the Chatwright DTQL
+contracts, the minimal TugQL parent-path extension, onboarding/runtime binding and
+the final Telegram E2E. Use Terra for scenario composition, the Chatwright TugQL
 assertion runtime, bounded Listus behaviour/direct tests and the memory provider.
 Every subagent returns commits, files changed, checks run, assumptions and risks.
 
 Scenario ownership and execution
 ================================
 
-Define the reusable Listus scenarios, fragments, DTQL queries and data
+Define the reusable Listus scenarios, fragments, TugQL queries and data
 expectations in sneat-bots. Keep sneat-bots independent of sneat-go. sneat-go is
 the execution host supplying the actual ListusBot profile, fake auth,
 application/database factories, webhook and Chatwright transport. It executes,
-but never copies or replaces, the sneat-bots scenario and DTQL definitions.
+but never copies or replaces, the sneat-bots scenario and TugQL definitions.
 
 Build the direct-conversation rung first. Completion requires the same scenario
 against the actual ListusBot Telegram webhook. New and existing users invoke one
@@ -635,31 +635,31 @@ Create onboarding-complete and few-items-added checkpoints, then run isolated
 add/re-add, mark/remove-done and selected-remove/remove-all siblings. Never use a
 pre-checkpoint message handle inside a database-only branch.
 
-DTQL data assertions
+TugQL data assertions
 ====================
 
-DTQL state assertions are MVP release requirements, not optional diagnostics.
+TugQL state assertions are MVP release requirements, not optional diagnostics.
 They run against the named Listus database holder after registered application
 work settles, immediately before checkpoint publication and at branch
 completion. A failed checkpoint assertion prevents the checkpoint from being
 published.
 
 Listus stores a list as a record in a parent-scoped `lists` collection with
-items embedded in its `items` field. Current DTQL accepts root collections only.
-Extend DALgo/DTQL by the smallest lossless amount needed to encode the concrete
+items embedded in its `items` field. Current TugQL accepts root collections only.
+Extend DALgo/TugQL by the smallest lossless amount needed to encode the concrete
 parent key path and execute it through dalgo2memory. Do not broaden this into
 joins, arbitrary collection groups or a new query language.
 
-After the user adds milk, execute canonical DTQL selecting the current default
+After the user adds milk, execute canonical TugQL selecting the current default
 family space's buy!groceries list. Show the bounded/redacted returned record and
 assert exactly one intended list record, an active milk item, and a consistent
-stored count. Gate few-items-added with a DTQL assertion for exactly milk,
+stored count. Gate few-items-added with a TugQL assertion for exactly milk,
 bread, eggs and apples as active items. Query and show the same record after
 every mutation branch. Use semantic state, not generated IDs or timestamps.
 
-Chatwright owns scheduling/assertions/evidence, DALgo owns DTQL, and DataTug is
+Chatwright owns scheduling/assertions/evidence, DALgo owns TugQL, and DataTug is
 the compatible authoring/inspection surface. Do not require a DataTug daemon or
-shell out to its CLI in this MVP; preserve the canonical DTQL and result schema
+shell out to its CLI in this MVP; preserve the canonical TugQL and result schema
 so a DataTug surface can open the same artifact later.
 
 Product behaviour
@@ -679,9 +679,9 @@ lint, static checks, focused tests and affected tests pass. Milestones include:
 
 1. contracts and architecture tests frozen;
 2. each independent implementation lane completed;
-3. DTQL parent-path and dalgo2memory conformance passing;
-4. direct Listus scenario with DTQL assertions passing;
-5. sneat-go Telegram execution with DTQL assertions passing;
+3. TugQL parent-path and dalgo2memory conformance passing;
+4. direct Listus scenario with TugQL assertions passing;
+5. sneat-go Telegram execution with TugQL assertions passing;
 6. cross-repository integration and release gate passing.
 
 Subagents commit and push only their assigned feature branches. On first push
@@ -696,7 +696,7 @@ push a knowingly failing milestone.
 Release and report
 ==================
 
-Run the full release gate, including two-memory-DB conformance, DTQL query/result
+Run the full release gate, including two-memory-DB conformance, TugQL query/result
 evidence, race tests and 20 consecutive full runs. Report starting revisions,
 agents/models, branches and commits by repository, integration order, commands
 and results, delivered acceptance criteria, deferred items and risks. Do not
@@ -712,7 +712,7 @@ merge to a default branch, deploy or release without explicit user authorisation
 - Existing confirmation behaviour is authoritative. A newly implemented
   remove-done or remove-all operation requires explicit confirmation and a
   cancellation path.
-- DTQL assertions after relevant messages and at checkpoints are part of the
+- TugQL assertions after relevant messages and at checkpoints are part of the
   Listus branching MVP. They query and show the stored list record, and a failed
   checkpoint assertion prevents branching.
 

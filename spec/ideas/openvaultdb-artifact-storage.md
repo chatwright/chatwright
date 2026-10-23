@@ -23,7 +23,7 @@ the source of code-owned scenarios?
 
 Chatwright produces more than a pass/fail value. A useful deterministic or AI
 run can include a transcript, platform trace, metrics, branch lineage,
-checkpoint manifests, canonical DTQL, bounded recordsets and failure
+checkpoint manifests, canonical TugQL, bounded recordsets and failure
 comparisons. Local files preserve ownership but are difficult to synchronize,
 retain across machines or share selectively. Chatwright Cloud can offer managed
 history, but it should not be the only durable destination for private evidence.
@@ -117,7 +117,7 @@ scenario is an explicit export/commit operation, not background two-way sync.
 - Refusal to publish sensitive evidence when the selected host lacks the
   configured security capabilities.
 - Upload, list, retrieve and verify a Listus Chatwright run containing transcript,
-  branch and DTQL evidence.
+  branch and TugQL evidence.
 - SpecScore/Rehearse evidence may reference the vault-stored manifest without
   requiring either product to understand every Chatwright artifact.
 

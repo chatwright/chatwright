@@ -111,7 +111,7 @@ may contain:
   constraints) when the assertion sits in an `ai-goal` part;
 - the actor's own **proposals and rationales**, explicitly labelled as claims
   rather than facts;
-- named **data-state evidence** already produced by a DTQL assertion, carried
+- named **data-state evidence** already produced by a TugQL assertion, carried
   with that feature's redaction and truncation declarations intact.
 
 It may **not** contain raw platform payloads, callback data, native platform

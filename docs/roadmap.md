@@ -76,21 +76,21 @@ message reaches the bot.
 The founder's MVP Priority #1 cuts across the phase model rather than waiting
 for Phase 2's AI-actor slot: give Chatwright a goal and tasks, let an AI actor
 discover and exercise a real bot (Listus Bot first, Sneat Bot second), verify
-application state through DTQL and return an evidence-backed campaign report.
+application state through TugQL and return an evidence-backed campaign report.
 Full contract and campaign definition:
 [goal-driven-ai-testing](../spec/features/chatwright/goal-driven-ai-testing/README.md).
 
 Implementation order: goal/task contract with budgets → minimum
 [Observation Model](../spec/features/chatwright/observation-model/README.md)
 slice → bounded observe–plan–act–validate loop → run-scoped bindings
-(actor → application user → family space) → parameterised DTQL checks at task
+(actor → application user → family space) → parameterised TugQL checks at task
 and milestone boundaries → finding classification and evidence-backed report →
 one reproducible Listus campaign, then a Sneat Bot campaign on the same
 contracts.
 
 **Gate:** from a fresh isolated Listus user with no command/callback map,
 Chatwright attempts every shopping-list task within budget, resolves the
-correct family space, verifies configured state through DTQL and produces a
+correct family space, verifies configured state through TugQL and produces a
 report distinguishing verified defects, AI navigation failures and coverage
 gaps. **Portability gate:** Sneat Bot reuses the same goal/actor/observation/
 binding/reporting contracts. Dependency boundary: the Telegram Platform

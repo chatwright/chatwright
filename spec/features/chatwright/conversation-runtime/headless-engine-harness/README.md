@@ -123,7 +123,7 @@ Scenario: An assistant response schedules an application database write
 Given the endpoint emits its terminal turn event before the write completes
 When Chatwright waits for the turn to settle
 Then it also drains the registered application work
-And a following DTQL assertion observes the committed state
+And a following TugQL assertion observes the committed state
 
 ### AC: stream-is-correlated-to-final-message
 

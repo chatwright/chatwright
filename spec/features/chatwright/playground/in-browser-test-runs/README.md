@@ -14,7 +14,7 @@ status: Draft
 Run deterministic and AI-goal test scenarios against a bot entirely in the
 Studio Playground, with selectable AI providers (bring-your-own-key, local
 models, Chatwright Cloud) and an optional `chatwright server` companion for
-local-model proxying, per-call metrics and DTQL side-effect verification.
+local-model proxying, per-call metrics and TugQL side-effect verification.
 
 ## Problem
 
@@ -35,7 +35,7 @@ are missing:
    page served over HTTPS cannot reach a local model server directly (mixed
    content, per-server CORS).
 3. **No honest handling of what a browser cannot verify.** Side-effect
-   assertions — a DTQL query over the bot's database — cannot run in a sandboxed
+   assertions — a TugQL query over the bot's database — cannot run in a sandboxed
    page at all, and pretending otherwise would violate "fidelity is declared"
    (principle 4).
 
@@ -112,7 +112,7 @@ It listens on a fixed, discoverable local address and exposes: a health endpoint
 so Studio can detect it; an AI-proxy endpoint that forwards proposals to a
 configured local backend and records per-call metrics (latency, tokens,
 structured-output mode); and a side-effect endpoint that evaluates a scenario's
-DTQL assertions via dalgo against the configured database. It sends the CORS and
+TugQL assertions via dalgo against the configured database. It sends the CORS and
 Private-Network-Access response headers the Studio origin requires, accepting two
 origins out of the box — `https://chatwright.dev` (the hosted UI) and
 `http://chatwright.localhost` (the locally-served UI) — and any origin added by
@@ -139,14 +139,14 @@ never overclaims:
 
 - Bot-reply (deterministic) and, later, AI-judged assertions are verifiable in
   the browser.
-- Side-effect (DTQL / data-state, filesystem) assertions are **unverified** when
+- Side-effect (TugQL / data-state, filesystem) assertions are **unverified** when
   no companion server is present — reported as unverified, never pass or fail,
   and never counted as evidence of completion. With `chatwright server` and a
   configured database they become verifiable via dalgo.
 
 ### Capability ladder
 
-| Setup | Actor + deterministic assertions | Local models | DB / DTQL assertions |
+| Setup | Actor + deterministic assertions | Local models | DB / TugQL assertions |
 | --- | --- | --- | --- |
 | BYO key, no server | yes (direct browser→provider) | — | unverified (declared) |
 | Chatwright Cloud (fast-follow) | yes (managed, quota-gated) | — | unverified (declared) |
@@ -207,8 +207,8 @@ And bring-your-own-key remains available with nothing to install
 
 ### AC: side-effect-assertion-is-unverified-in-a-plain-browser
 
-Scenario: A DTQL assertion cannot be verified without the companion server
-Given a scenario with a DTQL data-state assertion
+Scenario: A TugQL assertion cannot be verified without the companion server
+Given a scenario with a TugQL data-state assertion
 And no `chatwright server` is present
 When the run completes
 Then that assertion is reported as unverified with the browser-limitation reason
@@ -217,10 +217,10 @@ And it is never counted as evidence that the goal completed
 
 ### AC: side-effect-assertion-is-verified-with-the-server
 
-Scenario: The same DTQL assertion is verified when the companion server is present
+Scenario: The same TugQL assertion is verified when the companion server is present
 Given `chatwright server` is running with the bot's database configured
 When the same scenario runs
-Then the DTQL assertion is evaluated via dalgo against that database
+Then the TugQL assertion is evaluated via dalgo against that database
 And it is reported as pass or fail with the query evidence
 
 ### AC: deterministic-evidence-outranks-the-actor-claim

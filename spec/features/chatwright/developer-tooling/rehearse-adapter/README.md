@@ -13,7 +13,7 @@ status: Draft
 
 Let Rehearse invoke a Chatwright scenario as acceptance evidence and consume its
 case outcomes through a narrow result contract, while Chatwright remains solely
-responsible for conversation, platform, branch and DTQL execution semantics.
+responsible for conversation, platform, branch and TugQL execution semantics.
 
 ## Problem
 
@@ -69,12 +69,12 @@ it and cannot report verified behavior for a case missing a successful outcome.
 
 The Rehearse report stores the normalized outcome and durable references to the
 Chatwright transcript, platform trace, branch lineage, checkpoint manifests,
-DTQL queries/recordsets and failure comparison. It need not copy every artifact
+TugQL queries/recordsets and failure comparison. It need not copy every artifact
 into a generic step-output string.
 
-Chatwright executes DTQL after settled application work and against the named
+Chatwright executes TugQL after settled application work and against the named
 database holder for the active branch. Rehearse records the resulting assertion
-and artifact references; it does not rerun the query through its own SQLite DTQL
+and artifact references; it does not rerun the query through its own SQLite TugQL
 block or another database connection.
 
 ### Criterion binding validation
@@ -90,7 +90,7 @@ at the most specific proven scope.
 - [Developer tooling and Studio](../README.md)
 - [Portable scenario documents](../../scenario-authoring/portable-scenario-documents/README.md)
 - [Conversation observability](../../observability/README.md)
-- [DTQL data-state assertions](../../deterministic-testing/data-state-assertions/README.md)
+- [TugQL data-state assertions](../../deterministic-testing/data-state-assertions/README.md)
 - Rehearse scenario execution and `verified-behavior` report ingestion
 
 ## Acceptance Criteria
@@ -114,7 +114,7 @@ And outcomes from unrelated cases are not used as its proof
 
 ### AC: rich-artifacts-are-preserved
 
-Scenario: A Listus DTQL assertion fails in a mutation branch
+Scenario: A Listus TugQL assertion fails in a mutation branch
 Given Chatwright produced a transcript, branch lineage, canonical query and
 bounded recordset
 When Rehearse writes its report
@@ -122,11 +122,11 @@ Then the normalized failure retains durable references and digests for those
 artifacts
 And the evidence is not reduced to terminal text alone
 
-### AC: dtql-runs-in-chatwright-branch-context
+### AC: tugql-runs-in-chatwright-branch-context
 
 Scenario: Rehearse invokes a data-asserting branch scenario
 Given the case uses a replacement DALgo database holder
-When its DTQL assertion executes
+When its TugQL assertion executes
 Then Chatwright queries that branch-bound holder exactly once
 And Rehearse ingests the result without opening or querying another database
 

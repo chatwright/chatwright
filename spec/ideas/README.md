@@ -21,7 +21,7 @@ format: https://specscore.md/ideas-index-specification
 | [evidence-defined-completion](evidence-defined-completion.md) | Approved | 2026-07-23 | alex | — |
 | [executable-knowledge-platform](executable-knowledge-platform.md) | Approved | 2026-07-23 | alex | — |
 | [exploration-to-regression](exploration-to-regression.md) | Draft | 2026-07-25 | alex | — |
-| [goal-driven-ai-bot-testing](goal-driven-ai-bot-testing.md) | Specifying | 2026-07-22 | alex | chatwright/goal-driven-ai-testing, chatwright/goal-driven-ai-testing/goal-and-task-contract, chatwright/goal-driven-ai-testing/autonomous-exploration, chatwright/goal-driven-ai-testing/dtql-state-verification, chatwright/goal-driven-ai-testing/campaign-reporting |
+| [goal-driven-ai-bot-testing](goal-driven-ai-bot-testing.md) | Specifying | 2026-07-22 | alex | chatwright/goal-driven-ai-testing, chatwright/goal-driven-ai-testing/goal-and-task-contract, chatwright/goal-driven-ai-testing/autonomous-exploration, chatwright/goal-driven-ai-testing/tugql-state-verification, chatwright/goal-driven-ai-testing/campaign-reporting |
 | [headless-conversational-engine-testing](headless-conversational-engine-testing.md) | Specifying | 2026-07-22 | alex | chatwright/conversation-runtime/headless-engine-harness |
 | [hybrid-runs](hybrid-runs.md) | Approved | 2026-07-22 | alex | — |
 | [live-recording-sdk](live-recording-sdk.md) | Draft | 2026-07-22 | alex | — |
