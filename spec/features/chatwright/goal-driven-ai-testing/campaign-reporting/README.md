@@ -31,7 +31,7 @@ supports every conclusion.
 
 Every finding records severity, goal/task identity, summary, expected and
 observed behaviour, reproducible action sequence where available, observation
-and message/action IDs, trace references, DTQL evidence and confidence/evidence
+and message/action IDs, trace references, TugQL evidence and confidence/evidence
 qualification. URL findings retain separate structure/information and
 availability phase outcomes. Raw callback/platform details may be shown to
 developers through linked inspection but are not inputs to the AI's actor
@@ -56,7 +56,7 @@ And does not claim that editing is functionally broken without evidence
 
 ### AC: state-mismatch-has-linked-proof
 
-Scenario: Visible confirmation disagrees with DTQL
+Scenario: Visible confirmation disagrees with TugQL
 Given the task, observation and assertion evidence
 When a state-consistency finding is emitted
 Then a developer can navigate from the finding to both visible and database

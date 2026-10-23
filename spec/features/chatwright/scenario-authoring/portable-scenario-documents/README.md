@@ -70,7 +70,7 @@ generated summary, but it is not a second source for the scenario body.
 ### Identity, references and composition
 
 A document has a stable logical ID, schema version and source URL. References to
-fragments, fixtures, DTQL files or other documents resolve relative to the source
+fragments, fixtures, TugQL files or other documents resolve relative to the source
 document or through explicit URL references. Each resolved dependency retains
 its own source identity and participates in the scenario's semantic digest.
 
@@ -109,7 +109,7 @@ components.
 - [Scenario composition](../scenario-composition/README.md)
 - [Deterministic testing](../../deterministic-testing/README.md)
 - [State branching](../../state-branching/README.md)
-- [DTQL data-state assertions](../../deterministic-testing/data-state-assertions/README.md)
+- [TugQL data-state assertions](../../deterministic-testing/data-state-assertions/README.md)
 
 ## Acceptance Criteria
 
@@ -143,7 +143,7 @@ discarding the original content
 
 ### AC: transitive-components-have-provenance
 
-Scenario: A scenario invokes a reusable fragment with a DTQL assertion
+Scenario: A scenario invokes a reusable fragment with a TugQL assertion
 Given both components are stored outside the root document
 When the scenario is resolved
 Then the effective scenario records each component's canonical source and

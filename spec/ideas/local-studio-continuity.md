@@ -136,7 +136,7 @@ traffic and authoritative emulator state can be shown without exposing them
 to AI or other tools acting on chat events.
 
 For MVP Priority #1 Goal-Driven AI Testing, Studio should connect campaign
-findings to the rendered conversation, raw developer inspector and DTQL/binding
+findings to the rendered conversation, raw developer inspector and TugQL/binding
 evidence without exposing raw platform or domain IDs to the acting AI.
 
 ## Key Assumptions to Validate

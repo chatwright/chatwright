@@ -11,9 +11,9 @@ status: Draft
 
 ## Summary
 
-Open a Chatwright DTQL assertion and its captured recordset as a local DataTug
+Open a Chatwright TugQL assertion and its captured recordset as a local DataTug
 investigation, optionally rerun the query through an explicitly mapped read-only
-connection, and export edited canonical DTQL for a later Chatwright run.
+connection, and export edited canonical TugQL for a later Chatwright run.
 
 ## Problem
 
@@ -28,9 +28,9 @@ deep link would also cross an unacceptable trust boundary.
 
 ### Investigation bundle
 
-Every eligible DTQL assertion can export a versioned bundle containing:
+Every eligible TugQL assertion can export a versioned bundle containing:
 
-- the canonical resolved DTQL and content digest;
+- the canonical resolved TugQL and content digest;
 - expected assertion shape and normalization/excluded-field declarations;
 - captured bounded/redacted recordset with column/schema metadata;
 - total versus returned row counts and truncation state;
@@ -45,7 +45,7 @@ application credentials.
 ### Local DataTug handoff
 
 A developer may open the bundle with a local DataTug CLI/daemon. Chatwright
-creates or selects a DTQL-mode tab and returns a deep link to the DataTug Web UI
+creates or selects a TugQL-mode tab and returns a deep link to the DataTug Web UI
 using a loopback endpoint and one-time code in the URL fragment. Query and row
 data are transferred through the authenticated local daemon, not embedded in
 the URL or uploaded to the hosted Web application.
@@ -55,7 +55,7 @@ reports an installation/startup diagnostic; run evidence is unaffected.
 
 ### Captured inspection and comparison
 
-DataTug presents the executed DTQL, nested result fields, expected shape,
+DataTug presents the executed TugQL, nested result fields, expected shape,
 normalization and mismatch together. It indicates that rows are captured
 evidence, including redaction/truncation, rather than current live data.
 
@@ -76,7 +76,7 @@ replacement for the captured evidence.
 
 ### Author/edit/export loop
 
-DataTug edits the canonical DALgo AST in DTQL mode and exports canonical DTQL
+DataTug edits the canonical DALgo AST in TugQL mode and exports canonical TugQL
 YAML. Chatwright parses and validates the exported query against the scenario's
 holder and provider capabilities before accepting it as a source change. The
 edited query has a new digest and must be reviewed/committed and executed again
@@ -88,18 +88,18 @@ normalization, assertion truth, checkpoint gating or branch selection.
 ## Dependencies
 
 - [Developer tooling and Studio](../README.md)
-- [DTQL data-state assertions](../../deterministic-testing/data-state-assertions/README.md)
+- [TugQL data-state assertions](../../deterministic-testing/data-state-assertions/README.md)
 - [Conversation observability](../../observability/README.md)
-- DataTug DTQL-mode query tab, recordset presentation and loopback deep-link
+- DataTug TugQL-mode query tab, recordset presentation and loopback deep-link
   contract
-- DALgo canonical DTQL serialization
+- DALgo canonical TugQL serialization
 
 ## Acceptance Criteria
 
 ### AC: captured-failure-opens-without-database
 
 Scenario: A Listus branch has already been released
-Given its failed DTQL assertion bundle contains the canonical query and captured
+Given its failed TugQL assertion bundle contains the canonical query and captured
 recordset
 When the developer opens it in DataTug without a database connection
 Then DataTug displays the executed query, expected shape and captured mismatch
@@ -130,11 +130,11 @@ When DataTug handles the request
 Then the mutation is refused or rejected by a read-only session
 And the database remains unchanged
 
-### AC: dtql-round-trips-losslessly
+### AC: tugql-round-trips-losslessly
 
 Scenario: A developer edits a parent-scoped Listus query in DataTug
 Given the query is represented by the canonical DALgo AST
-When DataTug exports DTQL and Chatwright parses it
+When DataTug exports TugQL and Chatwright parses it
 Then the resulting structured query is semantically identical to the edited AST
 And its new canonical digest is reproducible
 
@@ -142,14 +142,14 @@ And its new canonical digest is reproducible
 
 Scenario: A developer fixes a filter which caused a failed assertion
 Given the original bundle and run are retained
-When the edited DTQL is exported to the scenario repository
+When the edited TugQL is exported to the scenario repository
 Then the old evidence continues to reference the original query digest
 And the criterion is not marked passing until Chatwright executes the new query
 
 ### AC: chatwright-remains-independent
 
 Scenario: DataTug is not installed in CI
-Given a scenario contains supported DTQL assertions
+Given a scenario contains supported TugQL assertions
 When Chatwright executes it
 Then assertions and evidence bundles complete without DataTug
 And only the optional open/investigate action is unavailable

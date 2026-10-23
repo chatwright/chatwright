@@ -26,7 +26,7 @@ workflows to an account system and weaken the local-first product promise.
 
 | Child | Purpose |
 |---|---|
-| [datatug-integration](datatug-integration/README.md) | Open captured DTQL assertions and recordsets in a local DataTug investigation and export reviewed queries |
+| [datatug-integration](datatug-integration/README.md) | Open captured TugQL assertions and recordsets in a local DataTug investigation and export reviewed queries |
 | [openvaultdb-artifact-storage](openvaultdb-artifact-storage/README.md) | Retain finalized run evidence in an optional user-selected OpenVaultDB vault without weakening local-first operation |
 | [rehearse-adapter](rehearse-adapter/README.md) | Invoke Chatwright from Rehearse and return criterion-addressable outcomes without duplicating chat semantics |
 | [specscore-verification-bindings](specscore-verification-bindings/README.md) | Bind criteria to canonical scenario cases, lock proof definitions and distinguish current, stale and partial evidence |

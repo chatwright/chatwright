@@ -26,13 +26,13 @@ Rehearse supplies the default thin-AC/scenario verification model, executes
 acceptance-level scenarios and feeds `verified-behavior` facts back into
 SpecScore. Chatwright executes a different, domain-rich scenario: it
 owns actors, chats, platform emulation, real bot webhooks, reusable fragments,
-state checkpoints, isolated branches and DTQL assertions over application data.
+state checkpoints, isolated branches and TugQL assertions over application data.
 
 Those models are complementary. A Listus acceptance criterion such as “adding an
 item persists it in the groceries list” should be able to point to the exact
 Chatwright case which onboards a user, sends the message, observes the bot and
 queries the branched DALgo database. A passing result should become SpecScore
-evidence without flattening the transcript, DTQL recordset or branch lineage.
+evidence without flattening the transcript, TugQL recordset or branch lineage.
 
 The integration also needs an honest source-of-truth rule. Product scenarios
 belong with the product which maintains their semantics. The first Listus
@@ -76,7 +76,7 @@ checkpoints, branches and data assertions have stable semantics.
 
 A generated lock records the immutable verification definition: scenario URL
 and revision/content digest, schema and compatible runner version, selected
-case/modes, referenced fragment digests and DTQL assertion digests. Run evidence
+case/modes, referenced fragment digests and TugQL assertion digests. Run evidence
 separately records the application revision and exact locked definition which
 was executed.
 
@@ -140,7 +140,7 @@ semantics without freezing these exact field or block names.
   dedicated Chatwright adapter proves the result protocol; common machinery can
   be extracted after a second domain runner demonstrates the same needs.
 - **Store pass/fail only.** Rejected because a green boolean cannot explain the
-  platform mode, application revision, state provider, DTQL result or branch
+  platform mode, application revision, state provider, TugQL result or branch
   whose behavior was actually observed.
 
 ## MVP Scope
@@ -161,7 +161,7 @@ semantics without freezing these exact field or block names.
 
 - A complete YAML replacement for the Go authoring API—the runtime semantics are
   still being validated.
-- Rehearse execution of Chatwright's DTQL itself—Chatwright must query the named
+- Rehearse execution of Chatwright's TugQL itself—Chatwright must query the named
   database holder bound to the current branch and report the result.
 - Uploading rich run artifacts to SpecScore by default—local artifact references
   and explicit publication preserve Chatwright's offline-first boundary.
@@ -177,9 +177,9 @@ semantics without freezing these exact field or block names.
 |---|---|---|
 | Must-be-true | Rehearse can consume Chatwright outcomes without understanding chat or branch semantics. | Implement the Listus adapter using only invocation inputs and the normalized result envelope; record any leaked domain dependency. |
 | Must-be-true | A small invocation manifest is useful before a full structured scenario exists. | Bind and rerun the Go-defined Listus journey from another repository with no copied steps. |
-| Must-be-true | The lock can cover the transitive proof definition reproducibly. | Change a fragment and a DTQL assertion independently; both changes must make the binding stale. |
+| Must-be-true | The lock can cover the transitive proof definition reproducibly. | Change a fragment and a TugQL assertion independently; both changes must make the binding stale. |
 | Should-be-true | Developers understand separate binding-stale and evidence-stale statuses. | Present controlled examples in Studio and test whether users can identify the required rerun or relock action. |
-| Should-be-true | Rich artifact links are enough for SpecScore while Chatwright retains native evidence. | Diagnose a failed Listus criterion from the SpecScore view through the linked transcript, branch and DTQL artifacts. |
+| Should-be-true | Rich artifact links are enough for SpecScore while Chatwright retains native evidence. | Diagnose a failed Listus criterion from the SpecScore view through the linked transcript, branch and TugQL artifacts. |
 | Might-be-true | Native discovery can later remove the small Rehearse wrapper file. | Compare wrapper-based and adapter-discovered scenarios after the MVP format stabilizes. |
 
 ## SpecScore Integration

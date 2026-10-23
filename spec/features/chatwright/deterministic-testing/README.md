@@ -25,7 +25,7 @@ failure.
 
 | Child | Purpose |
 |---|---|
-| [data-state-assertions](data-state-assertions/README.md) | Execute DTQL after messages and at checkpoints to prove persisted application state |
+| [data-state-assertions](data-state-assertions/README.md) | Execute TugQL after messages and at checkpoints to prove persisted application state |
 
 ## Behavior
 
@@ -58,7 +58,7 @@ jobs and related platform calls. CI output must remain useful without the web UI
 ### Persisted-state evidence
 
 Conversation expectations may be paired with
-[DTQL data-state assertions](data-state-assertions/README.md). They execute only
+[TugQL data-state assertions](data-state-assertions/README.md). They execute only
 after the relevant application work settles and can gate a checkpoint, so a bot
 reply is not accepted as proof that its claimed database mutation occurred.
 

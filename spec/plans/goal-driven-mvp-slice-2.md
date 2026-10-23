@@ -7,7 +7,7 @@ status: Executing
 
 **Status:** Executing
 **Source:** idea:goal-driven-ai-bot-testing
-**Features:** chatwright/goal-driven-ai-testing, chatwright/goal-driven-ai-testing/autonomous-exploration, chatwright/goal-driven-ai-testing/dtql-state-verification, chatwright/goal-driven-ai-testing/campaign-reporting, chatwright/ai-driven-testing
+**Features:** chatwright/goal-driven-ai-testing, chatwright/goal-driven-ai-testing/autonomous-exploration, chatwright/goal-driven-ai-testing/tugql-state-verification, chatwright/goal-driven-ai-testing/campaign-reporting, chatwright/ai-driven-testing
 **Date:** 2026-07-22
 **Owner:** alex
 **Supersedes:** —
@@ -16,7 +16,7 @@ status: Executing
 
 Turn slice 1's foundations (goal contract, observation slice) into a runnable
 campaign: the observe–plan–act–validate loop over a provider seam with
-record/replay, DTQL run-scoped bindings, and the evidence-backed campaign
+record/replay, TugQL run-scoped bindings, and the evidence-backed campaign
 report. Exit: the first reproducible Listus campaign. Slice 1 merged 2026-07-22 (goal 864e82c, observe 280e20c); lanes C and D
 execute combined in one implementation lane.
 
@@ -65,7 +65,7 @@ report.
 
 `campaign.Report` (JSON-serialisable, versioned): per-task outcomes with the
 contract's statuses, findings classified as verified-defect (backed by
-deterministic or DTQL evidence) | ai-navigation-failure | coverage-gap, every
+deterministic or TugQL evidence) | ai-navigation-failure | coverage-gap, every
 finding linking observation sequences and loop events, plus aggregate usage.
 This schema is the seed of the machine-readable run bundle — design it as an
 exported contract, not an internal struct.
@@ -76,7 +76,7 @@ exported contract, not an internal struct.
 |---|---|---|
 | C — actor loop + provider seam + record/replay (`actor/`) | `actor/` package; a scripted fake Provider for tests | slice 1 `goal/` + `observe/` |
 | D — campaign report (`campaign/`) | `campaign/` package (report schema + assembly from loop events) | Lane C's loop-event type (freeze it first) |
-| E — DTQL run-scoped bindings | per the Listus plan's task 2A, in its lanes (`sneat-bots`/DTQL repos — not this repo) | Listus plan; not blocked by C/D |
+| E — TugQL run-scoped bindings | per the Listus plan's task 2A, in its lanes (`sneat-bots`/TugQL repos — not this repo) | Listus plan; not blocked by C/D |
 
 Frozen contract tests (Lane C): `TestLoopStopsOnEachBudget`,
 `TestInvalidProposalIsRecordedAndReprompted`,
@@ -86,7 +86,7 @@ Frozen contract tests (Lane C): `TestLoopStopsOnEachBudget`,
 
 ## Out of scope
 
-AI judges/evaluation of UX quality (deterministic + DTQL evidence only in this
+AI judges/evaluation of UX quality (deterministic + TugQL evidence only in this
 slice); persona traits beyond a system-prompt string; parallel actors;
 Sneat Bot campaign (follows Listus).
 

@@ -18,7 +18,7 @@ latest evidence is passing, failing, missing, partial or stale.
 ## Problem
 
 A prose link to “the chat test” does not identify the scenario revision, selected
-case, execution mode, reusable fragments or DTQL assertions which constitute the
+case, execution mode, reusable fragments or TugQL assertions which constitute the
 proof. Embedding the complete scenario in the feature would solve neither reuse
 nor drift. Treating the latest green run as permanently current would hide
 changes to product code or the verification definition.
@@ -58,7 +58,7 @@ A lock command resolves a binding and writes a deterministic record containing:
 - canonical scenario URL, selected case and source revision/content digest;
 - Chatwright schema and compatible runner requirement;
 - required execution modes and non-secret input/profile identities;
-- the resolved transitive fragment, fixture and DTQL assertion digests;
+- the resolved transitive fragment, fixture and TugQL assertion digests;
 - the acceptance-criterion references the binding is allowed to verify;
 - lock format version and generation provenance.
 
@@ -116,7 +116,7 @@ And does not require a copied scenario in the feature repository
 
 ### AC: lock-covers-transitive-proof-definition
 
-Scenario: A reusable fragment or DTQL assertion changes
+Scenario: A reusable fragment or TugQL assertion changes
 Given neither file is the root scenario manifest
 When SpecScore compares the resolved scenario with its lock
 Then the binding becomes stale

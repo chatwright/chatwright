@@ -25,7 +25,7 @@ stopped, and how is the excess detected and attributed?
 
 ## Context
 
-The pieces exist: DTQL data-state assertions evaluate machine-checkable
+The pieces exist: TugQL data-state assertions evaluate machine-checkable
 criteria; the journal timestamps and attributes every action; budgets and
 stop reasons already give the loop deterministic termination; findings are
 classified with evidence links. What is missing is the loop evaluating task
@@ -34,7 +34,7 @@ claim.
 
 ## Recommended Direction
 
-- **Machine-checkable criteria per task** (DTQL assertion or deterministic
+- **Machine-checkable criteria per task** (TugQL assertion or deterministic
   conversation predicate) alongside the prose criteria the actor sees.
 - **Per-action evaluation**: after every executed action the loop evaluates
   the active task's criteria; when they hold, the task completes
@@ -46,7 +46,7 @@ claim.
     recorded, task continues (exists today as navigation failure; keep).
   - *Actor-overshoot* (NEW finding class): any client action recorded after
     the evidence-met moment — including "courtesy" messages to the bot —
-    plus a final-state diff (declared end state vs actual DTQL state)
+    plus a final-state diff (declared end state vs actual TugQL state)
     catching cumulative excess. Attribution rule: actor-caused state
     mismatch is never misfiled as a bot defect; the journal decides.
 - **Overshoot probe (arena tie-in)**: optional mode — after evidence-met,
@@ -82,14 +82,14 @@ claim.
   evidence timestamps and state diffs only.
 - Auto-rollback of overshoot actions — evidence records them; state
   branching/checkpoints already give clean-slate reruns.
-- Conversation-predicate DSL beyond what scenarios already assert — DTQL
+- Conversation-predicate DSL beyond what scenarios already assert — TugQL
   and existing waits first.
 
 ## Key Assumptions to Validate
 
 | Tier | Assumption | How to validate |
 |---|---|---|
-| Must-be-true | Per-action DTQL evaluation is affordable in-loop | Measure loop latency with a fake and a real executor on the Listus scenario |
+| Must-be-true | Per-action TugQL evaluation is affordable in-loop | Measure loop latency with a fake and a real executor on the Listus scenario |
 | Should-be-true | Overshoot occurs with real local models | Arena runs with the probe enabled; report the rate |
 | Might-be-true | stops-when-done rate discriminates models usefully | Compare across the founder's local line-up |
 

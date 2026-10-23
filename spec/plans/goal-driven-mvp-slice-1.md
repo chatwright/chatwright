@@ -19,7 +19,7 @@ frozen contract tests: the goal/task contract (package `goal`) and the minimum
 Observation Model slice folded over the emulator's append-only journal
 (package `observe`, plus a structured journal read seam on
 `platform.Emulator`). The AI actor loop, provider seam with record/replay,
-DTQL bindings and campaign reporting follow in slice 2 and are out of scope
+TugQL bindings and campaign reporting follow in slice 2 and are out of scope
 here.
 
 ## Lanes and exclusive path ownership
@@ -92,7 +92,7 @@ is out of scope (deferred per the model's own staging):
 
 ## Out of scope (slice 2+, do not start)
 
-Observe–plan–act–validate loop; AI provider seam and record/replay; DTQL
+Observe–plan–act–validate loop; AI provider seam and record/replay; TugQL
 run-scoped bindings; campaign report; Listus campaign wiring in `sneat-bots`.
 
 ## Gate

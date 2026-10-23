@@ -58,7 +58,7 @@ A published run has one versioned manifest identifying:
 - run, scenario/case, application and source revisions;
 - execution mode, platform emulator and state-provider profiles;
 - outcome and timestamps;
-- referenced transcript, trace, metrics, branch, checkpoint, DTQL and recordset
+- referenced transcript, trace, metrics, branch, checkpoint, TugQL and recordset
   artifacts;
 - each artifact's media type, byte count, content digest, redaction and
   truncation metadata;
@@ -133,7 +133,7 @@ And no owner-wide credential is written to the repository or result bundle
 
 ### AC: redaction-precedes-network-write
 
-Scenario: A transcript and DTQL recordset contain configured sensitive values
+Scenario: A transcript and TugQL recordset contain configured sensitive values
 Given remote publication is enabled
 When the provider prepares and uploads the run
 Then those values are redacted before the first OpenVaultDB request body or

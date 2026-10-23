@@ -19,7 +19,7 @@ Platform Emulator connects those actions to real local bots.
 
 | Child | Description |
 |---|---|
-| [in-browser-test-runs](in-browser-test-runs/README.md) | Run deterministic and AI-goal test scenarios against a bot entirely in the Studio Playground, with selectable AI providers (bring-your-own-key, local models, Chatwright cloud) and an optional chatwright server companion for local-model proxying, metrics and DTQL side-effect verification. |
+| [in-browser-test-runs](in-browser-test-runs/README.md) | Run deterministic and AI-goal test scenarios against a bot entirely in the Studio Playground, with selectable AI providers (bring-your-own-key, local models, Chatwright cloud) and an optional chatwright server companion for local-model proxying, metrics and TugQL side-effect verification. |
 
 ## Problem
 

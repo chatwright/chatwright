@@ -8,7 +8,7 @@ Read this before working in any Chatwright repository.
    build the features that journey needs, in the order the journey needs them.
    A feature without a journey that exercises it is not done.
 2. **Improve owned dependencies along the way.** When something we depend on
-   and own needs improvement (`bots-go-framework`, DALgo, DTQL/DataTug,
+   and own needs improvement (`bots-go-framework`, DALgo, TugQL/DataTug,
    SpecScore, inGitDB, …), improve it upstream as part of the work — never
    build a local workaround for a gap in our own tool.
 3. **Evidence over claims.** Behaviour counts as working only with verified run

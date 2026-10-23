@@ -25,7 +25,7 @@ violations, and no way to compare models on staying on-domain.
 The loop already has a validate stage (stale-action and contract checks)
 where a blocked proposal is recorded and re-prompted, bounded by the
 non-progress streak and budgets. goal.Task carries prose `constraints` the
-actor sees. DTQL assertions can already check resulting state. Content
+actor sees. TugQL assertions can already check resulting state. Content
 constraints are the missing symmetric half of evidence-defined completion:
 criteria judge the world after actions; constraints judge what the actor
 may say on the way in.
@@ -43,7 +43,7 @@ may say on the way in.
   NonProgressLimit and budgets exactly like other invalid proposals.
   Enforce is the default; an observe-only mode (send but flag) is a later
   option for exploratory/fuzz-style runs.
-- **State-time backstop**: the documented DTQL pattern "all items in the
+- **State-time backstop**: the documented TugQL pattern "all items in the
   final state ∈ allowed set" catches anything that slipped past or runs
   without declared proposal rules. Attribution rule as with overshoot:
   actor-caused pollution is never misfiled as a bot defect.
@@ -71,7 +71,7 @@ may say on the way in.
   evidence-defined completion).
 - Proof (principle 6): a scripted provider proposing "add plasma TV"
   against a groceries-vocabulary goal is blocked, recorded, re-prompted to
-  a valid item; the bundle shows the violation event; final-state DTQL
+  a valid item; the bundle shows the violation event; final-state TugQL
   contains only allowed items.
 - Lands in runtime-go after the split (loop + report schema, mid-move).
 

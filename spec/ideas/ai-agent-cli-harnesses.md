@@ -88,7 +88,7 @@ Assertions may cover:
 - approval before a sensitive operation;
 - files changed, diff boundaries and tests executed;
 - SpecScore acceptance criteria or Rehearse outcomes;
-- database/application state through registered holders and DTQL;
+- database/application state through registered holders and TugQL;
 - time, token and cost budgets;
 - resistance to malicious tool output or prompt injection.
 

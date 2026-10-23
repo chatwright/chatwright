@@ -15,7 +15,7 @@ status: Draft
 
 Give an AI actor a product-level goal and several tasks, let it autonomously
 discover and exercise a bot through the Observation Model, verify important
-application state through DTQL and return an evidence-backed campaign report.
+application state through TugQL and return an evidence-backed campaign report.
 
 This is the first implementation outcome required for using Chatwright on
 Listus Bot and Sneat Bot. Listus is the initial end-to-end proving target; Sneat
@@ -27,7 +27,7 @@ Bot is the second target that validates portability.
 |---|---|
 | [goal-and-task-contract](goal-and-task-contract/README.md) | Goal, ordered/independent tasks, success criteria, milestones, constraints and budgets |
 | [autonomous-exploration](autonomous-exploration/README.md) | Observe–plan–act–validate loop, discovery, progress and stop conditions |
-| [dtql-state-verification](dtql-state-verification/README.md) | Run-scoped user/space bindings, parameterised DTQL assertions and state evidence |
+| [tugql-state-verification](tugql-state-verification/README.md) | Run-scoped user/space bindings, parameterised TugQL assertions and state evidence |
 | [campaign-reporting](campaign-reporting/README.md) | Findings, task outcomes, coverage gaps and linked evidence |
 
 ### Capability Map
@@ -42,7 +42,7 @@ Goal-Driven AI Testing — MVP Priority #1
 │   ├── Observation → plan → action loop
 │   ├── Command/action discovery
 │   └── Progress, recovery and stop reasons
-├── DTQL State Verification
+├── TugQL State Verification
 │   ├── Actor → application user binding
 │   ├── User → default family space binding
 │   ├── Message/task/milestone checks
@@ -61,7 +61,7 @@ Goal-Driven AI Testing — MVP Priority #1
 - The AI can send text and target current generic actions.
 - Chatwright validates every proposal and remains authoritative.
 - The runner tracks task progress, milestones, budgets and non-progress.
-- DTQL assertions use typed runtime bindings rather than hard-coded user/space
+- TugQL assertions use typed runtime bindings rather than hard-coded user/space
   IDs.
 - URL assertions verify parsed structure and runtime-bound information
   independently from configured endpoint availability.
@@ -87,7 +87,7 @@ The Listus campaign starts with a new user and must attempt:
 9. removing all items;
 10. deterministic checks for discovered URL correctness and configured
     reachability;
-11. DTQL verification and a final evidence-backed report.
+11. TugQL verification and a final evidence-backed report.
 
 The second campaign applies the same runtime contract to Sneat Bot with
 target-specific goals, resolvers and assertions.
@@ -111,7 +111,7 @@ regression gates for AI-driven development of the bot itself:
   synthetic targets, changes and validation.
 - Telegram Platform Emulator for the first bot execution profile.
 - AI actor provider/configuration and bounded model invocation.
-- DataTug/DTQL integration over the target DALgo databases.
+- DataTug/TugQL integration over the target DALgo databases.
 - Deterministic Assertions, beginning with URL Verification (private,
   pre-announcement — not yet promoted to this public tree).
 - Target-specific identity/space resolvers and safe test environment.
@@ -134,7 +134,7 @@ And records a structured outcome for each task
 Scenario: Listus confirms that an item was added
 Given onboarding resolved `app_user_id` and `family_space_id`
 When the add task reaches its verification point
-Then a parameterised DTQL assertion queries that family space
+Then a parameterised TugQL assertion queries that family space
 And the campaign does not claim verified success from bot prose alone
 
 ### AC: campaign-stops-within-budget
@@ -156,7 +156,7 @@ And the configured availability phase fails with timeout and vantage evidence
 ### AC: report-links-evidence
 
 Scenario: A state inconsistency is found
-Given the bot confirms an operation but DTQL disagrees
+Given the bot confirms an operation but TugQL disagrees
 When the campaign report is produced
 Then the finding links its task, observations, messages/actions and assertion
 And distinguishes the product inconsistency from AI navigation uncertainty
@@ -165,7 +165,7 @@ And distinguishes the product inconsistency from AI navigation uncertainty
 
 - Which AI model and prompt policy should be the first reference driver?
 - Which goal/task syntax is the smallest useful portable contract?
-- Which Listus and Sneat DTQL resolvers are stable enough for the first demo?
+- Which Listus and Sneat TugQL resolvers are stable enough for the first demo?
 - Which seeded defects establish that the report is useful?
 
 ---

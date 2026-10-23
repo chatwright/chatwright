@@ -112,7 +112,7 @@ the prefix replayed.
 - In-process Go adapter first, with HTTP as the next transport realization.
 - User text/action input and assistant message/typed-action/tool-call output.
 - Turn settlement, timeout, cancellation and structured error semantics.
-- Scripted actors, deterministic assertions and DTQL application-state checks.
+- Scripted actors, deterministic assertions and TugQL application-state checks.
 - Model/prompt/tool-profile provenance plus transcript and trace evidence.
 - The same neutral Listus or conversational-engine scenario runnable in direct
   and Telegram-emulated profiles, with distinct evidence.
@@ -146,7 +146,7 @@ the prefix replayed.
 - **Feature:** [Headless conversational-engine harness](../features/chatwright/conversation-runtime/headless-engine-harness/README.md)
 - **Shared runtime:** [Conversation runtime](../features/chatwright/conversation-runtime/README.md)
 - **Evidence binding:** [SpecScore verification bindings](../features/chatwright/developer-tooling/specscore-verification-bindings/README.md)
-- **State proof:** [DTQL data-state assertions](../features/chatwright/deterministic-testing/data-state-assertions/README.md)
+- **State proof:** [TugQL data-state assertions](../features/chatwright/deterministic-testing/data-state-assertions/README.md)
 
 ## Open Questions
 
