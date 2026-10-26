@@ -211,42 +211,47 @@ The browser proof adds `playwright-core` as a Studio development dependency only
 Task 1a extraction is recorded by the durable
 [commit `c85671b`](https://github.com/chatwright/studio/commit/c85671b1067e3ba5919640d93b13f241959adde0)
 (already landed); the deleted `incident-replay-player-core` branch is not a
-durable reference. Task 1b transport and embedding remain on the
-`incident-replay-checkpoint-transport` pre-landing branch. The canonical paths are
+durable reference. Task 1b transport and embedding are on the
+`incident-replay-checkpoint-transport` pre-landing branch at durable
+[commit `14148f2`](https://github.com/chatwright/studio/commit/14148f22c366004d76aa470452ba9acbd201a337).
+The canonical Main paths are
 [`packages/player-core`](https://github.com/chatwright/studio/tree/main/packages/player-core),
 [`scripts/prove-player-core-package.mjs`](https://github.com/chatwright/studio/blob/main/scripts/prove-player-core-package.mjs)
 and
 [`scripts/prove-player-core-browser.mjs`](https://github.com/chatwright/studio/blob/main/scripts/prove-player-core-browser.mjs).
 
-Observed Task 1b forward-fix proof run on 2026-10-26 against Studio main base
-`68759024def5f7adeb79046a89252a00f875384f` plus pre-landing commit
-`50ec3535064187ef36886cb2b0142accea520207` (all commands exited 0):
+Observed Task 1b proof-correction run on 2026-10-26 against Studio main base
+`68759024def5f7adeb79046a89252a00f875384f` plus pre-landing commits
+`50ec3535064187ef36886cb2b0142accea520207`,
+`62e58ef848c52aecf76a98c9cd70161d1c70ca63` and
+`14148f22c366004d76aa470452ba9acbd201a337` (all commands exited 0):
 
 | Item | Observed |
 |---|---|
 | Package unit tests | 33 tests, 9 suites, 0 failures (`pnpm --filter @chatwright/player-core test`; includes the documented-`canAdvance` host-transition suite) |
-| Studio regression tests | 19 files, 205 tests, 0 failures (`pnpm test`; includes final-index wait, retained-binding, atomic-context and cancelled-callback regressions) |
+| Studio regression tests | 19 files, 206 tests, 0 failures (`pnpm test`; includes final-index wait, retained-binding, atomic-context and cancelled-callback regressions) |
 | Studio typecheck/build | development build, production Cloudflare build and offline UI zip succeeded; pre-existing `emulator.page.scss` budget warning only |
-| Tarball | `chatwright-player-core-0.1.0.tgz`, 43,497 bytes, 40 entries |
-| Tarball SHA-256 | `64ce6a8ae02645505c2f10e1778b30e3ea78ef2867ad30a9eed6b3ce725733bc` |
+| Tarball | `chatwright-player-core-0.1.0.tgz`, 44,131 bytes, 40 entries |
+| Tarball SHA-256 | `71e8bf8e275f8ec9a691ba002e7d479cf4e3e43c089152b8dc493214b1f4e46d` |
 | Tarball contents | `package.json`, `README.md`, `LICENSE`, `NOTICE`, 9 compiled `.js`, 9 `.d.ts`, 9 `.d.ts.map`, 9 `.js.map`; no `src/`, `test/` or `node_modules/` |
 | Dependency closure | `dependencies`, `peerDependencies`, `optionalDependencies`, `bundledDependencies`, `bundleDependencies` all absent/empty; no external runtime or declaration imports |
 | Consumer install | `npm install --offline --ignore-scripts --no-audit --no-fund --no-package-lock <tarball>` from a fresh temp directory outside the repository |
 | Consumer resolution | `<consumer>/node_modules/@chatwright/player-core/dist/index.js`; not a repository path |
-| Consumer runtime proof | 23/23 checks passed: existing golden messages/edit/deletion and seek equivalence plus documented-`canAdvance` host transitions, caller-side envelope mutation, required named-part completion, recreated-wait once-only consumption, ticket lifetime, stored-completion and zero-effect fencing |
+| Consumer runtime proof | 25/25 checks passed: existing golden messages/edit/deletion and seek equivalence plus documented-`canAdvance` host transitions, caller-side envelope mutation, required named-part completion, structural-clone replay rejection across a recreated wait, fail-closed finite-capacity consumption, stale/failed release not consuming a valid result, fresh-generation acceptance versus one idempotent checkpoint credit, ticket lifetime, stored-completion and zero-effect fencing |
 | Consumer declaration proof | explicit TypeScript compiler, `--noEmit --strict --lib ES2022 --module NodeNext`, exit 0, including the transport types |
 | Raw catalogue pins | Consumer fixtures declare raw UTF-8 byte length and SHA-256 (en 111 bytes, fr 119 bytes) and reject changed bytes, wrong lengths and a re-formatted equivalent JSON before parsing, key resolution or timing |
-| Browser embedding | Chromium 156.0.8078.4 (headless), 39/39 checks, 10 screenshots, loopback-only ephemeral server, consumer tarball install; browser/context/server cleanup confirmed |
+| Locale-resolved presentation | Verified English/French fixture bytes resolve to their real messages before `buildTimeline`/`settledStateAt`/animation; the settled transcript shows the resolved text, the longer French message types 32 ms longer (one 32 ms character at `TYPING_MS_PER_CHAR`), grading/event/checkpoint identities are unchanged, and feeding the raw key instead of the resolved text fails the same assertion |
+| Browser embedding | Chromium 156.0.8078.4 (headless), 47/47 checks, 12 screenshots, loopback-only ephemeral server, consumer tarball install; native clicks/keyboard exercise fresh acceptance, recreated-wait structural-clone replay rejection, stale rejection, capacity exhaustion, stored revisit and stable progress; browser/context/server cleanup confirmed |
 | Browser lifecycle proof | 4/4 child-process checks: SIGINT and SIGTERM each close context, browser and the owned loopback server exactly once; a rejected context/browser close still closes the others, reports the failure and leaves no listening port |
 
 The proof prints the tarball hash, full file list, consumer path, exact commands
 and outcomes on every run. Temporary consumer paths are per-run; the observed
-forward-fix runs used
-`/var/folders/c6/pty228l52dx19k5xfxjz1ztr0000gn/T/chatwright-player-core-proof-bhRI0J/consumer`
+proof-correction runs used
+`/var/folders/c6/pty228l52dx19k5xfxjz1ztr0000gn/T/chatwright-player-core-proof-O6UYzL/consumer`
 and
-`/var/folders/c6/pty228l52dx19k5xfxjz1ztr0000gn/T/chatwright-player-core-browser-lNZvxi/consumer`.
+`/var/folders/c6/pty228l52dx19k5xfxjz1ztr0000gn/T/chatwright-player-core-browser-Lp5T7x/consumer`.
 Each screenshot records one expected-versus-observed sentence for its settled
-transcript and effect/credit counters.
+transcript and effect/acceptance/consumption/credit counters.
 
 ### Relationship to DataTug Incident Replay
 
