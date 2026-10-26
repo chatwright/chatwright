@@ -78,10 +78,13 @@ regression tests continue to run against the extracted implementation.
 
 The transport is a pure cursor over the timeline with caller-declared
 `PresentationSegment` ranges and `PresentationBarrier` step bindings. A host
-clock tick calls `advance()`; reaching an unreleased barrier returns `waiting`
-with a live ticket, and doing nothing keeps it waiting. `seek()` is a watch
-operation: it may preview anywhere, revokes any open ticket and never opens one.
-Segment ends wait for an explicit outer `enterSegment()`; barriers never change
+clock tick calls `advance()` while `state.canAdvance` is true; reaching an
+unreleased barrier returns `waiting` with a live ticket, and doing nothing keeps
+it waiting. `canAdvance` also admits the documented tick that reaches
+`segment-end` or `ended`, so a host never strands a preview, idle or running
+state one step short of its required transition. `seek()` is a watch operation:
+it may preview anywhere, revokes any open ticket and never opens one. Segment
+ends wait for an explicit outer `enterSegment()`; barriers never change
 chapters.
 
 The caller owns the whole validation boundary. It constructs and matches its own
@@ -99,9 +102,17 @@ registry, consumes validation or performs the external action. Barriers are
 runtime presentation bindings, never run-bundle wire fields; `walkthrough.json`
 remains the sole chapter owner. Studio consumes the same transport: empty-barrier
 behaviour is unchanged, and a scheduled frame callback delivered after a seek,
-pause, plan change or disposal is inert. The only caller-side matching proof is
-synthetic; this specification claims no production DataTug adapter, server
-grading or registry publication.
+pause, plan change or disposal is inert. The transport validates and freezes the
+caller's plan; a host that retains it across a rebuild keeps
+`transport.bindings`, not the caller's mutable arrays or records. A new
+load/select/patch context is prepared and validated before any bundle, timeline
+or transport is published, so a failed admission leaves the prior complete
+context unchanged rather than pairing an empty timeline with an old live ticket.
+A live wait at the final index survives pause/Play; a paused release satisfies
+the wait without advancing, scheduling or restarting, and ordinary wait-free
+replay-at-end still restarts. The only caller-side matching proof is synthetic;
+this specification claims no production DataTug adapter, server grading or
+registry publication.
 
 ### Package and consumer contract
 
@@ -197,39 +208,43 @@ The browser proof adds `playwright-core` as a Studio development dependency only
 
 ### Source evidence
 
-Pre-landing source branches: `incident-replay-player-core` (Task 1a extraction,
-already landed) and `incident-replay-checkpoint-transport` (Task 1b transport
-and embedding, pre-landing). The canonical paths are
+Task 1a extraction is recorded by the durable
+[commit `c85671b`](https://github.com/chatwright/studio/commit/c85671b1067e3ba5919640d93b13f241959adde0)
+(already landed); the deleted `incident-replay-player-core` branch is not a
+durable reference. Task 1b transport and embedding remain on the
+`incident-replay-checkpoint-transport` pre-landing branch. The canonical paths are
 [`packages/player-core`](https://github.com/chatwright/studio/tree/main/packages/player-core),
 [`scripts/prove-player-core-package.mjs`](https://github.com/chatwright/studio/blob/main/scripts/prove-player-core-package.mjs)
 and
 [`scripts/prove-player-core-browser.mjs`](https://github.com/chatwright/studio/blob/main/scripts/prove-player-core-browser.mjs).
 
-Observed Task 1b proof run on 2026-10-26 against Studio
-`68759024def5f7adeb79046a89252a00f875384f` plus the pre-landing branch (all
-commands exited 0):
+Observed Task 1b forward-fix proof run on 2026-10-26 against Studio main base
+`68759024def5f7adeb79046a89252a00f875384f` plus pre-landing commit
+`50ec3535064187ef36886cb2b0142accea520207` (all commands exited 0):
 
 | Item | Observed |
 |---|---|
-| Package unit tests | 26 tests, 8 suites, 0 failures (`pnpm --filter @chatwright/player-core test`; 6 existing + 20 transport) |
-| Studio regression tests | 19 files, 195 tests, 0 failures (`pnpm test`; 10 new transport-consumption tests) |
-| Studio typecheck/build | development build and production build succeeded; pre-existing `emulator.page.scss` budget warning only |
-| Tarball | `chatwright-player-core-0.1.0.tgz`, 42,567 bytes, 40 entries |
-| Tarball SHA-256 | `13a4ee3732744687eb5ab3d3c5cbf0e000de48e66f4dea31eb30ac096f46a1c9` |
+| Package unit tests | 33 tests, 9 suites, 0 failures (`pnpm --filter @chatwright/player-core test`; includes the documented-`canAdvance` host-transition suite) |
+| Studio regression tests | 19 files, 205 tests, 0 failures (`pnpm test`; includes final-index wait, retained-binding, atomic-context and cancelled-callback regressions) |
+| Studio typecheck/build | development build, production Cloudflare build and offline UI zip succeeded; pre-existing `emulator.page.scss` budget warning only |
+| Tarball | `chatwright-player-core-0.1.0.tgz`, 43,497 bytes, 40 entries |
+| Tarball SHA-256 | `64ce6a8ae02645505c2f10e1778b30e3ea78ef2867ad30a9eed6b3ce725733bc` |
 | Tarball contents | `package.json`, `README.md`, `LICENSE`, `NOTICE`, 9 compiled `.js`, 9 `.d.ts`, 9 `.d.ts.map`, 9 `.js.map`; no `src/`, `test/` or `node_modules/` |
 | Dependency closure | `dependencies`, `peerDependencies`, `optionalDependencies`, `bundledDependencies`, `bundleDependencies` all absent/empty; no external runtime or declaration imports |
 | Consumer install | `npm install --offline --ignore-scripts --no-audit --no-fund --no-package-lock <tarball>` from a fresh temp directory outside the repository |
 | Consumer resolution | `<consumer>/node_modules/@chatwright/player-core/dist/index.js`; not a repository path |
-| Consumer runtime proof | 21/21 checks passed: existing golden messages/edit/deletion and seek equivalence plus caller-side envelope mutation, ticket lifetime, stored-completion and zero-effect fencing |
+| Consumer runtime proof | 23/23 checks passed: existing golden messages/edit/deletion and seek equivalence plus documented-`canAdvance` host transitions, caller-side envelope mutation, required named-part completion, recreated-wait once-only consumption, ticket lifetime, stored-completion and zero-effect fencing |
 | Consumer declaration proof | explicit TypeScript compiler, `--noEmit --strict --lib ES2022 --module NodeNext`, exit 0, including the transport types |
+| Raw catalogue pins | Consumer fixtures declare raw UTF-8 byte length and SHA-256 (en 111 bytes, fr 119 bytes) and reject changed bytes, wrong lengths and a re-formatted equivalent JSON before parsing, key resolution or timing |
 | Browser embedding | Chromium 156.0.8078.4 (headless), 39/39 checks, 10 screenshots, loopback-only ephemeral server, consumer tarball install; browser/context/server cleanup confirmed |
+| Browser lifecycle proof | 4/4 child-process checks: SIGINT and SIGTERM each close context, browser and the owned loopback server exactly once; a rejected context/browser close still closes the others, reports the failure and leaves no listening port |
 
 The proof prints the tarball hash, full file list, consumer path, exact commands
 and outcomes on every run. Temporary consumer paths are per-run; the observed
-Task 1b runs used
-`/var/folders/c6/pty228l52dx19k5xfxjz1ztr0000gn/T/chatwright-player-core-proof-3sZwhy/consumer`
+forward-fix runs used
+`/var/folders/c6/pty228l52dx19k5xfxjz1ztr0000gn/T/chatwright-player-core-proof-bhRI0J/consumer`
 and
-`/var/folders/c6/pty228l52dx19k5xfxjz1ztr0000gn/T/chatwright-player-core-browser-UNpI8y/consumer`.
+`/var/folders/c6/pty228l52dx19k5xfxjz1ztr0000gn/T/chatwright-player-core-browser-lNZvxi/consumer`.
 Each screenshot records one expected-versus-observed sentence for its settled
 transcript and effect/credit counters.
 
@@ -324,6 +339,14 @@ When the caller releases the exact current ticket after its own accepted result
 Then presentation resumes within the same segment at most once
 And a release while paused does not restart playback
 And Watch/seek never opens a ticket, consumes validation or changes chapters
+And a host that schedules only while `canAdvance` reaches `waiting`,
+`segment-end` and `ended` without an undocumented extra advance
+And a live final-index wait survives pause/Play, while wait-free end-of-run
+replay still restarts
+And a failed load/select/patch leaves the prior bundle, timeline, transport,
+cursor and ticket coherent
+And a caller-owned once-only ledger prevents a recreated wait from consuming the
+same attempt/submission identity again
 
 ## Open Questions
 
