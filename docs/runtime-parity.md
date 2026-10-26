@@ -9,7 +9,7 @@ Catch-up rows are debt with a tracking link; deviation rows carry an
 explanation and proof. If a feature is missing from this register, it is
 expected to behave identically in both runtimes.
 
-Updated: 2026-07-24 (Telegram editMessageText real-Telegram fidelity fix: omitting reply_markup now clears the keyboard in both runtimes).
+Updated: 2026-10-26 (playback core extracted to `@chatwright/player-core`: presentation-only, so Go stays N/A under the current rendering rule; shared execution/wire changes still require real Go/TS parity — see the [playback core specification](../spec/features/chatwright/playground/playback-core/README.md)).
 
 ## Status legend
 
@@ -30,7 +30,7 @@ Updated: 2026-07-24 (Telegram editMessageText real-Telegram fidelity fix: omitti
 | Iframe bots (postMessage, bot protocol v1) | ➖ N/A by design | ✅ Works | IframeHost landed (handshake, port handoff, correlation, queueing); protocol proven live against greetbot 2026-07-23 |
 | Deterministic scenario verbs (send/click/expect/edited/within) | ✅ Works (`cw`) | ✅ Works | expect layer landed 2026-07-23 (`chatOf`/`Chat`/`BotMessageExpectation` in runtime-ts's `src/expect/`, subscribe-based, per-chat consumption cursor, transcript-in-failure; 25 tests, CI green; covers the founder's [Yes,No]-buttons canonical case); portable file format still I-71 ("one file, two runtimes, same verdict") |
 | Run-bundle v1 recording | ✅ Works | ✅ Works | `Session.toBundle()` output validates against the published schema in CI (ajv); single deterministic part per run so far |
-| Replay (bundle playback) | ➖ N/A by design | ✅ Works | Playback is a rendering concern; the Studio player is the shared replay surface for bundles from BOTH runtimes — parity holds at the format level |
+| Replay (bundle playback) | ➖ N/A by design | ✅ Works | Playback is a rendering concern; the Studio player is the shared replay surface for bundles from BOTH runtimes — parity holds at the format level. The pure timeline/settled-state core is extracted to `@chatwright/player-core` and proved from a packed outside-repository consumer ([playback core](../spec/features/chatwright/playground/playback-core/README.md)). This is presentation-only, so Go remains N/A under the current rendering rule; any change to shared execution, scenario or wire semantics instead requires real Go/TS parity evidence. |
 | AI actors (goal-driven campaigns) | ✅ Works | 📅 Planned | Key-security design = research item I-76; founder direction: bring-your-own-key (client-side, "for the brave") or chatwright.dev subscription (managed keys, "for the lazy/busy") |
 | Arena (model comparison) | ✅ Works | 📅 Planned | Follows browser AI actors |
 | Data-state assertions (TugQL) + checkpoint/branching | ✅ Works | 📅 Planned | Browser needs a bridge to app databases — expected via a local CLI bridge (idea: local-studio-continuity) |

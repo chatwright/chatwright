@@ -17,7 +17,7 @@ run and test their real bot application against it.
 
 ## Contents
 
-| Platform Emulator | Status | Product role |
+| Child | Status | Purpose |
 |---|---|---|
 | [Telegram Platform Emulator](telegram/README.md) | Implementing | MVP and reference implementation |
 | [WhatsApp Platform Emulator](whatsapp/README.md) | Draft | Planned future emulator |

@@ -41,6 +41,8 @@ prerequisite for local development.
 | [developer-tooling](developer-tooling/README.md) | Open-source CLI, local runner, CI, IDE integrations and offline-capable Studio |
 | [cloud](cloud/README.md) | Optional managed infrastructure and intelligence, with a useful free-account path |
 | [marketplace](marketplace/README.md) | Open-source, community and commercial reusable conversation-development assets |
+| [manual-emulator](manual-emulator/README.md) | Deprecated compatibility record redirecting historical manual-emulator scope to Playground |
+| [platform-adapters](platform-adapters/README.md) | Deprecated compatibility record redirecting historical platform-adapter scope to Platform Emulators |
 
 ## Compatibility paths (not product hierarchy)
 
